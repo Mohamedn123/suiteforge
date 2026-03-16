@@ -1,0 +1,80 @@
+{
+    "module": "N/workbook",
+    "description": "Create and manage workbooks in SuiteAnalytics Workbook. Use with N/dataset to manage datasets and workbooks.",
+    "supportedIn": ["server"],
+    "methods": [
+        {
+            "name": "create",
+            "description": "Creates a new workbook.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.name", "type": "string", "description": "The workbook name", "optional": true },
+                { "name": "options.description", "type": "string", "description": "The workbook description", "optional": true },
+                { "name": "options.pivots", "type": "Array", "description": "Pivot tables", "optional": true },
+                { "name": "options.charts", "type": "Array", "description": "Charts", "optional": true },
+                { "name": "options.tables", "type": "Array", "description": "Tables", "optional": true }
+            ],
+            "returns": "workbook.Workbook",
+            "returnType": "N/workbook#Workbook",
+            "supportedIn": ["server"]
+        },
+        {
+            "name": "load",
+            "description": "Loads an existing workbook by its ID.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.id", "type": "string", "description": "The workbook ID" }
+            ],
+            "returns": "workbook.Workbook",
+            "returnType": "N/workbook#Workbook",
+            "supportedIn": ["server"]
+        },
+        {
+            "name": "list",
+            "description": "Returns a list of all saved workbooks.",
+            "params": [],
+            "returns": "Object[]",
+            "supportedIn": ["server"]
+        },
+        {
+            "name": "createPivot",
+            "description": "Creates a pivot table definition for use in a workbook.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.dataset", "type": "Object", "description": "The dataset to base the pivot on" },
+                { "name": "options.name", "type": "string", "description": "Name of the pivot", "optional": true }
+            ],
+            "returns": "Object",
+            "supportedIn": ["server"]
+        },
+        {
+            "name": "createChart",
+            "description": "Creates a chart definition for use in a workbook.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.pivot", "type": "Object", "description": "The pivot table for the chart" },
+                { "name": "options.name", "type": "string", "description": "Name of the chart", "optional": true }
+            ],
+            "returns": "Object",
+            "supportedIn": ["server"]
+        }
+    ],
+    "enums": [],
+    "objectTypes": [
+        {
+            "name": "Workbook",
+            "description": "Represents a SuiteAnalytics Workbook.",
+            "methods": [
+                { "name": "save", "description": "Saves the workbook.", "params": [], "returns": "void" }
+            ],
+            "properties": [
+                { "name": "id", "type": "string", "description": "The workbook ID.", "readOnly": true },
+                { "name": "name", "type": "string", "description": "The workbook name." },
+                { "name": "description", "type": "string", "description": "The workbook description." },
+                { "name": "pivots", "type": "Array", "description": "Pivot tables in the workbook." },
+                { "name": "charts", "type": "Array", "description": "Charts in the workbook." },
+                { "name": "tables", "type": "Array", "description": "Tables in the workbook." }
+            ]
+        }
+    ]
+}

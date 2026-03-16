@@ -1,0 +1,577 @@
+{
+    "module": "N/file",
+    "description": "Use the N/file module to work with files within NetSuite. You can use this module to upload files to the NetSuite File Cabinet, as well as send files as attachments without uploading them to the File Cabinet. You can also use this module to copy files in the File Cabinet, and you can use conflict resolution options to handle conflicts.",
+    "supportedIn": ["server"],
+    "methods": [
+        {
+            "name": "copy",
+            "description": "Copies an existing file in the File Cabinet.",
+            "params": [
+                {
+                    "name": "options.id",
+                    "type": "number",
+                    "description": "The internal ID of the file to copy."
+                },
+                {
+                    "name": "options.folder",
+                    "type": "number",
+                    "description": "The internal ID of the folder to copy the file to."
+                },
+                {
+                    "name": "options.conflictResolution",
+                    "type": "string",
+                    "description": "The conflict resolution value. Use file.NameConflictResolution enum. The default value is FAIL.",
+                    "optional": true
+                }
+            ],
+            "returns": "file.File",
+            "returnType": "N/file#File"
+        },
+        {
+            "name": "create",
+            "description": "Creates a new file in the NetSuite File Cabinet. Content held in memory is limited to 10MB.",
+            "params": [
+                {
+                    "name": "options.name",
+                    "type": "string",
+                    "description": "The file name and extension."
+                },
+                {
+                    "name": "options.fileType",
+                    "type": "string",
+                    "description": "The file type. Use the file.Type enum to set the value."
+                },
+                {
+                    "name": "options.contents",
+                    "type": "string",
+                    "description": "The file content. If the file type is binary (for example, PDF), the file content must be base64 encoded.",
+                    "optional": true
+                },
+                {
+                    "name": "options.description",
+                    "type": "string",
+                    "description": "The file description.",
+                    "optional": true
+                },
+                {
+                    "name": "options.encoding",
+                    "type": "string",
+                    "description": "The character encoding on a file. Use the file.Encoding enum to set the value.",
+                    "optional": true
+                },
+                {
+                    "name": "options.folder",
+                    "type": "number",
+                    "description": "The internal ID of the folder within the NetSuite File Cabinet.",
+                    "optional": true
+                },
+                {
+                    "name": "options.isInactive",
+                    "type": "boolean",
+                    "description": "The inactive status of a file. If set to true, the file is inactive. The default value is false.",
+                    "optional": true
+                },
+                {
+                    "name": "options.isOnline",
+                    "type": "boolean",
+                    "description": "The Available without Login status. If set to true, users can download the file outside of a current NetSuite login session. The default value is false.",
+                    "optional": true
+                }
+            ],
+            "returns": "file.File",
+            "returnType": "N/file#File"
+        },
+        {
+            "name": "delete",
+            "description": "Deletes an existing file from the NetSuite File Cabinet.",
+            "params": [
+                {
+                    "name": "options.id",
+                    "type": "number",
+                    "description": "The internal ID of the file to delete."
+                }
+            ],
+            "returns": "void"
+        },
+        {
+            "name": "load",
+            "description": "Loads an existing file from the NetSuite File Cabinet. The file size limit for this method is 2GB.",
+            "params": [
+                {
+                    "name": "options.id",
+                    "type": "number | string",
+                    "description": "The internal ID of the file (number or string), or the file path in the File Cabinet (e.g. 'Images/myImageFile.jpg'). Supports absolute and relative paths."
+                }
+            ],
+            "returns": "file.File",
+            "returnType": "N/file#File"
+        }
+    ],
+    "enums": [
+        {
+            "name": "Encoding",
+            "description": "Holds character encoding values for file contents. Use this enum to set the value of the File.encoding property.",
+            "members": [
+                {
+                    "name": "UTF_8",
+                    "value": "UTF_8",
+                    "description": "Unicode"
+                },
+                {
+                    "name": "ISO_8859_1",
+                    "value": "ISO_8859_1",
+                    "description": "Western (ISO 8859-1)"
+                },
+                {
+                    "name": "WINDOWS_1252",
+                    "value": "WINDOWS_1252",
+                    "description": "Western (Windows-1252)"
+                },
+                {
+                    "name": "GB18030",
+                    "value": "GB18030",
+                    "description": "Chinese Simplified (GB18030)"
+                },
+                {
+                    "name": "SHIFT_JIS",
+                    "value": "SHIFT_JIS",
+                    "description": "Japanese (Shift_JIS)"
+                },
+                {
+                    "name": "MAC_ROMAN",
+                    "value": "MAC_ROMAN",
+                    "description": "Western (Mac Roman)"
+                },
+                {
+                    "name": "GB2312",
+                    "value": "GB2312",
+                    "description": "Chinese Simplified (GB2312)"
+                },
+                {
+                    "name": "BIG5",
+                    "value": "BIG5",
+                    "description": "Chinese Traditional (Big5)"
+                },
+                {
+                    "name": "US_ASCII",
+                    "value": "US_ASCII",
+                    "description": "US-ASCII"
+                }
+            ]
+        },
+        {
+            "name": "NameConflictResolution",
+            "description": "Holds conflict resolution values that apply when copying a file. Use this enum to specify how to resolve conflicts when copying files.",
+            "members": [
+                {
+                    "name": "FAIL",
+                    "value": "FAIL",
+                    "description": "Fail with an error if a conflict occurs."
+                },
+                {
+                    "name": "OVERWRITE",
+                    "value": "OVERWRITE",
+                    "description": "Overwrite the existing file if a conflict occurs. Attributes and permissions of the overwritten file are preserved."
+                },
+                {
+                    "name": "OVERWRITE_CONTENT_AND_ATTRIBUTES",
+                    "value": "OVERWRITE_CONTENT_AND_ATTRIBUTES",
+                    "description": "Overwrite the existing file if a conflict occurs. Attributes and permissions are also overwritten."
+                },
+                {
+                    "name": "RENAME_TO_UNIQUE",
+                    "value": "RENAME_TO_UNIQUE",
+                    "description": "Add a numeric suffix to the name of the copied file if a conflict occurs."
+                }
+            ]
+        },
+        {
+            "name": "Type",
+            "description": "Holds file type values. Use this enum to set the value of the File.fileType property.",
+            "members": [
+                {
+                    "name": "APPCACHE",
+                    "value": "APPCACHE",
+                    "description": "Application cache manifest"
+                },
+                {
+                    "name": "AUTOCAD",
+                    "value": "AUTOCAD",
+                    "description": "AutoCAD file"
+                },
+                {
+                    "name": "BMPIMAGE",
+                    "value": "BMPIMAGE",
+                    "description": "BMP image"
+                },
+                {
+                    "name": "CERTIFICATE",
+                    "value": "CERTIFICATE",
+                    "description": "Certificate file"
+                },
+                {
+                    "name": "CONFIG",
+                    "value": "CONFIG",
+                    "description": "Configuration file"
+                },
+                {
+                    "name": "CSV",
+                    "value": "CSV",
+                    "description": "Comma-separated values"
+                },
+                {
+                    "name": "EXCEL",
+                    "value": "EXCEL",
+                    "description": "Excel spreadsheet"
+                },
+                {
+                    "name": "FLASH",
+                    "value": "FLASH",
+                    "description": "Flash file"
+                },
+                {
+                    "name": "FREEMARKER",
+                    "value": "FREEMARKER",
+                    "description": "FreeMarker template"
+                },
+                {
+                    "name": "GIFIMAGE",
+                    "value": "GIFIMAGE",
+                    "description": "GIF image"
+                },
+                {
+                    "name": "GZIP",
+                    "value": "GZIP",
+                    "description": "GZIP archive"
+                },
+                {
+                    "name": "HTMLDOC",
+                    "value": "HTMLDOC",
+                    "description": "HTML document"
+                },
+                {
+                    "name": "ICON",
+                    "value": "ICON",
+                    "description": "Icon file"
+                },
+                {
+                    "name": "JAVASCRIPT",
+                    "value": "JAVASCRIPT",
+                    "description": "JavaScript file"
+                },
+                {
+                    "name": "JPGIMAGE",
+                    "value": "JPGIMAGE",
+                    "description": "JPEG image"
+                },
+                {
+                    "name": "JSON",
+                    "value": "JSON",
+                    "description": "JSON file"
+                },
+                {
+                    "name": "MESSAGERFC",
+                    "value": "MESSAGERFC",
+                    "description": "Message RFC file"
+                },
+                {
+                    "name": "MISC",
+                    "value": "MISC",
+                    "description": "Miscellaneous file"
+                },
+                {
+                    "name": "MISCBINARY",
+                    "value": "MISCBINARY",
+                    "description": "Miscellaneous binary file"
+                },
+                {
+                    "name": "MISCTEXT",
+                    "value": "MISCTEXT",
+                    "description": "Miscellaneous text file"
+                },
+                {
+                    "name": "MP3",
+                    "value": "MP3",
+                    "description": "MP3 audio"
+                },
+                {
+                    "name": "MPEGMOVIE",
+                    "value": "MPEGMOVIE",
+                    "description": "MPEG movie"
+                },
+                {
+                    "name": "MSPROJECT",
+                    "value": "MSPROJECT",
+                    "description": "Microsoft Project file"
+                },
+                {
+                    "name": "PDF",
+                    "value": "PDF",
+                    "description": "PDF document"
+                },
+                {
+                    "name": "PJPGIMAGE",
+                    "value": "PJPGIMAGE",
+                    "description": "Progressive JPEG image"
+                },
+                {
+                    "name": "PLAINTEXT",
+                    "value": "PLAINTEXT",
+                    "description": "Plain text file"
+                },
+                {
+                    "name": "PNGIMAGE",
+                    "value": "PNGIMAGE",
+                    "description": "PNG image"
+                },
+                {
+                    "name": "POSTSCRIPT",
+                    "value": "POSTSCRIPT",
+                    "description": "PostScript file"
+                },
+                {
+                    "name": "POWERPOINT",
+                    "value": "POWERPOINT",
+                    "description": "PowerPoint presentation"
+                },
+                {
+                    "name": "QUICKTIME",
+                    "value": "QUICKTIME",
+                    "description": "QuickTime movie"
+                },
+                {
+                    "name": "RTF",
+                    "value": "RTF",
+                    "description": "Rich text format"
+                },
+                {
+                    "name": "SCSS",
+                    "value": "SCSS",
+                    "description": "SCSS stylesheet"
+                },
+                {
+                    "name": "SMS",
+                    "value": "SMS",
+                    "description": "SMS file"
+                },
+                {
+                    "name": "STYLESHEET",
+                    "value": "STYLESHEET",
+                    "description": "CSS stylesheet"
+                },
+                {
+                    "name": "SVG",
+                    "value": "SVG",
+                    "description": "SVG image"
+                },
+                {
+                    "name": "TAR",
+                    "value": "TAR",
+                    "description": "TAR archive"
+                },
+                {
+                    "name": "TIFFIMAGE",
+                    "value": "TIFFIMAGE",
+                    "description": "TIFF image"
+                },
+                {
+                    "name": "VISIO",
+                    "value": "VISIO",
+                    "description": "Visio file"
+                },
+                {
+                    "name": "WEBAPPPAGE",
+                    "value": "WEBAPPPAGE",
+                    "description": "Web app page"
+                },
+                {
+                    "name": "WEBAPPSCRIPT",
+                    "value": "WEBAPPSCRIPT",
+                    "description": "Web app script"
+                },
+                {
+                    "name": "WORD",
+                    "value": "WORD",
+                    "description": "Word document"
+                },
+                {
+                    "name": "XMLDOC",
+                    "value": "XMLDOC",
+                    "description": "XML document"
+                },
+                {
+                    "name": "XSD",
+                    "value": "XSD",
+                    "description": "XML Schema Definition"
+                },
+                {
+                    "name": "ZIP",
+                    "value": "ZIP",
+                    "description": "ZIP archive"
+                }
+            ]
+        }
+    ],
+    "objectTypes": [
+        {
+            "name": "File",
+            "description": "Encapsulates a file within NetSuite.",
+            "methods": [
+                {
+                    "name": "appendLine",
+                    "description": "Inserts a line to the end of a CSV or text file.",
+                    "params": [
+                        {
+                            "name": "options.value",
+                            "type": "string",
+                            "description": "The line to append."
+                        }
+                    ],
+                    "returns": "file.File",
+                    "returnType": "N/file#File"
+                },
+                {
+                    "name": "getContents",
+                    "description": "Returns the content of a file in string format. Files loaded in memory are limited to 10MB.",
+                    "params": [],
+                    "returns": "string"
+                },
+                {
+                    "name": "getReader",
+                    "description": "Returns a reader object for performing special read operations.",
+                    "params": [],
+                    "returns": "file.Reader",
+                    "returnType": "N/file#Reader"
+                },
+                {
+                    "name": "getSegments",
+                    "description": "Returns an iterator of segments delimited by the specified separator. The separator is included in each segment.",
+                    "params": [
+                        {
+                            "name": "options.separator",
+                            "type": "string",
+                            "description": "The separator to use to divide the segments."
+                        }
+                    ],
+                    "returns": "Iterator"
+                },
+                {
+                    "name": "lines.iterator",
+                    "description": "Returns an iterator that enables you to iterate over each line in the file. Use the each method on the returned iterator to process each line.",
+                    "params": [],
+                    "returns": "Iterator"
+                },
+                {
+                    "name": "resetStream",
+                    "description": "Resets the file stream to its previous state.",
+                    "params": [],
+                    "returns": "void"
+                },
+                {
+                    "name": "save",
+                    "description": "Saves a new or updated file to the File Cabinet. Returns the internal ID of the saved file.",
+                    "params": [],
+                    "returns": "number"
+                }
+            ],
+            "properties": [
+                {
+                    "name": "description",
+                    "type": "string",
+                    "description": "Description of a file."
+                },
+                {
+                    "name": "encoding",
+                    "type": "string",
+                    "description": "Character encoding on a file. Use the file.Encoding enum to set the value."
+                },
+                {
+                    "name": "fileType",
+                    "type": "string",
+                    "description": "File type of a file. Use the file.Type enum. This property is read-only after the file is created."
+                },
+                {
+                    "name": "folder",
+                    "type": "number",
+                    "description": "Internal ID of the folder that houses a file within the NetSuite File Cabinet."
+                },
+                {
+                    "name": "id",
+                    "type": "number",
+                    "readOnly": true,
+                    "description": "Internal ID of a file in the NetSuite File Cabinet."
+                },
+                {
+                    "name": "isInactive",
+                    "type": "boolean",
+                    "description": "Inactive status of a file. If set to true, the file is inactive."
+                },
+                {
+                    "name": "isOnline",
+                    "type": "boolean",
+                    "description": "Available without Login status. If set to true, users can download the file outside of a current NetSuite login session."
+                },
+                {
+                    "name": "isText",
+                    "type": "boolean",
+                    "readOnly": true,
+                    "description": "Indicates whether a file type is text-based."
+                },
+                {
+                    "name": "name",
+                    "type": "string",
+                    "description": "Name of a file."
+                },
+                {
+                    "name": "path",
+                    "type": "string",
+                    "readOnly": true,
+                    "description": "Relative path to a file in the NetSuite File Cabinet."
+                },
+                {
+                    "name": "size",
+                    "type": "number",
+                    "readOnly": true,
+                    "description": "Size of a file in bytes."
+                },
+                {
+                    "name": "url",
+                    "type": "string",
+                    "readOnly": true,
+                    "description": "URL of a file."
+                }
+            ]
+        },
+        {
+            "name": "Reader",
+            "description": "Encapsulates a reader that you can use to perform special read operations.",
+            "methods": [
+                {
+                    "name": "readChars",
+                    "description": "Returns the next specified number of characters from the current position.",
+                    "params": [
+                        {
+                            "name": "options.number",
+                            "type": "number",
+                            "description": "The number of characters to read."
+                        }
+                    ],
+                    "returns": "string"
+                },
+                {
+                    "name": "readUntil",
+                    "description": "Returns a string from the current position to the next occurrence of the specified tag.",
+                    "params": [
+                        {
+                            "name": "options.tag",
+                            "type": "string",
+                            "description": "The tag to read until."
+                        }
+                    ],
+                    "returns": "string"
+                }
+            ],
+            "properties": []
+        }
+    ]
+}

@@ -1,0 +1,7 @@
+<entryForm scriptid="{{SCRIPTID}}">
+    <name></name>
+    <recordtype></recordtype>
+    <isinactive>F</isinactive>
+    <tabs>
+    </tabs>
+</entryForm>

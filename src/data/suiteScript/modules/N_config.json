@@ -1,0 +1,40 @@
+{
+    "module": "N/config",
+    "description": "Use the N/config module to access NetSuite configuration settings. The config.load(options) method returns a record.Record object. Use the record.Record object members to access configuration settings. You do not need to load the N/record module to do this.",
+    "supportedIn": ["server"],
+    "methods": [
+        {
+            "name": "load",
+            "description": "Loads a record.Record object that encapsulates the specified configuration page.",
+            "supportedIn": ["server"],
+            "params": [
+                {
+                    "name": "options.type",
+                    "type": "string",
+                    "description": "The NetSuite configuration page you want to access. Use values from config.Type enum.",
+                    "optional": false
+                }
+            ],
+            "returns": "record.Record",
+            "returnType": "N/record#Record"
+        }
+    ],
+    "enums": [
+        {
+            "name": "Type",
+            "description": "Holds the string values for supported configuration objects. Use this enum to set the value of the NetSuite configuration page you want to access in the config.load(options) method.",
+            "members": [
+                { "name": "USER_PREFERENCES", "value": "USERPREFERENCES", "description": "Set Preferences page (Home > Set Preferences)" },
+                { "name": "COMPANY_INFORMATION", "value": "COMPANYINFORMATION", "description": "Company Information page (Setup > Company > Company Information)" },
+                { "name": "COMPANY_PREFERENCES", "value": "COMPANYPREFERENCES", "description": "General Preferences page (Setup > Company > General Preferences)" },
+                { "name": "ACCOUNTING_PREFERENCES", "value": "ACCOUNTINGPREFERENCES", "description": "Accounting Preferences page (Setup > Accounting > Accounting Preferences)" },
+                { "name": "ACCOUNTING_PERIODS", "value": "ACCOUNTINGPERIODS", "description": "Accounting Periods page (Setup > Accounting > Manage Accounting Periods)" },
+                { "name": "TAX_PERIODS", "value": "TAXPERIODS", "description": "Tax Periods page (Setup > Accounting > Manage Tax Periods)" },
+                { "name": "FEATURES", "value": "FEATURES", "description": "Enable Features page (Setup > Company > Enable Features)" },
+                { "name": "TIME_POST", "value": "TIMEPOST", "description": "Posting Time Transactions configuration" },
+                { "name": "TIME_VOID", "value": "TIMEVOID", "description": "Posting Time Transactions configuration" }
+            ]
+        }
+    ],
+    "objectTypes": []
+}

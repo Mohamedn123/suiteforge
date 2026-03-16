@@ -1,0 +1,9 @@
+<role scriptid="{{SCRIPTID}}">
+    <name></name>
+    <description></description>
+    <isinactive>F</isinactive>
+    <issalesrole>F</issalesrole>
+    <issupportrole>F</issupportrole>
+    <permissions>
+    </permissions>
+</role>

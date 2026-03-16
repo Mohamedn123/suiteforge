@@ -1,0 +1,657 @@
+{
+    "module": "N/search",
+    "description": "Use the N/search module to create and run on-demand or saved searches, then analyze and iterate through the search results.",
+    "supportedIn": ["client", "server"],
+    "methods": [
+        {
+            "name": "create",
+            "description": "Creates a new search and returns it as a search.Search object.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Search creation options." },
+                { "name": "options.type", "type": "string", "description": "The search type. Use the search.Type enum to set this value." },
+                { "name": "options.filters", "type": "search.Filter[] | Object[]", "description": "Search filters.", "optional": true },
+                { "name": "options.columns", "type": "search.Column[] | string[]", "description": "Search return columns.", "optional": true },
+                { "name": "options.title", "type": "string", "description": "The name for a saved search. Required to save a search.", "optional": true },
+                { "name": "options.id", "type": "string", "description": "Script ID for a saved search. Begins with customsearch.", "optional": true },
+                { "name": "options.isPublic", "type": "boolean", "description": "Set to true to make the search public. Default is false.", "optional": true },
+                { "name": "options.settings", "type": "search.Setting[] | Object[]", "description": "Search settings for the search.", "optional": true }
+            ],
+            "returns": "search.Search",
+            "returnType": "N/search#Search"
+        },
+        {
+            "name": "create.promise",
+            "description": "Creates a new search asynchronously and returns it as a search.Search object.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Search creation options." },
+                { "name": "options.type", "type": "string", "description": "The search type. Use the search.Type enum to set this value." },
+                { "name": "options.filters", "type": "search.Filter[] | Object[]", "description": "Search filters.", "optional": true },
+                { "name": "options.columns", "type": "search.Column[] | string[]", "description": "Search return columns.", "optional": true },
+                { "name": "options.title", "type": "string", "description": "The name for a saved search.", "optional": true },
+                { "name": "options.id", "type": "string", "description": "Script ID for a saved search.", "optional": true },
+                { "name": "options.isPublic", "type": "boolean", "description": "Set to true to make the search public.", "optional": true },
+                { "name": "options.settings", "type": "search.Setting[] | Object[]", "description": "Search settings.", "optional": true }
+            ],
+            "returns": "Promise<search.Search>",
+            "returnType": "N/search#Search"
+        },
+        {
+            "name": "createColumn",
+            "description": "Creates a new search column as a search.Column object.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Column creation options." },
+                { "name": "options.name", "type": "string", "description": "The search return column name." },
+                { "name": "options.join", "type": "string", "description": "The join ID for this search return column.", "optional": true },
+                { "name": "options.summary", "type": "string", "description": "The summary type. Use the search.Summary enum.", "optional": true },
+                { "name": "options.formula", "type": "string", "description": "Formula used for the column.", "optional": true },
+                { "name": "options.label", "type": "string", "description": "The label for the search column.", "optional": true },
+                { "name": "options.function", "type": "string", "description": "Special function applied to the column.", "optional": true },
+                { "name": "options.sort", "type": "string", "description": "The sort direction. Use the search.Sort enum.", "optional": true }
+            ],
+            "returns": "search.Column",
+            "returnType": "N/search#Column"
+        },
+        {
+            "name": "createFilter",
+            "description": "Creates a new search filter as a search.Filter object.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Filter creation options." },
+                { "name": "options.name", "type": "string", "description": "The name or internal ID of the search field." },
+                { "name": "options.join", "type": "string", "description": "The join ID for this search filter.", "optional": true },
+                { "name": "options.operator", "type": "string", "description": "The search operator. Use the search.Operator enum." },
+                { "name": "options.values", "type": "string | string[] | number | Date", "description": "Values to use as filter values.", "optional": true },
+                { "name": "options.formula", "type": "string", "description": "Formula used by this filter.", "optional": true },
+                { "name": "options.summary", "type": "string", "description": "The summary type. Use the search.Summary enum.", "optional": true }
+            ],
+            "returns": "search.Filter",
+            "returnType": "N/search#Filter"
+        },
+        {
+            "name": "createSetting",
+            "description": "Creates a new search setting and returns it as a search.Setting object.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Setting creation options." },
+                { "name": "options.name", "type": "string", "description": "The name of the search parameter." },
+                { "name": "options.value", "type": "string", "description": "The value of the search parameter." }
+            ],
+            "returns": "search.Setting",
+            "returnType": "N/search#Setting"
+        },
+        {
+            "name": "delete",
+            "description": "Deletes an existing saved search.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Delete options." },
+                { "name": "options.id", "type": "string | number", "description": "The internal ID or script ID of the saved search to delete." }
+            ],
+            "returns": "void"
+        },
+        {
+            "name": "delete.promise",
+            "description": "Deletes an existing saved search asynchronously.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Delete options." },
+                { "name": "options.id", "type": "string | number", "description": "The internal ID or script ID of the saved search to delete." }
+            ],
+            "returns": "Promise<void>"
+        },
+        {
+            "name": "duplicates",
+            "description": "Performs a search for duplicate records based on the account's duplicate detection configuration.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Duplicate search options." },
+                { "name": "options.type", "type": "string", "description": "The search type. Use the search.Type enum." },
+                { "name": "options.fields", "type": "Object", "description": "The field-value pairs used to detect duplicates.", "optional": true },
+                { "name": "options.id", "type": "number", "description": "The internal ID of an existing record used for duplicate detection.", "optional": true }
+            ],
+            "returns": "search.Result[]"
+        },
+        {
+            "name": "duplicates.promise",
+            "description": "Performs a search for duplicate records asynchronously based on the account's duplicate detection configuration.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Duplicate search options." },
+                { "name": "options.type", "type": "string", "description": "The search type." },
+                { "name": "options.fields", "type": "Object", "description": "The field-value pairs used to detect duplicates.", "optional": true },
+                { "name": "options.id", "type": "number", "description": "The internal ID of an existing record.", "optional": true }
+            ],
+            "returns": "Promise<search.Result[]>"
+        },
+        {
+            "name": "global",
+            "description": "Performs a global search against a single keyword or multiple keywords.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Global search options." },
+                { "name": "options.keywords", "type": "string", "description": "The keywords to use for the global search." }
+            ],
+            "returns": "search.Result[]"
+        },
+        {
+            "name": "global.promise",
+            "description": "Performs a global search asynchronously against a single keyword or multiple keywords.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Global search options." },
+                { "name": "options.keywords", "type": "string", "description": "The keywords to use for the global search." }
+            ],
+            "returns": "Promise<search.Result[]>"
+        },
+        {
+            "name": "load",
+            "description": "Loads an existing saved search and returns it as a search.Search object.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Load options." },
+                { "name": "options.id", "type": "string | number", "description": "The internal ID or script ID of the saved search to load." },
+                { "name": "options.type", "type": "string", "description": "The search type of the saved search to load.", "optional": true }
+            ],
+            "returns": "search.Search",
+            "returnType": "N/search#Search"
+        },
+        {
+            "name": "load.promise",
+            "description": "Loads an existing saved search asynchronously and returns it as a search.Search object.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Load options." },
+                { "name": "options.id", "type": "string | number", "description": "The internal ID or script ID of the saved search to load." },
+                { "name": "options.type", "type": "string", "description": "The search type of the saved search.", "optional": true }
+            ],
+            "returns": "Promise<search.Search>",
+            "returnType": "N/search#Search"
+        },
+        {
+            "name": "lookupFields",
+            "description": "Performs a search for one or more body fields on a record. Returns select fields as objects with value and text properties.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Lookup options." },
+                { "name": "options.type", "type": "string", "description": "The search type. Use the search.Type enum." },
+                { "name": "options.id", "type": "string | number", "description": "The internal ID of the record." },
+                { "name": "options.columns", "type": "string | string[]", "description": "The body field IDs to look up." }
+            ],
+            "returns": "Object"
+        },
+        {
+            "name": "lookupFields.promise",
+            "description": "Performs a search asynchronously for one or more body fields on a record.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Lookup options." },
+                { "name": "options.type", "type": "string", "description": "The search type." },
+                { "name": "options.id", "type": "string | number", "description": "The internal ID of the record." },
+                { "name": "options.columns", "type": "string | string[]", "description": "The body field IDs to look up." }
+            ],
+            "returns": "Promise<Object>"
+        }
+    ],
+    "enums": [
+        {
+            "name": "Operator",
+            "description": "Holds the values for search operators to use with search.Filter.",
+            "members": [
+                { "name": "AFTER", "value": "after", "description": "Date is after" },
+                { "name": "ALLOF", "value": "allof", "description": "All of (multi-select)" },
+                { "name": "ANY", "value": "any", "description": "Any value" },
+                { "name": "ANYOF", "value": "anyof", "description": "Any of (multi-select)" },
+                { "name": "BEFORE", "value": "before", "description": "Date is before" },
+                { "name": "BETWEEN", "value": "between", "description": "Between two values" },
+                { "name": "CONTAINS", "value": "contains", "description": "Contains substring" },
+                { "name": "DOESNOTCONTAIN", "value": "doesnotcontain", "description": "Does not contain substring" },
+                { "name": "DOESNOTSTARTWITH", "value": "doesnotstartwith", "description": "Does not start with" },
+                { "name": "EQUALTO", "value": "equalto", "description": "Equal to" },
+                { "name": "GREATERTHAN", "value": "greaterthan", "description": "Greater than" },
+                { "name": "GREATERTHANOREQUALTO", "value": "greaterthanorequalto", "description": "Greater than or equal to" },
+                { "name": "HASKEYWORDS", "value": "haskeywords", "description": "Has keywords" },
+                { "name": "IS", "value": "is", "description": "Is exactly" },
+                { "name": "ISEMPTY", "value": "isempty", "description": "Is empty" },
+                { "name": "ISNOT", "value": "isnot", "description": "Is not" },
+                { "name": "ISNOTEMPTY", "value": "isnotempty", "description": "Is not empty" },
+                { "name": "LESSTHAN", "value": "lessthan", "description": "Less than" },
+                { "name": "LESSTHANOREQUALTO", "value": "lessthanorequalto", "description": "Less than or equal to" },
+                { "name": "NONEOF", "value": "noneof", "description": "None of (multi-select)" },
+                { "name": "NOTAFTER", "value": "notafter", "description": "Not after date" },
+                { "name": "NOTALLOF", "value": "notallof", "description": "Not all of (multi-select)" },
+                { "name": "NOTBEFORE", "value": "notbefore", "description": "Not before date" },
+                { "name": "NOTBETWEEN", "value": "notbetween", "description": "Not between two values" },
+                { "name": "NOTEQUALTO", "value": "notequalto", "description": "Not equal to" },
+                { "name": "NOTGREATERTHAN", "value": "notgreaterthan", "description": "Not greater than" },
+                { "name": "NOTGREATERTHANOREQUALTO", "value": "notgreaterthanorequalto", "description": "Not greater than or equal to" },
+                { "name": "NOTLESSTHAN", "value": "notlessthan", "description": "Not less than" },
+                { "name": "NOTLESSTHANOREQUALTO", "value": "notlessthanorequalto", "description": "Not less than or equal to" },
+                { "name": "NOTON", "value": "noton", "description": "Not on date" },
+                { "name": "NOTONORAFTER", "value": "notonorafter", "description": "Not on or after date" },
+                { "name": "NOTONORBEFORE", "value": "notonorbefore", "description": "Not on or before date" },
+                { "name": "NOTWITHIN", "value": "notwithin", "description": "Not within date range" },
+                { "name": "ON", "value": "on", "description": "On date" },
+                { "name": "ONORAFTER", "value": "onorafter", "description": "On or after date" },
+                { "name": "ONORBEFORE", "value": "onorbefore", "description": "On or before date" },
+                { "name": "STARTSWITH", "value": "startswith", "description": "Starts with" },
+                { "name": "WITHIN", "value": "within", "description": "Within date range" }
+            ]
+        },
+        {
+            "name": "Sort",
+            "description": "Holds the values for supported sorting directions used with search.createColumn(options).",
+            "members": [
+                { "name": "ASC", "value": "ASC", "description": "Ascending (A-Z, 0-9, oldest first)" },
+                { "name": "DESC", "value": "DESC", "description": "Descending (Z-A, 9-0, newest first)" },
+                { "name": "NONE", "value": "NONE", "description": "No sorting" }
+            ]
+        },
+        {
+            "name": "Summary",
+            "description": "Holds the values for summary types used by the Column.summary property.",
+            "members": [
+                { "name": "GROUP", "value": "GROUP", "description": "Group by this column" },
+                { "name": "COUNT", "value": "COUNT", "description": "Count of values" },
+                { "name": "SUM", "value": "SUM", "description": "Sum of values" },
+                { "name": "AVG", "value": "AVG", "description": "Average of values" },
+                { "name": "MIN", "value": "MIN", "description": "Minimum value" },
+                { "name": "MAX", "value": "MAX", "description": "Maximum value" }
+            ]
+        },
+        {
+            "name": "Type",
+            "description": "Holds the string values for search types used with search.create(options).",
+            "members": [
+                { "name": "ACCOUNT", "value": "account", "description": "Account" },
+                { "name": "ACCOUNTING_PERIOD", "value": "accountingperiod", "description": "Accounting Period" },
+                { "name": "ASSEMBLY_BUILD", "value": "assemblybuild", "description": "Assembly Build" },
+                { "name": "ASSEMBLY_ITEM", "value": "assemblyitem", "description": "Assembly Item" },
+                { "name": "ASSEMBLY_UNBUILD", "value": "assemblyunbuild", "description": "Assembly Unbuild" },
+                { "name": "BIN", "value": "bin", "description": "Bin" },
+                { "name": "BIN_TRANSFER", "value": "bintransfer", "description": "Bin Transfer" },
+                { "name": "BOM", "value": "bom", "description": "Bill of Materials" },
+                { "name": "CALENDAR_EVENT", "value": "calendarevent", "description": "Calendar Event" },
+                { "name": "CAMPAIGN", "value": "campaign", "description": "Campaign" },
+                { "name": "CASH_REFUND", "value": "cashrefund", "description": "Cash Refund" },
+                { "name": "CASH_SALE", "value": "cashsale", "description": "Cash Sale" },
+                { "name": "CHARGE", "value": "charge", "description": "Charge" },
+                { "name": "CHECK", "value": "check", "description": "Check" },
+                { "name": "CLASSIFICATION", "value": "classification", "description": "Classification" },
+                { "name": "COMMERCE_CATEGORY", "value": "commercecategory", "description": "Commerce Category" },
+                { "name": "CONTACT", "value": "contact", "description": "Contact" },
+                { "name": "CREDIT_CARD_CHARGE", "value": "creditcardcharge", "description": "Credit Card Charge" },
+                { "name": "CREDIT_CARD_REFUND", "value": "creditcardrefund", "description": "Credit Card Refund" },
+                { "name": "CREDIT_MEMO", "value": "creditmemo", "description": "Credit Memo" },
+                { "name": "CURRENCY", "value": "currency", "description": "Currency" },
+                { "name": "CUSTOMER", "value": "customer", "description": "Customer" },
+                { "name": "CUSTOMER_CATEGORY", "value": "customercategory", "description": "Customer Category" },
+                { "name": "CUSTOMER_DEPOSIT", "value": "customerdeposit", "description": "Customer Deposit" },
+                { "name": "CUSTOMER_MESSAGE", "value": "customermessage", "description": "Customer Message" },
+                { "name": "CUSTOMER_PAYMENT", "value": "customerpayment", "description": "Customer Payment" },
+                { "name": "CUSTOMER_REFUND", "value": "customerrefund", "description": "Customer Refund" },
+                { "name": "CUSTOM_RECORD", "value": "customrecord", "description": "Custom Record" },
+                { "name": "CUSTOM_TRANSACTION", "value": "customtransaction", "description": "Custom Transaction" },
+                { "name": "DELETED_RECORD", "value": "deletedrecord", "description": "Deleted Record" },
+                { "name": "DEPARTMENT", "value": "department", "description": "Department" },
+                { "name": "DEPOSIT", "value": "deposit", "description": "Deposit" },
+                { "name": "DEPOSIT_APPLICATION", "value": "depositapplication", "description": "Deposit Application" },
+                { "name": "DESCRIPTION_ITEM", "value": "descriptionitem", "description": "Description Item" },
+                { "name": "DISCOUNT_ITEM", "value": "discountitem", "description": "Discount Item" },
+                { "name": "DOWNLOAD_ITEM", "value": "downloaditem", "description": "Download Item" },
+                { "name": "EMPLOYEE", "value": "employee", "description": "Employee" },
+                { "name": "ENTITY", "value": "entity", "description": "Entity" },
+                { "name": "ESTIMATE", "value": "estimate", "description": "Estimate / Quote" },
+                { "name": "EXPENSE_CATEGORY", "value": "expensecategory", "description": "Expense Category" },
+                { "name": "EXPENSE_REPORT", "value": "expensereport", "description": "Expense Report" },
+                { "name": "FAIR_VALUE_PRICE", "value": "fairvalueprice", "description": "Fair Value Price" },
+                { "name": "FOLDER", "value": "folder", "description": "Folder" },
+                { "name": "GIFT_CERTIFICATE", "value": "giftcertificate", "description": "Gift Certificate" },
+                { "name": "GIFT_CERTIFICATE_ITEM", "value": "giftcertificateitem", "description": "Gift Certificate Item" },
+                { "name": "INBOUND_SHIPMENT", "value": "inboundshipment", "description": "Inbound Shipment" },
+                { "name": "INTER_COMPANY_JOURNAL_ENTRY", "value": "intercompanyjournalentry", "description": "Inter-Company Journal Entry" },
+                { "name": "INTER_COMPANY_TRANSFER_ORDER", "value": "intercompanytransferorder", "description": "Inter-Company Transfer Order" },
+                { "name": "INVENTORY_ADJUSTMENT", "value": "inventoryadjustment", "description": "Inventory Adjustment" },
+                { "name": "INVENTORY_COUNT", "value": "inventorycount", "description": "Inventory Count" },
+                { "name": "INVENTORY_ITEM", "value": "inventoryitem", "description": "Inventory Item" },
+                { "name": "INVENTORY_NUMBER", "value": "inventorynumber", "description": "Inventory Number" },
+                { "name": "INVENTORY_TRANSFER", "value": "inventorytransfer", "description": "Inventory Transfer" },
+                { "name": "INVOICE", "value": "invoice", "description": "Invoice" },
+                { "name": "ISSUE", "value": "issue", "description": "Issue" },
+                { "name": "ITEM", "value": "item", "description": "Item" },
+                { "name": "ITEM_FULFILLMENT", "value": "itemfulfillment", "description": "Item Fulfillment" },
+                { "name": "ITEM_GROUP", "value": "itemgroup", "description": "Item Group" },
+                { "name": "ITEM_RECEIPT", "value": "itemreceipt", "description": "Item Receipt" },
+                { "name": "JOB", "value": "job", "description": "Job / Project" },
+                { "name": "JOURNAL_ENTRY", "value": "journalentry", "description": "Journal Entry" },
+                { "name": "KIT_ITEM", "value": "kititem", "description": "Kit/Package Item" },
+                { "name": "LEAD", "value": "lead", "description": "Lead" },
+                { "name": "LOCATION", "value": "location", "description": "Location" },
+                { "name": "LOT_NUMBERED_ASSEMBLY_ITEM", "value": "lotnumberedassemblyitem", "description": "Lot Numbered Assembly Item" },
+                { "name": "LOT_NUMBERED_INVENTORY_ITEM", "value": "lotnumberedinventoryitem", "description": "Lot Numbered Inventory Item" },
+                { "name": "MANUFACTURING_OPERATION_TASK", "value": "manufacturingoperationtask", "description": "Manufacturing Operation Task" },
+                { "name": "MANUFACTURING_ROUTING", "value": "manufacturingrouting", "description": "Manufacturing Routing" },
+                { "name": "MARKUP_ITEM", "value": "markupitem", "description": "Markup Item" },
+                { "name": "MESSAGE", "value": "message", "description": "Message" },
+                { "name": "NEXUS", "value": "nexus", "description": "Nexus" },
+                { "name": "NON_INVENTORY_ITEM", "value": "noninventoryitem", "description": "Non-Inventory Item" },
+                { "name": "NOTE", "value": "note", "description": "Note" },
+                { "name": "OPPORTUNITY", "value": "opportunity", "description": "Opportunity" },
+                { "name": "OTHER_CHARGE_ITEM", "value": "otherchargeitem", "description": "Other Charge Item" },
+                { "name": "OTHER_NAME", "value": "othername", "description": "Other Name" },
+                { "name": "PARTNER", "value": "partner", "description": "Partner" },
+                { "name": "PAYMENT_ITEM", "value": "paymentitem", "description": "Payment Item" },
+                { "name": "PAYMENT_METHOD", "value": "paymentmethod", "description": "Payment Method" },
+                { "name": "PHONE_CALL", "value": "phonecall", "description": "Phone Call" },
+                { "name": "PRICE_LEVEL", "value": "pricelevel", "description": "Price Level" },
+                { "name": "PRICING", "value": "pricing", "description": "Pricing" },
+                { "name": "PROJECT_TASK", "value": "projecttask", "description": "Project Task" },
+                { "name": "PROJECT_TEMPLATE", "value": "projecttemplate", "description": "Project Template" },
+                { "name": "PROMOTION_CODE", "value": "promotioncode", "description": "Promotion Code" },
+                { "name": "PROSPECT", "value": "prospect", "description": "Prospect" },
+                { "name": "PURCHASE_CONTRACT", "value": "purchasecontract", "description": "Purchase Contract" },
+                { "name": "PURCHASE_ORDER", "value": "purchaseorder", "description": "Purchase Order" },
+                { "name": "PURCHASE_REQUISITION", "value": "purchaserequisition", "description": "Purchase Requisition" },
+                { "name": "RETURN_AUTHORIZATION", "value": "returnauthorization", "description": "Return Authorization" },
+                { "name": "REVENUE_ARRANGEMENT", "value": "revenuearrangement", "description": "Revenue Arrangement" },
+                { "name": "REVENUE_COMMITMENT", "value": "revenuecommitment", "description": "Revenue Commitment" },
+                { "name": "REV_REC_SCHEDULE", "value": "revrecschedule", "description": "Revenue Recognition Schedule" },
+                { "name": "ROLE", "value": "role", "description": "Role" },
+                { "name": "SALES_ORDER", "value": "salesorder", "description": "Sales Order" },
+                { "name": "SALES_TAX_ITEM", "value": "salestaxitem", "description": "Sales Tax Item" },
+                { "name": "SAVED_SEARCH", "value": "savedsearch", "description": "Saved Search" },
+                { "name": "SERIALIZED_ASSEMBLY_ITEM", "value": "serializedassemblyitem", "description": "Serialized Assembly Item" },
+                { "name": "SERIALIZED_INVENTORY_ITEM", "value": "serializedinventoryitem", "description": "Serialized Inventory Item" },
+                { "name": "SERVICE_ITEM", "value": "serviceitem", "description": "Service Item" },
+                { "name": "SHIP_ITEM", "value": "shipitem", "description": "Shipping Item" },
+                { "name": "SOLUTION", "value": "solution", "description": "Solution" },
+                { "name": "SUBSIDIARY", "value": "subsidiary", "description": "Subsidiary" },
+                { "name": "SUBSCRIPTION", "value": "subscription", "description": "Subscription" },
+                { "name": "SUBSCRIPTION_LINE", "value": "subscriptionline", "description": "Subscription Line" },
+                { "name": "SUBSCRIPTION_PLAN", "value": "subscriptionplan", "description": "Subscription Plan" },
+                { "name": "SUBTOTAL_ITEM", "value": "subtotalitem", "description": "Subtotal Item" },
+                { "name": "SUPPORT_CASE", "value": "supportcase", "description": "Support Case" },
+                { "name": "TASK", "value": "task", "description": "Task" },
+                { "name": "TAX_GROUP", "value": "taxgroup", "description": "Tax Group" },
+                { "name": "TAX_PERIOD", "value": "taxperiod", "description": "Tax Period" },
+                { "name": "TAX_TYPE", "value": "taxtype", "description": "Tax Type" },
+                { "name": "TERM", "value": "term", "description": "Term" },
+                { "name": "TIME_BILL", "value": "timebill", "description": "Time Entry / Time Bill" },
+                { "name": "TIME_SHEET", "value": "timesheet", "description": "Time Sheet" },
+                { "name": "TOPIC", "value": "topic", "description": "Topic" },
+                { "name": "TRANSACTION", "value": "transaction", "description": "Transaction" },
+                { "name": "TRANSFER_ORDER", "value": "transferorder", "description": "Transfer Order" },
+                { "name": "VENDOR", "value": "vendor", "description": "Vendor" },
+                { "name": "VENDOR_BILL", "value": "vendorbill", "description": "Vendor Bill" },
+                { "name": "VENDOR_CREDIT", "value": "vendorcredit", "description": "Vendor Credit" },
+                { "name": "VENDOR_PAYMENT", "value": "vendorpayment", "description": "Vendor Payment" },
+                { "name": "VENDOR_RETURN_AUTHORIZATION", "value": "vendorreturnauthorization", "description": "Vendor Return Authorization" },
+                { "name": "WORK_ORDER", "value": "workorder", "description": "Work Order" },
+                { "name": "WORK_ORDER_CLOSE", "value": "workorderclose", "description": "Work Order Close" },
+                { "name": "WORK_ORDER_COMPLETION", "value": "workordercompletion", "description": "Work Order Completion" },
+                { "name": "WORK_ORDER_ISSUE", "value": "workorderissue", "description": "Work Order Issue" },
+                { "name": "ZONE", "value": "zone", "description": "Zone" }
+            ]
+        }
+    ],
+    "objectTypes": [
+        {
+            "name": "Search",
+            "description": "Encapsulates a NetSuite search. Use the methods available to the Search object to create, run, or save a search.",
+            "methods": [
+                {
+                    "name": "run",
+                    "description": "Runs an on-demand search created with search.create() or loaded with search.load(), returning the results as a search.ResultSet.",
+                    "params": [],
+                    "returns": "search.ResultSet",
+                    "returnType": "N/search#ResultSet"
+                },
+                {
+                    "name": "runPaged",
+                    "description": "Runs the current search and returns a search.PagedData object.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Paging options.", "optional": true },
+                        { "name": "options.pageSize", "type": "number", "description": "Maximum number of entries per page (5 to 1000). Default is 50.", "optional": true }
+                    ],
+                    "returns": "search.PagedData",
+                    "returnType": "N/search#PagedData"
+                },
+                {
+                    "name": "runPaged.promise",
+                    "description": "Asynchronously runs the current search and returns a search.PagedData object.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Paging options.", "optional": true },
+                        { "name": "options.pageSize", "type": "number", "description": "Maximum number of entries per page (5 to 1000). Default is 50.", "optional": true }
+                    ],
+                    "returns": "Promise<search.PagedData>",
+                    "returnType": "N/search#PagedData"
+                },
+                {
+                    "name": "save",
+                    "description": "Saves a search created by search.create() or loaded with search.load(). Returns the internal ID of the saved search.",
+                    "params": [],
+                    "returns": "number"
+                },
+                {
+                    "name": "save.promise",
+                    "description": "Asynchronously saves a search. Returns the internal ID of the saved search.",
+                    "params": [],
+                    "returns": "Promise<number>"
+                }
+            ],
+            "properties": [
+                { "name": "searchType", "type": "string", "description": "Search type on which the search is based." },
+                { "name": "searchId", "type": "number", "description": "Internal ID of the search." },
+                { "name": "filters", "type": "search.Filter[]", "description": "Filters for the search as an array of search.Filter objects." },
+                { "name": "filterExpression", "type": "Object[]", "description": "Search filter expression as an array of expression objects." },
+                { "name": "columns", "type": "search.Column[] | string[]", "description": "Columns to return as an array of search.Column objects or string array of column names." },
+                { "name": "title", "type": "string", "description": "Title for a saved search." },
+                { "name": "id", "type": "string", "description": "Script ID for a saved search, starting with customsearch." },
+                { "name": "isPublic", "type": "boolean", "description": "True if the search is public, false otherwise." },
+                { "name": "packageId", "type": "string", "description": "The application ID for the search." },
+                { "name": "settings", "type": "search.Setting[] | string[]", "description": "Search settings as an array of search.Setting objects or string array." }
+            ]
+        },
+        {
+            "name": "ResultSet",
+            "description": "Encapsulates a set of search results returned by Search.run().",
+            "methods": [
+                {
+                    "name": "each",
+                    "description": "Iterates over each result row, up to 4000 results. Return true from callback to continue, false to stop.",
+                    "params": [
+                        { "name": "callback", "type": "Function", "description": "A developer-defined function invoked for each result. Receives a search.Result object." }
+                    ],
+                    "returns": "void"
+                },
+                {
+                    "name": "each.promise",
+                    "description": "Asynchronously iterates over each result row, up to 4000 results.",
+                    "params": [
+                        { "name": "callback", "type": "Function", "description": "A developer-defined function invoked for each result." }
+                    ],
+                    "returns": "Promise<void>",
+                    "supportedIn": ["client"]
+                },
+                {
+                    "name": "getRange",
+                    "description": "Retrieves a slice of the search result as an array of search.Result objects.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Range options." },
+                        { "name": "options.start", "type": "number", "description": "The index of the first result to return." },
+                        { "name": "options.end", "type": "number", "description": "The index of the last result to return (exclusive)." }
+                    ],
+                    "returns": "search.Result[]"
+                },
+                {
+                    "name": "getRange.promise",
+                    "description": "Asynchronously retrieves a slice of the search result as an array of search.Result objects.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Range options." },
+                        { "name": "options.start", "type": "number", "description": "The index of the first result to return." },
+                        { "name": "options.end", "type": "number", "description": "The index of the last result to return (exclusive)." }
+                    ],
+                    "returns": "Promise<search.Result[]>",
+                    "supportedIn": ["client"]
+                }
+            ],
+            "properties": [
+                { "name": "columns", "type": "search.Column[]", "description": "An array of search.Column objects representing the columns returned in the search results.", "readOnly": true }
+            ]
+        },
+        {
+            "name": "Result",
+            "description": "Encapsulates a single search result row. Use the methods and properties to get column values for the result.",
+            "methods": [
+                {
+                    "name": "getValue",
+                    "description": "Returns the value of a specified search return column. Accepts an options object with name, join, and summary properties, or a search.Column object.",
+                    "params": [
+                        { "name": "options", "type": "Object | search.Column", "description": "Column options object or a search.Column object." },
+                        { "name": "options.name", "type": "string", "description": "The search return column name.", "optional": true },
+                        { "name": "options.join", "type": "string", "description": "The join ID for the search return column.", "optional": true },
+                        { "name": "options.summary", "type": "string", "description": "The summary type used for the column.", "optional": true }
+                    ],
+                    "returns": "string"
+                },
+                {
+                    "name": "getText",
+                    "description": "Returns the UI display name (text value) for a search result column. Accepts an options object with name, join, and summary properties, or a search.Column object.",
+                    "params": [
+                        { "name": "options", "type": "Object | search.Column", "description": "Column options object or a search.Column object." },
+                        { "name": "options.name", "type": "string", "description": "The search return column name.", "optional": true },
+                        { "name": "options.join", "type": "string", "description": "The join ID for the search return column.", "optional": true },
+                        { "name": "options.summary", "type": "string", "description": "The summary type used for the column.", "optional": true }
+                    ],
+                    "returns": "string"
+                }
+            ],
+            "properties": [
+                { "name": "id", "type": "string", "description": "The internal ID for the record returned in the search result row.", "readOnly": true },
+                { "name": "recordType", "type": "string", "description": "The type of record returned in the search result row.", "readOnly": true },
+                { "name": "columns", "type": "search.Column[]", "description": "Array of search.Column objects for the columns returned in the result row." }
+            ]
+        },
+        {
+            "name": "Column",
+            "description": "Encapsulates a single search column in a search.Search object.",
+            "methods": [
+                {
+                    "name": "setWhenOrderedBy",
+                    "description": "Returns the search column for which the minimal or maximal value should be found when returning the Column value.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options for ordering." },
+                        { "name": "options.name", "type": "string", "description": "The name of the search column for which the minimal or maximal value should be found." },
+                        { "name": "options.join", "type": "string", "description": "The join ID for the column.", "optional": true }
+                    ],
+                    "returns": "search.Column",
+                    "returnType": "N/search#Column"
+                }
+            ],
+            "properties": [
+                { "name": "name", "type": "string", "description": "Name of the search column.", "readOnly": true },
+                { "name": "join", "type": "string", "description": "Join ID for the search column.", "readOnly": true },
+                { "name": "summary", "type": "string", "description": "Returns the summary type for the search column.", "readOnly": true },
+                { "name": "formula", "type": "string", "description": "Formula used for the search column." },
+                { "name": "function", "type": "string", "description": "Special function used in the search column." },
+                { "name": "label", "type": "string", "description": "Label used for the search column. Custom labels only." },
+                { "name": "sort", "type": "string", "description": "The sort direction for this column. Use search.Sort enum values." },
+                { "name": "type", "type": "string", "description": "The formula return type of the column." }
+            ]
+        },
+        {
+            "name": "Filter",
+            "description": "Encapsulates a search filter used in a search.",
+            "methods": [],
+            "properties": [
+                { "name": "name", "type": "string", "description": "Name or internal ID of the search field.", "readOnly": true },
+                { "name": "join", "type": "string", "description": "Join ID for the search filter.", "readOnly": true },
+                { "name": "operator", "type": "string", "description": "Operator used for the search filter.", "readOnly": true },
+                { "name": "summary", "type": "string", "description": "Summary type for the search filter." },
+                { "name": "formula", "type": "string", "description": "Formula used by the search filter." },
+                { "name": "values", "type": "string | string[]", "description": "Values for the search filter." }
+            ]
+        },
+        {
+            "name": "PagedData",
+            "description": "Holds metadata about a paginated query.",
+            "methods": [
+                {
+                    "name": "fetch",
+                    "description": "Retrieves the data within the specified page range.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Fetch options." },
+                        { "name": "options.index", "type": "number", "description": "The index of the page range to fetch." }
+                    ],
+                    "returns": "search.Page",
+                    "returnType": "N/search#Page"
+                },
+                {
+                    "name": "fetch.promise",
+                    "description": "Asynchronously retrieves the data within the specified page range.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Fetch options." },
+                        { "name": "options.index", "type": "number", "description": "The index of the page range to fetch." }
+                    ],
+                    "returns": "Promise<search.Page>",
+                    "returnType": "N/search#Page",
+                    "supportedIn": ["client"]
+                }
+            ],
+            "properties": [
+                { "name": "count", "type": "number", "description": "The total number of results when Search.runPaged() was executed.", "readOnly": true },
+                { "name": "pageRanges", "type": "search.PageRange[]", "description": "The collection of PageRange objects that divide the result set into smaller groups.", "readOnly": true },
+                { "name": "pageSize", "type": "number", "description": "The maximum number of entries per page.", "readOnly": true },
+                { "name": "searchDefinition", "type": "search.Search", "description": "The search criteria used when Search.runPaged() was executed.", "readOnly": true }
+            ]
+        },
+        {
+            "name": "Page",
+            "description": "Encapsulates a set of search results for a single search page.",
+            "methods": [
+                {
+                    "name": "next",
+                    "description": "Gets the next segment of data from a paginated search.",
+                    "params": [],
+                    "returns": "search.Page",
+                    "returnType": "N/search#Page"
+                },
+                {
+                    "name": "next.promise",
+                    "description": "Asynchronously gets the next segment of data from a paginated search.",
+                    "params": [],
+                    "returns": "Promise<search.Page>",
+                    "returnType": "N/search#Page",
+                    "supportedIn": ["client"]
+                },
+                {
+                    "name": "prev",
+                    "description": "Gets the previous segment of data from a paginated search.",
+                    "params": [],
+                    "returns": "search.Page",
+                    "returnType": "N/search#Page"
+                },
+                {
+                    "name": "prev.promise",
+                    "description": "Asynchronously gets the previous segment of data from a paginated search.",
+                    "params": [],
+                    "returns": "Promise<search.Page>",
+                    "returnType": "N/search#Page",
+                    "supportedIn": ["client"]
+                }
+            ],
+            "properties": [
+                { "name": "data", "type": "search.Result[]", "description": "The results from a paginated search page." },
+                { "name": "isFirst", "type": "boolean", "description": "Indicates whether this page is the first page of data.", "readOnly": true },
+                { "name": "isLast", "type": "boolean", "description": "Indicates whether this page is the last page of data.", "readOnly": true },
+                { "name": "pagedData", "type": "search.PagedData", "description": "The PagedData object used to fetch this Page object.", "readOnly": true },
+                { "name": "pageRange", "type": "search.PageRange", "description": "The PageRange object used to fetch this Page object.", "readOnly": true }
+            ]
+        },
+        {
+            "name": "PageRange",
+            "description": "Defines the page range to bound the result set for a paginated query.",
+            "methods": [],
+            "properties": [
+                { "name": "compoundLabel", "type": "string", "description": "Human-readable label with beginning and ending range identifiers.", "readOnly": true },
+                { "name": "index", "type": "number", "description": "The index of this page range.", "readOnly": true }
+            ]
+        },
+        {
+            "name": "Setting",
+            "description": "Encapsulates a search setting. Search settings let you specify search parameters typically available only in the UI.",
+            "methods": [],
+            "properties": [
+                { "name": "name", "type": "string", "description": "The name of the search parameter.", "readOnly": true },
+                { "name": "value", "type": "string", "description": "The value of the search parameter.", "readOnly": true }
+            ]
+        }
+    ]
+}

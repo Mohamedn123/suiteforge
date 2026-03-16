@@ -1,0 +1,31 @@
+{
+    "module": "N/pgp",
+    "description": "Send secure PGP-encrypted messages to one or multiple receivers. SuiteScript 2.1 only.",
+    "supportedIn": ["server"],
+    "methods": [
+        {
+            "name": "createEncryptor",
+            "description": "Creates an encryptor object for PGP encryption.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.recipientKeys", "type": "Array", "description": "Array of recipient public key IDs" },
+                { "name": "options.armor", "type": "boolean", "description": "If true, output is ASCII-armored", "optional": true }
+            ],
+            "returns": "pgp.Encryptor",
+            "supportedIn": ["server"]
+        },
+        {
+            "name": "createDecryptor",
+            "description": "Creates a decryptor object for PGP decryption.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.privateKey", "type": "string", "description": "The script ID of the private key" },
+                { "name": "options.password", "type": "string", "description": "Password for the private key", "optional": true }
+            ],
+            "returns": "pgp.Decryptor",
+            "supportedIn": ["server"]
+        }
+    ],
+    "enums": [],
+    "objectTypes": []
+}

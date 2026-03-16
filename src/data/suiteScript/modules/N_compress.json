@@ -1,0 +1,78 @@
+{
+    "module": "N/compress",
+    "description": "Compress, decompress, and archive files. Create archives (TAR/ZIP) containing multiple files.",
+    "supportedIn": ["server"],
+    "methods": [
+        {
+            "name": "createArchiver",
+            "description": "Creates an Archiver object that can aggregate multiple files into a single archive.",
+            "params": [],
+            "returns": "compress.Archiver",
+            "returnType": "N/compress#Archiver",
+            "supportedIn": ["server"]
+        },
+        {
+            "name": "gzip",
+            "description": "Compresses a file using gzip compression and returns a temporary file object.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.file", "type": "file.File", "description": "The file to compress" },
+                { "name": "options.level", "type": "number", "description": "Compression level (0-9; 0=no compression, 9=best)", "optional": true }
+            ],
+            "returns": "file.File",
+            "returnType": "N/file#File",
+            "supportedIn": ["server"]
+        },
+        {
+            "name": "gunzip",
+            "description": "Decompresses a gzip-compressed file and returns a temporary file object.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.file", "type": "file.File", "description": "The compressed file to decompress" }
+            ],
+            "returns": "file.File",
+            "returnType": "N/file#File",
+            "supportedIn": ["server"]
+        }
+    ],
+    "enums": [
+        {
+            "name": "Type",
+            "description": "Archive types supported for creating archives.",
+            "members": [
+                { "name": "TAR", "value": "TAR", "description": "TAR archive" },
+                { "name": "ZIP", "value": "ZIP", "description": "ZIP archive" },
+                { "name": "CPIO", "value": "CPIO", "description": "CPIO archive" }
+            ]
+        }
+    ],
+    "objectTypes": [
+        {
+            "name": "Archiver",
+            "description": "Manages creation of archive files containing multiple source files.",
+            "methods": [
+                {
+                    "name": "add",
+                    "description": "Adds a file to be included in the archive.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options" },
+                        { "name": "options.file", "type": "file.File", "description": "The file to add to the archive" },
+                        { "name": "options.directory", "type": "string", "description": "Directory path within the archive", "optional": true }
+                    ],
+                    "returns": "void"
+                },
+                {
+                    "name": "archive",
+                    "description": "Creates the archive from added files and returns a temporary file object.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options" },
+                        { "name": "options.type", "type": "string", "description": "Archive type (compress.Type.*)" }
+                    ],
+                    "returns": "file.File",
+                    "returnType": "N/file#File"
+                }
+            ],
+            "properties": []
+        }
+    ]
+}

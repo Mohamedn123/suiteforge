@@ -1,0 +1,111 @@
+{
+    "module": "N/keyControl",
+    "description": "Manage SSH keys and access key storage for SFTP transfers and other cryptographic operations.",
+    "supportedIn": ["server"],
+    "methods": [
+        {
+            "name": "findKeys",
+            "description": "Searches and returns a list of keys based on criteria. If no criteria are set, returns all keys.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Search criteria", "optional": true },
+                { "name": "options.name", "type": "string", "description": "Filter by key name", "optional": true },
+                { "name": "options.nameOperator", "type": "string", "description": "Operator for name filter (keyControl.Operator.*)", "optional": true },
+                { "name": "options.description", "type": "string", "description": "Filter by key description", "optional": true },
+                { "name": "options.descriptionOperator", "type": "string", "description": "Operator for description filter", "optional": true },
+                { "name": "options.scriptId", "type": "string", "description": "Filter by key script ID", "optional": true }
+            ],
+            "returns": "Object",
+            "supportedIn": ["server"]
+        },
+        {
+            "name": "createKey",
+            "description": "Creates a new key record.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.file", "type": "file.File", "description": "The key file" },
+                { "name": "options.password", "type": "string", "description": "Password for the key", "optional": true },
+                { "name": "options.scriptId", "type": "string", "description": "Script ID for the key", "optional": true },
+                { "name": "options.name", "type": "string", "description": "Name of the key", "optional": true },
+                { "name": "options.description", "type": "string", "description": "Description of the key", "optional": true },
+                { "name": "options.restrictions", "type": "string", "description": "Employee IDs to restrict access", "optional": true }
+            ],
+            "returns": "keyControl.Key",
+            "returnType": "N/keyControl#Key",
+            "supportedIn": ["server"]
+        },
+        {
+            "name": "deleteKey",
+            "description": "Marks a key as deleted. The history is retained.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.scriptId", "type": "string", "description": "The script ID of the key to delete" }
+            ],
+            "returns": "Object",
+            "supportedIn": ["server"]
+        },
+        {
+            "name": "loadKey",
+            "description": "Loads a key by its script ID.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.scriptId", "type": "string", "description": "The script ID of the key to load" }
+            ],
+            "returns": "keyControl.Key",
+            "returnType": "N/keyControl#Key",
+            "supportedIn": ["server"]
+        },
+        {
+            "name": "lock",
+            "description": "Locks a key so it cannot be edited in the UI.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.scriptId", "type": "string", "description": "The script ID of the key to lock" }
+            ],
+            "returns": "string",
+            "supportedIn": ["server"]
+        },
+        {
+            "name": "unlock",
+            "description": "Unlocks a previously locked key.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.scriptId", "type": "string", "description": "The script ID of the key to unlock" }
+            ],
+            "returns": "string",
+            "supportedIn": ["server"]
+        }
+    ],
+    "enums": [
+        {
+            "name": "Operator",
+            "description": "Operators for filtering keys in findKeys().",
+            "members": [
+                { "name": "CONTAINS", "value": "CONTAINS", "description": "Contains the value" },
+                { "name": "STARTS_WITH", "value": "STARTS_WITH", "description": "Starts with the value" },
+                { "name": "EQUALS", "value": "EQUALS", "description": "Exactly equals the value" }
+            ]
+        }
+    ],
+    "objectTypes": [
+        {
+            "name": "Key",
+            "description": "Represents an SSH key or secret key record.",
+            "methods": [
+                {
+                    "name": "save",
+                    "description": "Saves the key record.",
+                    "params": [],
+                    "returns": "Object"
+                }
+            ],
+            "properties": [
+                { "name": "scriptId", "type": "string", "description": "Script ID of the key (prefixed with custkey)." },
+                { "name": "name", "type": "string", "description": "Name of the key." },
+                { "name": "description", "type": "string", "description": "Description of the key." },
+                { "name": "file", "type": "file.File", "description": "File object of the key." },
+                { "name": "password", "type": "string", "description": "Password of the key (write-only)." },
+                { "name": "restrictions", "type": "string", "description": "Internal IDs of restricted employees." }
+            ]
+        }
+    ]
+}

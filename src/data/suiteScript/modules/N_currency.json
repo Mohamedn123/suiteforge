@@ -1,0 +1,50 @@
+{
+    "module": "N/currency",
+    "description": "Use the N/currency module to work with exchange rates within your NetSuite account. You can use this module to find the exchange rate between two currencies based on a certain date. The Multiple Currencies feature must be enabled.",
+    "supportedIn": ["client", "server"],
+    "methods": [
+        {
+            "name": "exchangeRate",
+            "description": "Returns an exchange rate between two currencies. The source currency is looked up relative to the target currency on the effective date.",
+            "params": [
+                {
+                    "name": "options",
+                    "type": "Object",
+                    "description": "Exchange rate options object."
+                },
+                {
+                    "name": "options.source",
+                    "type": "number|string",
+                    "description": "The internal ID or three-letter ISO code for the currency you are converting from (e.g., 1 or USD)."
+                },
+                {
+                    "name": "options.target",
+                    "type": "number|string",
+                    "description": "The internal ID or three-letter ISO code for the currency you are converting to."
+                },
+                {
+                    "name": "options.date",
+                    "type": "Date",
+                    "description": "Pass in a new Date object. If not specified, defaults to today. The date determines the exchange rate in effect.",
+                    "optional": true
+                }
+            ],
+            "returns": "number"
+        },
+        {
+            "name": "exchangeRate.promise",
+            "description": "Returns an exchange rate between two currencies asynchronously.",
+            "supportedIn": ["client"],
+            "params": [
+                {
+                    "name": "options",
+                    "type": "Object",
+                    "description": "Same parameters as currency.exchangeRate(options): source, target, date (optional)."
+                }
+            ],
+            "returns": "Promise<number>"
+        }
+    ],
+    "enums": [],
+    "objectTypes": []
+}

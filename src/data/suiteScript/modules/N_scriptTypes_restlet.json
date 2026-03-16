@@ -1,0 +1,19 @@
+{
+    "module": "N/scriptTypes/restlet",
+    "description": "Create custom handling for RESTlet scripts with request/response processing capabilities.",
+    "supportedIn": ["server"],
+    "methods": [
+        {
+            "name": "CustomRESTlet",
+            "description": "The CustomRESTlet class provides a mechanism to define custom RESTlet implementations with request and response processing.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.execute", "type": "Function", "description": "The function to execute when the RESTlet is invoked" }
+            ],
+            "returns": "Object",
+            "supportedIn": ["server"]
+        }
+    ],
+    "enums": [],
+    "objectTypes": []
+}

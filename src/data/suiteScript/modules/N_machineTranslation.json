@@ -1,0 +1,95 @@
+{
+    "module": "N/machineTranslation",
+    "description": "Translate text into supported languages using generative AI via the OCI Language service. SuiteScript 2.1 only.",
+    "supportedIn": ["server"],
+    "methods": [
+        {
+            "name": "createDocument",
+            "description": "Creates a document to be used as source content for translation.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.id", "type": "string", "description": "A unique ID for the document" },
+                { "name": "options.text", "type": "string", "description": "The text content to translate (max 5,000 characters)" },
+                { "name": "options.language", "type": "string", "description": "The source language (machineTranslation.Language.*)", "optional": true }
+            ],
+            "returns": "machineTranslation.Document",
+            "supportedIn": ["server"]
+        },
+        {
+            "name": "translate",
+            "description": "Translates a set of documents into the specified target language.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.documents", "type": "Array", "description": "Array of Document objects to translate" },
+                { "name": "options.targetLanguage", "type": "string", "description": "The target language (machineTranslation.Language.*)" }
+            ],
+            "returns": "machineTranslation.Response",
+            "supportedIn": ["server"]
+        },
+        {
+            "name": "translate.promise",
+            "description": "Asynchronously translates documents into the specified target language.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.documents", "type": "Array", "description": "Array of Document objects to translate" },
+                { "name": "options.targetLanguage", "type": "string", "description": "The target language" }
+            ],
+            "returns": "Promise",
+            "supportedIn": ["server"]
+        }
+    ],
+    "enums": [
+        {
+            "name": "Language",
+            "description": "Supported languages for machine translation.",
+            "members": [
+                { "name": "AR", "value": "ar", "description": "Arabic" },
+                { "name": "CS", "value": "cs", "description": "Czech" },
+                { "name": "DA", "value": "da", "description": "Danish" },
+                { "name": "DE", "value": "de", "description": "German" },
+                { "name": "EL", "value": "el", "description": "Greek" },
+                { "name": "EN", "value": "en", "description": "English" },
+                { "name": "ES", "value": "es", "description": "Spanish" },
+                { "name": "FI", "value": "fi", "description": "Finnish" },
+                { "name": "FR", "value": "fr", "description": "French" },
+                { "name": "HE", "value": "he", "description": "Hebrew" },
+                { "name": "HU", "value": "hu", "description": "Hungarian" },
+                { "name": "IT", "value": "it", "description": "Italian" },
+                { "name": "JA", "value": "ja", "description": "Japanese" },
+                { "name": "KO", "value": "ko", "description": "Korean" },
+                { "name": "NL", "value": "nl", "description": "Dutch" },
+                { "name": "NO", "value": "no", "description": "Norwegian" },
+                { "name": "PL", "value": "pl", "description": "Polish" },
+                { "name": "PT", "value": "pt", "description": "Portuguese" },
+                { "name": "RO", "value": "ro", "description": "Romanian" },
+                { "name": "RU", "value": "ru", "description": "Russian" },
+                { "name": "SV", "value": "sv", "description": "Swedish" },
+                { "name": "TH", "value": "th", "description": "Thai" },
+                { "name": "TR", "value": "tr", "description": "Turkish" },
+                { "name": "ZH_CN", "value": "zh-CN", "description": "Chinese (Simplified)" },
+                { "name": "ZH_TW", "value": "zh-TW", "description": "Chinese (Traditional)" }
+            ]
+        }
+    ],
+    "objectTypes": [
+        {
+            "name": "Document",
+            "description": "A document with text content for translation.",
+            "methods": [],
+            "properties": [
+                { "name": "id", "type": "string", "description": "The document ID." },
+                { "name": "text", "type": "string", "description": "The text content." },
+                { "name": "language", "type": "string", "description": "The language of the document." }
+            ]
+        },
+        {
+            "name": "Response",
+            "description": "The response from the translation service.",
+            "methods": [],
+            "properties": [
+                { "name": "results", "type": "Array", "description": "Array of translated Document objects.", "readOnly": true },
+                { "name": "errors", "type": "Array", "description": "Array of Error objects from the translation service.", "readOnly": true }
+            ]
+        }
+    ]
+}

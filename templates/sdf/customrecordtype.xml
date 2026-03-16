@@ -1,0 +1,16 @@
+<customrecordtype scriptid="{{SCRIPTID}}">
+    <recordname></recordname>
+    <description></description>
+    <isinactive>F</isinactive>
+    <isordered>F</isordered>
+    <showid>F</showid>
+    <allowattachments>T</allowattachments>
+    <allowinlineediting>F</allowinlineediting>
+    <allowpdfprinting>T</allowpdfprinting>
+    <allowquickadd>F</allowquickadd>
+    <allowquicksearch>F</allowquicksearch>
+    <allowuiaccess>T</allowuiaccess>
+    <hierarchytype>FLAT</hierarchytype>
+    <fields>
+    </fields>
+</customrecordtype>

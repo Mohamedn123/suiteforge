@@ -1,0 +1,539 @@
+{
+    "module": "N/https",
+    "description": "Use the N/https module to manage content sent to a third party using HTTPS calls. Encapsulates all the functionality of the N/http module but does not allow the HTTP protocol.",
+    "supportedIn": ["client", "server"],
+    "methods": [
+        {
+            "name": "get",
+            "description": "Sends an HTTPS GET request and returns the response.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Request options" },
+                { "name": "options.url", "type": "string", "description": "The HTTPS URL being requested." },
+                { "name": "options.headers", "type": "Object", "description": "Request headers.", "optional": true }
+            ],
+            "returns": "https.ClientResponse",
+            "returnType": "N/https#ClientResponse"
+        },
+        {
+            "name": "get.promise",
+            "description": "Sends an HTTPS GET request asynchronously and returns the response.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Request options" },
+                { "name": "options.url", "type": "string", "description": "The HTTPS URL being requested." },
+                { "name": "options.headers", "type": "Object", "description": "Request headers.", "optional": true }
+            ],
+            "returns": "Promise<https.ClientResponse>"
+        },
+        {
+            "name": "post",
+            "description": "Sends an HTTPS POST request and returns the response.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Request options" },
+                { "name": "options.url", "type": "string", "description": "The HTTPS URL being requested." },
+                { "name": "options.body", "type": "string|Object", "description": "The POST data." },
+                { "name": "options.headers", "type": "Object", "description": "Request headers.", "optional": true }
+            ],
+            "returns": "https.ClientResponse",
+            "returnType": "N/https#ClientResponse"
+        },
+        {
+            "name": "post.promise",
+            "description": "Sends an HTTPS POST request asynchronously and returns the response.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Request options" },
+                { "name": "options.url", "type": "string", "description": "The HTTPS URL being requested." },
+                { "name": "options.body", "type": "string|Object", "description": "The POST data." },
+                { "name": "options.headers", "type": "Object", "description": "Request headers.", "optional": true }
+            ],
+            "returns": "Promise<https.ClientResponse>"
+        },
+        {
+            "name": "put",
+            "description": "Sends an HTTPS PUT request and returns the response.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Request options" },
+                { "name": "options.url", "type": "string", "description": "The HTTPS URL being requested." },
+                { "name": "options.body", "type": "string|Object", "description": "The PUT data." },
+                { "name": "options.headers", "type": "Object", "description": "Request headers.", "optional": true }
+            ],
+            "returns": "https.ClientResponse",
+            "returnType": "N/https#ClientResponse"
+        },
+        {
+            "name": "put.promise",
+            "description": "Sends an HTTPS PUT request asynchronously and returns the response.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Request options" },
+                { "name": "options.url", "type": "string", "description": "The HTTPS URL being requested." },
+                { "name": "options.body", "type": "string|Object", "description": "The PUT data." },
+                { "name": "options.headers", "type": "Object", "description": "Request headers.", "optional": true }
+            ],
+            "returns": "Promise<https.ClientResponse>"
+        },
+        {
+            "name": "delete",
+            "description": "Sends an HTTPS DELETE request and returns the response.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Request options" },
+                { "name": "options.url", "type": "string", "description": "The HTTPS URL being requested." },
+                { "name": "options.headers", "type": "Object", "description": "Request headers.", "optional": true }
+            ],
+            "returns": "https.ClientResponse",
+            "returnType": "N/https#ClientResponse"
+        },
+        {
+            "name": "delete.promise",
+            "description": "Sends an HTTPS DELETE request asynchronously and returns the response.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Request options" },
+                { "name": "options.url", "type": "string", "description": "The HTTPS URL being requested." },
+                { "name": "options.headers", "type": "Object", "description": "Request headers.", "optional": true }
+            ],
+            "returns": "Promise<https.ClientResponse>"
+        },
+        {
+            "name": "request",
+            "description": "Sends an HTTPS request and returns the response.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Request options" },
+                { "name": "options.method", "type": "string", "description": "The HTTPS method. Use https.Method enum to set the value." },
+                { "name": "options.url", "type": "string", "description": "The HTTPS URL being requested." },
+                { "name": "options.body", "type": "string|Object", "description": "The request body.", "optional": true },
+                { "name": "options.headers", "type": "Object", "description": "Request headers.", "optional": true }
+            ],
+            "returns": "https.ClientResponse",
+            "returnType": "N/https#ClientResponse"
+        },
+        {
+            "name": "request.promise",
+            "description": "Sends an HTTPS request asynchronously and returns the response.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Request options" },
+                { "name": "options.method", "type": "string", "description": "The HTTPS method. Use https.Method enum to set the value." },
+                { "name": "options.url", "type": "string", "description": "The HTTPS URL being requested." },
+                { "name": "options.body", "type": "string|Object", "description": "The request body.", "optional": true },
+                { "name": "options.headers", "type": "Object", "description": "Request headers.", "optional": true }
+            ],
+            "returns": "Promise<https.ClientResponse>"
+        },
+        {
+            "name": "createSecretKey",
+            "description": "Creates and returns a crypto.SecretKey object. This method can take a GUID or a secret.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.guid", "type": "string", "description": "A GUID used to generate a secret key. Required if secret is not specified.", "optional": true },
+                { "name": "options.secret", "type": "string", "description": "The script ID of the secret used for authentication. Required if guid is not specified.", "optional": true },
+                { "name": "options.encoding", "type": "string", "description": "The encoding for the SecretKey. Use https.Encoding enum to set the value.", "optional": true }
+            ],
+            "returns": "crypto.SecretKey",
+            "returnType": "N/crypto#SecretKey",
+            "supportedIn": ["server"]
+        },
+        {
+            "name": "createSecureString",
+            "description": "Creates and returns an https.SecureString object.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.input", "type": "string", "description": "The string to convert to a SecureString." },
+                { "name": "options.inputEncoding", "type": "string", "description": "The encoding of the input string. Use https.Encoding enum. Default is UTF_8.", "optional": true }
+            ],
+            "returns": "https.SecureString",
+            "returnType": "N/https#SecureString",
+            "supportedIn": ["server"]
+        },
+        {
+            "name": "requestRestlet",
+            "description": "Sends an HTTPS request to a RESTlet and returns the response. Authentication headers are automatically added.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.body", "type": "string|Object", "description": "The PUT/POST data. Required if method is POST or PUT.", "optional": true },
+                { "name": "options.headers", "type": "Object", "description": "The HTTPS headers.", "optional": true },
+                { "name": "options.method", "type": "string", "description": "The HTTPS method (DELETE, GET, HEAD, POST, PUT). Default is GET or POST based on body.", "optional": true },
+                { "name": "options.scriptId", "type": "string|number", "description": "The internal ID or script ID of the script record." },
+                { "name": "options.deploymentId", "type": "string", "description": "The script ID of the script deployment record." },
+                { "name": "options.urlParams", "type": "Object", "description": "Parameters to be appended to the target URL as a query string.", "optional": true }
+            ],
+            "returns": "https.ClientResponse",
+            "returnType": "N/https#ClientResponse",
+            "supportedIn": ["server"]
+        },
+        {
+            "name": "requestRestlet.promise",
+            "description": "Sends an HTTPS request to a RESTlet asynchronously and returns the response.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.body", "type": "string|Object", "description": "The PUT/POST data.", "optional": true },
+                { "name": "options.headers", "type": "Object", "description": "The HTTPS headers.", "optional": true },
+                { "name": "options.method", "type": "string", "description": "The HTTPS method.", "optional": true },
+                { "name": "options.scriptId", "type": "string|number", "description": "The internal ID or script ID of the script record." },
+                { "name": "options.deploymentId", "type": "string", "description": "The script ID of the script deployment record." },
+                { "name": "options.urlParams", "type": "Object", "description": "Parameters to be appended to the target URL.", "optional": true }
+            ],
+            "returns": "Promise<https.ClientResponse>"
+        },
+        {
+            "name": "requestSuitelet",
+            "description": "Sends an HTTPS request to a Suitelet and returns the response.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.scriptId", "type": "string", "description": "The script ID of the script record." },
+                { "name": "options.deploymentId", "type": "string", "description": "The script ID of the script deployment record." },
+                { "name": "options.body", "type": "string|Object", "description": "The body content to send. Only PUT, POST, and PATCH methods support this.", "optional": true },
+                { "name": "options.headers", "type": "Object", "description": "The HTTPS headers.", "optional": true },
+                { "name": "options.method", "type": "string", "description": "The HTTPS request method. Default is GET or POST based on body.", "optional": true },
+                { "name": "options.urlParams", "type": "Object", "description": "Parameters to be appended to the target URL as a query string.", "optional": true }
+            ],
+            "returns": "https.ClientResponse",
+            "returnType": "N/https#ClientResponse"
+        },
+        {
+            "name": "requestSuitelet.promise",
+            "description": "Sends an HTTPS request asynchronously to a Suitelet and returns the response.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.scriptId", "type": "string", "description": "The script ID of the script record." },
+                { "name": "options.deploymentId", "type": "string", "description": "The script ID of the script deployment record." },
+                { "name": "options.body", "type": "string|Object", "description": "The body content to send.", "optional": true },
+                { "name": "options.headers", "type": "Object", "description": "The HTTPS headers.", "optional": true },
+                { "name": "options.method", "type": "string", "description": "The HTTPS request method.", "optional": true },
+                { "name": "options.urlParams", "type": "Object", "description": "Parameters to be appended to the target URL.", "optional": true }
+            ],
+            "returns": "Promise<https.ClientResponse>"
+        },
+        {
+            "name": "requestSuiteTalkRest",
+            "description": "Sends an HTTPS request to a SuiteTalk REST endpoint and returns the response. Authentication headers are automatically added.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.body", "type": "string|Object", "description": "The PUT/POST data. Required if method is POST or PUT.", "optional": true },
+                { "name": "options.url", "type": "string", "description": "The URL of a SuiteTalk REST endpoint." },
+                { "name": "options.headers", "type": "Object", "description": "The HTTPS headers.", "optional": true },
+                { "name": "options.method", "type": "string", "description": "The HTTPS method (DELETE, GET, HEAD, POST, PUT). Default is GET or POST based on body.", "optional": true }
+            ],
+            "returns": "https.ClientResponse",
+            "returnType": "N/https#ClientResponse",
+            "supportedIn": ["server"]
+        }
+    ],
+    "enums": [
+        {
+            "name": "CacheDuration",
+            "description": "Holds the string values for supported cache durations.",
+            "members": [
+                { "name": "UNIQUE", "value": "UNIQUE", "description": "Never cached, always executed on request." },
+                { "name": "SHORT", "value": "SHORT", "description": "Conceptually corresponds to minutes." },
+                { "name": "MEDIUM", "value": "MEDIUM", "description": "Conceptually corresponds to hours." },
+                { "name": "LONG", "value": "LONG", "description": "Conceptually corresponds to days." }
+            ]
+        },
+        {
+            "name": "Encoding",
+            "description": "Holds the string values for supported encoding types.",
+            "members": [
+                { "name": "UTF_8", "value": "UTF_8", "description": "UTF-8 encoding" },
+                { "name": "BASE_16", "value": "BASE_16", "description": "Base-16 encoding" },
+                { "name": "BASE_32", "value": "BASE_32", "description": "Base-32 encoding" },
+                { "name": "BASE_64", "value": "BASE_64", "description": "Base-64 encoding" },
+                { "name": "BASE_64_URL_SAFE", "value": "BASE_64_URL_SAFE", "description": "Base-64 URL-safe encoding" },
+                { "name": "HEX", "value": "HEX", "description": "Hexadecimal encoding" }
+            ]
+        },
+        {
+            "name": "HashAlg",
+            "description": "Holds the string values for supported hashing algorithms.",
+            "members": [
+                { "name": "SHA256", "value": "SHA256", "description": "SHA-256 (256-bit)" },
+                { "name": "SHA512", "value": "SHA512", "description": "SHA-512 (512-bit)" }
+            ]
+        },
+        {
+            "name": "Method",
+            "description": "Holds the string values for supported HTTPS requests.",
+            "members": [
+                { "name": "GET", "value": "GET", "description": "HTTPS GET" },
+                { "name": "POST", "value": "POST", "description": "HTTPS POST" },
+                { "name": "PUT", "value": "PUT", "description": "HTTPS PUT" },
+                { "name": "DELETE", "value": "DELETE", "description": "HTTPS DELETE" },
+                { "name": "HEAD", "value": "HEAD", "description": "HTTPS HEAD" }
+            ]
+        },
+        {
+            "name": "RedirectType",
+            "description": "Holds the string values for supported NetSuite resources that you can redirect to.",
+            "members": [
+                { "name": "MEDIA_ITEM", "value": "MEDIA_ITEM", "description": "Redirect to a media item." },
+                { "name": "RECORD", "value": "RECORD", "description": "Redirect to a record." },
+                { "name": "RESTLET", "value": "RESTLET", "description": "Redirect to a RESTlet." },
+                { "name": "SUITELET", "value": "SUITELET", "description": "Redirect to a Suitelet." },
+                { "name": "TASK_LINK", "value": "TASK_LINK", "description": "Redirect to a task link." }
+            ]
+        }
+    ],
+    "objectTypes": [
+        {
+            "name": "ClientResponse",
+            "description": "Encapsulates the response to an HTTPS client request.",
+            "methods": [
+                {
+                    "name": "getHeader",
+                    "description": "Returns the value of a response header.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options" },
+                        { "name": "options.name", "type": "string", "description": "The header name." }
+                    ],
+                    "returns": "string|string[]"
+                },
+                {
+                    "name": "getAllHeaders",
+                    "description": "Returns all response headers.",
+                    "params": [],
+                    "returns": "Object"
+                }
+            ],
+            "properties": [
+                { "name": "body", "type": "string", "description": "The response body.", "readOnly": true },
+                { "name": "code", "type": "number", "description": "The response code.", "readOnly": true },
+                { "name": "headers", "type": "Object", "description": "The response headers.", "readOnly": true }
+            ]
+        },
+        {
+            "name": "SecureString",
+            "description": "Encapsulates data that may be sent to a third-party using an HTTPS call.",
+            "methods": [
+                {
+                    "name": "appendSecureString",
+                    "description": "Appends one SecureString to another SecureString.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options" },
+                        { "name": "options.secureString", "type": "https.SecureString", "description": "The SecureString to append." }
+                    ],
+                    "returns": "https.SecureString",
+                    "returnType": "N/https#SecureString"
+                },
+                {
+                    "name": "appendString",
+                    "description": "Appends a string to a SecureString.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options" },
+                        { "name": "options.input", "type": "string", "description": "The string to append." },
+                        { "name": "options.encoding", "type": "string", "description": "The encoding of the string. Use https.Encoding enum.", "optional": true }
+                    ],
+                    "returns": "https.SecureString",
+                    "returnType": "N/https#SecureString"
+                },
+                {
+                    "name": "convertEncoding",
+                    "description": "Converts the content of a SecureString between two encodings.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options" },
+                        { "name": "options.fromEncoding", "type": "string", "description": "The source encoding. Use https.Encoding enum." },
+                        { "name": "options.toEncoding", "type": "string", "description": "The target encoding. Use https.Encoding enum." }
+                    ],
+                    "returns": "https.SecureString",
+                    "returnType": "N/https#SecureString"
+                },
+                {
+                    "name": "hash",
+                    "description": "Creates a hash for a SecureString.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options" },
+                        { "name": "options.algorithm", "type": "string", "description": "The hash algorithm. Use https.HashAlg enum to set the value." }
+                    ],
+                    "returns": "https.SecureString",
+                    "returnType": "N/https#SecureString"
+                },
+                {
+                    "name": "hmac",
+                    "description": "Creates an hmac for a SecureString.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options" },
+                        { "name": "options.algorithm", "type": "string", "description": "The hash algorithm. Use https.HashAlg enum to set the value." },
+                        { "name": "options.key", "type": "crypto.SecretKey", "description": "The secret key for the hmac." }
+                    ],
+                    "returns": "https.SecureString",
+                    "returnType": "N/https#SecureString"
+                },
+                {
+                    "name": "replaceString",
+                    "description": "Replaces all occurrences of a pattern string inside a SecureString with a replacement string.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options" },
+                        { "name": "options.pattern", "type": "string", "description": "The pattern to search for." },
+                        { "name": "options.replacement", "type": "string", "description": "The replacement string." }
+                    ],
+                    "returns": "https.SecureString",
+                    "returnType": "N/https#SecureString"
+                },
+                {
+                    "name": "toString",
+                    "description": "Returns the SecureString as a masked string representation.",
+                    "params": [],
+                    "returns": "string"
+                }
+            ],
+            "properties": []
+        },
+        {
+            "name": "ServerRequest",
+            "description": "Encapsulates the HTTPS request information sent to an HTTPS server. For example, a request received by a Suitelet or RESTlet.",
+            "methods": [
+                {
+                    "name": "getHeader",
+                    "description": "Returns the value of a request header.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options" },
+                        { "name": "options.name", "type": "string", "description": "The header name." }
+                    ],
+                    "returns": "string"
+                },
+                {
+                    "name": "getLineCount",
+                    "description": "Returns the number of lines in a sublist.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options" },
+                        { "name": "options.group", "type": "string", "description": "The sublist internal ID." }
+                    ],
+                    "returns": "number"
+                },
+                {
+                    "name": "getSublistValue",
+                    "description": "Returns the value of a sublist line item.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options" },
+                        { "name": "options.group", "type": "string", "description": "The sublist internal ID." },
+                        { "name": "options.name", "type": "string", "description": "The field ID." },
+                        { "name": "options.line", "type": "string", "description": "The line number." }
+                    ],
+                    "returns": "string"
+                },
+                {
+                    "name": "getAllHeaders",
+                    "description": "Returns all request headers.",
+                    "params": [],
+                    "returns": "Object"
+                }
+            ],
+            "properties": [
+                { "name": "body", "type": "string", "description": "The server request body.", "readOnly": true },
+                { "name": "clientIpAddress", "type": "string", "description": "The remote client IP address.", "readOnly": true },
+                { "name": "files", "type": "Object", "description": "The server request files.", "readOnly": true },
+                { "name": "headers", "type": "Object", "description": "The server request headers.", "readOnly": true },
+                { "name": "method", "type": "string", "description": "The HTTPS method for the server request.", "readOnly": true },
+                { "name": "parameters", "type": "Object", "description": "The server request parameters.", "readOnly": true },
+                { "name": "url", "type": "string", "description": "The server request URL.", "readOnly": true }
+            ]
+        },
+        {
+            "name": "ServerResponse",
+            "description": "Encapsulates the response from an HTTPS server to an HTTPS request. For example, a response from a Suitelet or RESTlet.",
+            "methods": [
+                {
+                    "name": "addHeader",
+                    "description": "Adds a header to the response.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options" },
+                        { "name": "options.name", "type": "string", "description": "The header name." },
+                        { "name": "options.value", "type": "string", "description": "The header value." }
+                    ],
+                    "returns": "void"
+                },
+                {
+                    "name": "getHeader",
+                    "description": "Returns the value of a response header.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options" },
+                        { "name": "options.name", "type": "string", "description": "The header name." }
+                    ],
+                    "returns": "string|string[]"
+                },
+                {
+                    "name": "getAllHeaders",
+                    "description": "Returns all response headers.",
+                    "params": [],
+                    "returns": "Object"
+                },
+                {
+                    "name": "renderPdf",
+                    "description": "Generates and renders a PDF directly to the response.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options" },
+                        { "name": "options.xmlString", "type": "string", "description": "The XML/BFO template string." }
+                    ],
+                    "returns": "void"
+                },
+                {
+                    "name": "sendRedirect",
+                    "description": "Sets the redirect URL by resolving to a NetSuite resource.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Redirect options" },
+                        { "name": "options.type", "type": "string", "description": "The redirect type. Use https.RedirectType enum to set the value." },
+                        { "name": "options.identifier", "type": "string", "description": "The target identifier." },
+                        { "name": "options.id", "type": "string", "description": "The record internal ID.", "optional": true },
+                        { "name": "options.editMode", "type": "boolean", "description": "Open in edit mode.", "optional": true },
+                        { "name": "options.parameters", "type": "Object", "description": "URL parameters.", "optional": true }
+                    ],
+                    "returns": "void"
+                },
+                {
+                    "name": "setCdnCacheable",
+                    "description": "Sets CDN caching for a period of time.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options" },
+                        { "name": "options.type", "type": "string", "description": "The CDN cache duration. Use https.CacheDuration enum to set the value." }
+                    ],
+                    "returns": "void"
+                },
+                {
+                    "name": "setHeader",
+                    "description": "Sets the value of a response header.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options" },
+                        { "name": "options.name", "type": "string", "description": "The header name." },
+                        { "name": "options.value", "type": "string", "description": "The header value." }
+                    ],
+                    "returns": "void"
+                },
+                {
+                    "name": "write",
+                    "description": "Writes information (text/xml/html) to the response.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options" },
+                        { "name": "options.output", "type": "string", "description": "The content to write to the response." }
+                    ],
+                    "returns": "void"
+                },
+                {
+                    "name": "writeFile",
+                    "description": "Writes a file to the response.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options" },
+                        { "name": "options.file", "type": "file.File", "description": "The file to write." },
+                        { "name": "options.isInline", "type": "boolean", "description": "Display inline vs. download.", "optional": true }
+                    ],
+                    "returns": "void"
+                },
+                {
+                    "name": "writeLine",
+                    "description": "Writes line information (text/xml/html) to the response.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options" },
+                        { "name": "options.output", "type": "string", "description": "The content to write." }
+                    ],
+                    "returns": "void"
+                },
+                {
+                    "name": "writePage",
+                    "description": "Generates a page.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options" },
+                        { "name": "options.pageObject", "type": "Object", "description": "A serverWidget.Form, serverWidget.List, or serverWidget.Assistant object." }
+                    ],
+                    "returns": "void"
+                }
+            ],
+            "properties": [
+                { "name": "headers", "type": "Object", "description": "The server response headers.", "readOnly": true }
+            ]
+        }
+    ]
+}

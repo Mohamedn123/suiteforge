@@ -1,0 +1,233 @@
+{
+    "module": "N/crypto",
+    "description": "Use N/crypto module to perform hashing, hash-based message authentication (hmac), and symmetrical encryption functions.",
+    "supportedIn": ["server"],
+    "methods": [
+        {
+            "name": "createCipher",
+            "description": "Creates and returns a new crypto.Cipher object.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.algorithm", "type": "string", "description": "The encryption algorithm. Use crypto.EncryptionAlg enum to set the value." },
+                { "name": "options.key", "type": "crypto.SecretKey", "description": "The crypto.SecretKey object." },
+                { "name": "options.padding", "type": "string", "description": "The padding for the cipher text. Use crypto.Padding enum to set the value. Default is crypto.Padding.PKCS5Padding.", "optional": true }
+            ],
+            "returns": "crypto.Cipher",
+            "returnType": "N/crypto#Cipher"
+        },
+        {
+            "name": "createDecipher",
+            "description": "Creates and returns a new crypto.Decipher object.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.algorithm", "type": "string", "description": "The encryption algorithm. Use crypto.EncryptionAlg enum to set the value." },
+                { "name": "options.key", "type": "crypto.SecretKey", "description": "The crypto.SecretKey object used for encryption." },
+                { "name": "options.padding", "type": "string", "description": "The padding for the cipher. Use crypto.Padding enum to set the value.", "optional": true },
+                { "name": "options.iv", "type": "string", "description": "The initialization vector that was used for encryption." }
+            ],
+            "returns": "crypto.Decipher",
+            "returnType": "N/crypto#Decipher"
+        },
+        {
+            "name": "createHash",
+            "description": "Creates and returns a new crypto.Hash object.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.algorithm", "type": "string", "description": "The hash algorithm. Use crypto.HashAlg enum to set the value." }
+            ],
+            "returns": "crypto.Hash",
+            "returnType": "N/crypto#Hash"
+        },
+        {
+            "name": "createHmac",
+            "description": "Creates and returns a new crypto.Hmac object.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.algorithm", "type": "string", "description": "The hash algorithm. Use crypto.HashAlg enum to set the value." },
+                { "name": "options.key", "type": "crypto.SecretKey", "description": "The crypto.SecretKey object." }
+            ],
+            "returns": "crypto.Hmac",
+            "returnType": "N/crypto#Hmac"
+        },
+        {
+            "name": "createSecretKey",
+            "description": "Creates and returns a new crypto.SecretKey object.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.guid", "type": "string", "description": "A GUID used to generate a secret key. Required if secret is not specified.", "optional": true },
+                { "name": "options.secret", "type": "string", "description": "The script ID of the secret used for authentication. Required if guid is not specified.", "optional": true },
+                { "name": "options.encoding", "type": "string", "description": "The encoding for the SecretKey. Use encode.Encoding enum to set the value. Default is encode.Encoding.HEX.", "optional": true }
+            ],
+            "returns": "crypto.SecretKey",
+            "returnType": "N/crypto#SecretKey"
+        },
+        {
+            "name": "checkPasswordField",
+            "description": "Checks whether a password in a record corresponds to the password entered by the user.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.recordType", "type": "string", "description": "Type of record that has the password field." },
+                { "name": "options.recordId", "type": "number", "description": "ID of the record that has the password field." },
+                { "name": "options.fieldId", "type": "string", "description": "ID of the password field." },
+                { "name": "options.value", "type": "string", "description": "Input password value to be checked against the password stored in the record." },
+                { "name": "options.sublistId", "type": "string", "description": "ID of the sublist if the password field is on a sublist line.", "optional": true },
+                { "name": "options.line", "type": "number", "description": "Zero-based line index of the password field if the password is on a line.", "optional": true }
+            ],
+            "returns": "boolean"
+        }
+    ],
+    "enums": [
+        {
+            "name": "EncryptionAlg",
+            "description": "Holds the string values for supported encryption algorithms.",
+            "members": [
+                { "name": "AES", "value": "AES", "description": "AES symmetric encryption" }
+            ]
+        },
+        {
+            "name": "HashAlg",
+            "description": "Holds the string values for supported hashing algorithms.",
+            "members": [
+                { "name": "SHA1", "value": "SHA1", "description": "SHA-1 (160-bit)" },
+                { "name": "SHA256", "value": "SHA256", "description": "SHA-256 (256-bit)" },
+                { "name": "SHA384", "value": "SHA384", "description": "SHA-384 (384-bit)" },
+                { "name": "SHA512", "value": "SHA512", "description": "SHA-512 (512-bit)" },
+                { "name": "MD5", "value": "MD5", "description": "MD5 (128-bit)" }
+            ]
+        },
+        {
+            "name": "Padding",
+            "description": "Holds the string values for supported cipher padding.",
+            "members": [
+                { "name": "NoPadding", "value": "NoPadding", "description": "No padding" },
+                { "name": "PKCS5Padding", "value": "PKCS5Padding", "description": "PKCS5 padding" }
+            ]
+        }
+    ],
+    "objectTypes": [
+        {
+            "name": "SecretKey",
+            "description": "Encapsulates a secret key handle.",
+            "methods": [],
+            "properties": [
+                { "name": "guid", "type": "string", "description": "The GUID associated with the secret key.", "readOnly": true },
+                { "name": "encoding", "type": "string", "description": "The encoding used for the clear text value of the secret key.", "readOnly": true },
+                { "name": "secret", "type": "string", "description": "The script ID of an API secret.", "readOnly": true }
+            ]
+        },
+        {
+            "name": "Hash",
+            "description": "Encapsulates a hash.",
+            "methods": [
+                {
+                    "name": "update",
+                    "description": "Updates the clear data with the encoding specified.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options" },
+                        { "name": "options.input", "type": "string", "description": "The clear data to be updated." },
+                        { "name": "options.inputEncoding", "type": "string", "description": "The input encoding. Use encode.Encoding enum. Default is encode.Encoding.UTF_8.", "optional": true }
+                    ],
+                    "returns": "void"
+                },
+                {
+                    "name": "digest",
+                    "description": "Calculates the digest of the data to be hashed.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options" },
+                        { "name": "options.outputEncoding", "type": "string", "description": "The output encoding. Use encode.Encoding enum. Default is encode.Encoding.HEX." }
+                    ],
+                    "returns": "string"
+                }
+            ],
+            "properties": []
+        },
+        {
+            "name": "Hmac",
+            "description": "Encapsulates an hmac.",
+            "methods": [
+                {
+                    "name": "update",
+                    "description": "Updates the clear data with the encoding specified.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options" },
+                        { "name": "options.input", "type": "string", "description": "The clear data to be updated." },
+                        { "name": "options.inputEncoding", "type": "string", "description": "The input encoding. Use encode.Encoding enum. Default is encode.Encoding.UTF_8.", "optional": true }
+                    ],
+                    "returns": "void"
+                },
+                {
+                    "name": "digest",
+                    "description": "Gets the computed digest.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options" },
+                        { "name": "options.outputEncoding", "type": "string", "description": "The output encoding. Use encode.Encoding enum. Default is encode.Encoding.HEX." }
+                    ],
+                    "returns": "string"
+                }
+            ],
+            "properties": []
+        },
+        {
+            "name": "Cipher",
+            "description": "Encapsulates a cipher.",
+            "methods": [
+                {
+                    "name": "update",
+                    "description": "Updates the clear data with the specified encoding.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options" },
+                        { "name": "options.input", "type": "string", "description": "The clear data to be updated." },
+                        { "name": "options.inputEncoding", "type": "string", "description": "The input encoding. Use encode.Encoding enum. Default is encode.Encoding.UTF_8.", "optional": true }
+                    ],
+                    "returns": "void"
+                },
+                {
+                    "name": "final",
+                    "description": "Returns the cipher data.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options" },
+                        { "name": "options.outputEncoding", "type": "string", "description": "The output encoding for the CipherPayload. Use encode.Encoding enum. Default is encode.Encoding.HEX.", "optional": true }
+                    ],
+                    "returns": "crypto.CipherPayload",
+                    "returnType": "N/crypto#CipherPayload"
+                }
+            ],
+            "properties": []
+        },
+        {
+            "name": "Decipher",
+            "description": "Encapsulates a decipher.",
+            "methods": [
+                {
+                    "name": "update",
+                    "description": "Updates decipher data with the specified encoding.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options" },
+                        { "name": "options.input", "type": "string", "description": "The data to be updated." },
+                        { "name": "options.inputEncoding", "type": "string", "description": "The input encoding. Use encode.Encoding enum. Default is encode.Encoding.UTF_8.", "optional": true }
+                    ],
+                    "returns": "void"
+                },
+                {
+                    "name": "final",
+                    "description": "Returns the clear data.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options" },
+                        { "name": "options.outputEncoding", "type": "string", "description": "The output encoding. Use encode.Encoding enum. Default is encode.Encoding.HEX.", "optional": true }
+                    ],
+                    "returns": "string"
+                }
+            ],
+            "properties": []
+        },
+        {
+            "name": "CipherPayload",
+            "description": "Encapsulates a cipher payload.",
+            "methods": [],
+            "properties": [
+                { "name": "ciphertext", "type": "string", "description": "The result of the ciphering process.", "readOnly": true },
+                { "name": "iv", "type": "string", "description": "An initialization vector.", "readOnly": true }
+            ]
+        }
+    ]
+}

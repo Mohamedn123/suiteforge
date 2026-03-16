@@ -1,0 +1,43 @@
+{
+    "module": "N/ui/dialog",
+    "description": "Create modal dialogs that persist until a button on the dialog is pressed. Supported only in client scripts.",
+    "supportedIn": ["client"],
+    "methods": [
+        {
+            "name": "alert",
+            "description": "Creates an alert dialog with an OK button.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Alert options" },
+                { "name": "options.title", "type": "string", "description": "The alert dialog title. Defaults to an empty string.", "optional": true },
+                { "name": "options.message", "type": "string", "description": "The content of the alert dialog. Defaults to an empty string.", "optional": true }
+            ],
+            "returns": "Promise",
+            "supportedIn": ["client"]
+        },
+        {
+            "name": "confirm",
+            "description": "Creates a confirmation dialog with OK and Cancel buttons.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Confirm options" },
+                { "name": "options.title", "type": "string", "description": "The confirmation dialog title. Defaults to an empty string.", "optional": true },
+                { "name": "options.message", "type": "string", "description": "The content of the confirmation dialog. Defaults to an empty string.", "optional": true }
+            ],
+            "returns": "Promise",
+            "supportedIn": ["client"]
+        },
+        {
+            "name": "create",
+            "description": "Creates a dialog with the specified buttons. If no buttons are specified, an OK button is used.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Dialog options" },
+                { "name": "options.buttons", "type": "Array", "description": "Array of button objects with label and value properties. Defaults to a single OK button with value true.", "optional": true },
+                { "name": "options.title", "type": "string", "description": "The dialog title. Defaults to an empty string.", "optional": true },
+                { "name": "options.message", "type": "string", "description": "The content of the dialog. Defaults to an empty string.", "optional": true }
+            ],
+            "returns": "Promise",
+            "supportedIn": ["client"]
+        }
+    ],
+    "enums": [],
+    "objectTypes": []
+}

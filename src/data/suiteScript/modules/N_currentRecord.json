@@ -1,0 +1,1158 @@
+{
+    "module": "N/currentRecord",
+    "description": "Use the N/currentRecord module to access the record that is active in the current client context. This module is always a dynamic object and mode of work is always dynamic, not deferred dynamic/standard.",
+    "supportedIn": ["client"],
+    "methods": [
+        {
+            "name": "get",
+            "description": "Retrieves a record object that represents the current record.",
+            "params": [],
+            "returns": "currentRecord.CurrentRecord",
+            "returnType": "N/currentRecord#CurrentRecord"
+        },
+        {
+            "name": "get.promise",
+            "description": "Retrieves a promise for an object that represents the current record.",
+            "params": [],
+            "returns": "Promise",
+            "returnType": "Promise<N/currentRecord#CurrentRecord>"
+        }
+    ],
+    "enums": [],
+    "objectTypes": [
+        {
+            "name": "CurrentRecord",
+            "description": "Represents the record active on the current page. Has the same methods as record.Record plus additional client-side methods.",
+            "methods": [
+                {
+                    "name": "cancelLine",
+                    "description": "Cancels the changes made to the currently selected line.",
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist."
+                        }
+                    ],
+                    "returns": "currentRecord.CurrentRecord",
+                    "returnType": "N/currentRecord#CurrentRecord"
+                },
+                {
+                    "name": "commitLine",
+                    "description": "Commits the currently selected line.",
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist."
+                        }
+                    ],
+                    "returns": "currentRecord.CurrentRecord",
+                    "returnType": "N/currentRecord#CurrentRecord"
+                },
+                {
+                    "name": "executeMacro",
+                    "description": "Performs macro operation and returns its result in a plain JavaScript object.",
+                    "params": [
+                        {
+                            "name": "options.id",
+                            "type": "string",
+                            "description": "The macro ID."
+                        },
+                        {
+                            "name": "options.params",
+                            "type": "Object",
+                            "description": "Macro parameters.",
+                            "optional": true
+                        }
+                    ],
+                    "returns": "Object"
+                },
+                {
+                    "name": "executeMacro.promise",
+                    "description": "Performs macro operation asynchronously and returns its result in a plain JavaScript object.",
+                    "params": [
+                        {
+                            "name": "options.id",
+                            "type": "string",
+                            "description": "The macro ID."
+                        },
+                        {
+                            "name": "options.params",
+                            "type": "Object",
+                            "description": "Macro parameters.",
+                            "optional": true
+                        }
+                    ],
+                    "returns": "Promise",
+                    "returnType": "Promise<Object>"
+                },
+                {
+                    "name": "findMatrixSublistLineWithValue",
+                    "description": "Returns the line number of the first line that contains the specified value in the matrix column.",
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist that contains the matrix."
+                        },
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the matrix field."
+                        },
+                        {
+                            "name": "options.column",
+                            "type": "number",
+                            "description": "The column number for the matrix field."
+                        },
+                        {
+                            "name": "options.value",
+                            "type": "number | Date | string | array | boolean",
+                            "description": "The value to search for."
+                        }
+                    ],
+                    "returns": "number"
+                },
+                {
+                    "name": "findSublistLineWithValue",
+                    "description": "Gets the line number for the first occurrence of a field value in a sublist.",
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist."
+                        },
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the field."
+                        },
+                        {
+                            "name": "options.value",
+                            "type": "number | Date | string | array | boolean",
+                            "description": "The value to search for."
+                        }
+                    ],
+                    "returns": "number"
+                },
+                {
+                    "name": "getCurrentMatrixSublistValue",
+                    "description": "Gets the value for the currently selected line in the matrix.",
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist that contains the matrix."
+                        },
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the matrix field."
+                        },
+                        {
+                            "name": "options.column",
+                            "type": "number",
+                            "description": "The column number for the matrix field."
+                        }
+                    ],
+                    "returns": "number | Date | string | array | boolean"
+                },
+                {
+                    "name": "getCurrentSublistIndex",
+                    "description": "Gets the line number of the currently selected line.",
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist."
+                        }
+                    ],
+                    "returns": "number"
+                },
+                {
+                    "name": "getCurrentSublistSubrecord",
+                    "description": "Gets the subrecord for the associated sublist field on the current line. The subrecord object is retrieved in view mode.",
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist."
+                        },
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist field."
+                        }
+                    ],
+                    "returns": "currentRecord.CurrentRecord",
+                    "returnType": "N/currentRecord#CurrentRecord"
+                },
+                {
+                    "name": "getCurrentSublistText",
+                    "description": "Gets the value of the field in the currently selected line by text representation.",
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist."
+                        },
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the field."
+                        }
+                    ],
+                    "returns": "string"
+                },
+                {
+                    "name": "getCurrentSublistValue",
+                    "description": "Gets the value of the field in the currently selected line.",
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist."
+                        },
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the field."
+                        }
+                    ],
+                    "returns": "number | Date | string | array | boolean"
+                },
+                {
+                    "name": "getField",
+                    "description": "Gets a field object from the record.",
+                    "params": [
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the field."
+                        }
+                    ],
+                    "returns": "currentRecord.Field",
+                    "returnType": "N/currentRecord#Field"
+                },
+                {
+                    "name": "getFields",
+                    "description": "Returns the body field names (internal IDs) of all the fields in the record, including machine header field and matrix header fields.",
+                    "params": [],
+                    "returns": "string[]"
+                },
+                {
+                    "name": "getLineCount",
+                    "description": "Returns the number of lines in the sublist.",
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist."
+                        }
+                    ],
+                    "returns": "number"
+                },
+                {
+                    "name": "getMatrixHeaderCount",
+                    "description": "Returns the number of columns for the specified matrix.",
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist that contains the matrix."
+                        },
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the matrix field."
+                        }
+                    ],
+                    "returns": "number"
+                },
+                {
+                    "name": "getMatrixHeaderField",
+                    "description": "Gets the field for the specified header in the matrix.",
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist that contains the matrix."
+                        },
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the matrix field."
+                        },
+                        {
+                            "name": "options.column",
+                            "type": "number",
+                            "description": "The column number for the matrix field."
+                        }
+                    ],
+                    "returns": "currentRecord.Field",
+                    "returnType": "N/currentRecord#Field"
+                },
+                {
+                    "name": "getMatrixHeaderValue",
+                    "description": "Gets the value for the associated header in the matrix.",
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist that contains the matrix."
+                        },
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the matrix field."
+                        },
+                        {
+                            "name": "options.column",
+                            "type": "number",
+                            "description": "The column number for the matrix field."
+                        }
+                    ],
+                    "returns": "number | Date | string | array | boolean"
+                },
+                {
+                    "name": "getMatrixSublistField",
+                    "description": "Gets the field for the specified sublist in the matrix.",
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist that contains the matrix."
+                        },
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the matrix field."
+                        },
+                        {
+                            "name": "options.line",
+                            "type": "number",
+                            "description": "The line number for the matrix field."
+                        },
+                        {
+                            "name": "options.column",
+                            "type": "number",
+                            "description": "The column number for the matrix field."
+                        }
+                    ],
+                    "returns": "currentRecord.Field",
+                    "returnType": "N/currentRecord#Field"
+                },
+                {
+                    "name": "getMatrixSublistValue",
+                    "description": "Gets the value for the associated field in the matrix.",
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist that contains the matrix."
+                        },
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the matrix field."
+                        },
+                        {
+                            "name": "options.line",
+                            "type": "number",
+                            "description": "The line number for the matrix field."
+                        },
+                        {
+                            "name": "options.column",
+                            "type": "number",
+                            "description": "The column number for the matrix field."
+                        }
+                    ],
+                    "returns": "number | Date | string | array | boolean"
+                },
+                {
+                    "name": "getMacro",
+                    "description": "Provides a macro to execute.",
+                    "params": [
+                        {
+                            "name": "options.id",
+                            "type": "string",
+                            "description": "The macro ID."
+                        }
+                    ],
+                    "returns": "record.Macro",
+                    "returnType": "N/record#Macro"
+                },
+                {
+                    "name": "getMacros",
+                    "description": "Provides a plain JavaScript object that contains macro objects defined for a record type, indexed by the Macro ID.",
+                    "params": [],
+                    "returns": "Object"
+                },
+                {
+                    "name": "getSublist",
+                    "description": "Gets the specified sublist object.",
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist."
+                        }
+                    ],
+                    "returns": "currentRecord.Sublist",
+                    "returnType": "N/currentRecord#Sublist"
+                },
+                {
+                    "name": "getSublistField",
+                    "description": "Gets the specified field object from the sublist.",
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist."
+                        },
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the field."
+                        },
+                        {
+                            "name": "options.line",
+                            "type": "number",
+                            "description": "The line number."
+                        }
+                    ],
+                    "returns": "currentRecord.Field",
+                    "returnType": "N/currentRecord#Field"
+                },
+                {
+                    "name": "getSublistFields",
+                    "description": "Returns all the field names in a sublist.",
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist."
+                        }
+                    ],
+                    "returns": "string[]"
+                },
+                {
+                    "name": "getSublistSubrecord",
+                    "description": "Gets the subrecord associated with a sublist field. (standard mode only)",
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist."
+                        },
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist field."
+                        },
+                        {
+                            "name": "options.line",
+                            "type": "number",
+                            "description": "The line number for the sublist field."
+                        }
+                    ],
+                    "returns": "currentRecord.CurrentRecord",
+                    "returnType": "N/currentRecord#CurrentRecord"
+                },
+                {
+                    "name": "getSublistText",
+                    "description": "Gets the value of the field in a sublist by a string representation.",
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist."
+                        },
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the field."
+                        },
+                        {
+                            "name": "options.line",
+                            "type": "number",
+                            "description": "The line number."
+                        }
+                    ],
+                    "returns": "string"
+                },
+                {
+                    "name": "getSublistValue",
+                    "description": "Gets the value of the field in a sublist.",
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist."
+                        },
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the field."
+                        },
+                        {
+                            "name": "options.line",
+                            "type": "number",
+                            "description": "The line number."
+                        }
+                    ],
+                    "returns": "number | Date | string | array | boolean"
+                },
+                {
+                    "name": "getSubrecord",
+                    "description": "Gets the subrecord associated with the field. The subrecord object is retrieved in view mode.",
+                    "params": [
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the field."
+                        }
+                    ],
+                    "returns": "currentRecord.CurrentRecord",
+                    "returnType": "N/currentRecord#CurrentRecord"
+                },
+                {
+                    "name": "getText",
+                    "description": "Gets the value of the field by a string representation.",
+                    "params": [
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the field."
+                        }
+                    ],
+                    "returns": "string"
+                },
+                {
+                    "name": "getValue",
+                    "description": "Gets the value of the field. Not to be used on custom password fields. Use crypto.checkPasswordField(options) instead.",
+                    "params": [
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the field."
+                        }
+                    ],
+                    "returns": "number | Date | string | array | boolean"
+                },
+                {
+                    "name": "hasCurrentSublistSubrecord",
+                    "description": "Returns a value indicating whether the associated sublist field has a subrecord on the current line.",
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist."
+                        },
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist field."
+                        }
+                    ],
+                    "returns": "boolean"
+                },
+                {
+                    "name": "hasSublistSubrecord",
+                    "description": "Returns a value indicating whether the associated sublist field contains a subrecord.",
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist."
+                        },
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist field."
+                        },
+                        {
+                            "name": "options.line",
+                            "type": "number",
+                            "description": "The line number."
+                        }
+                    ],
+                    "returns": "boolean"
+                },
+                {
+                    "name": "hasSubrecord",
+                    "description": "Indicates whether the field has a subrecord.",
+                    "params": [
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the field."
+                        }
+                    ],
+                    "returns": "boolean"
+                },
+                {
+                    "name": "insertLine",
+                    "description": "Inserts a new line in a sublist.",
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist."
+                        },
+                        {
+                            "name": "options.line",
+                            "type": "number",
+                            "description": "The line at which to insert a sublist line."
+                        },
+                        {
+                            "name": "options.ignoreRecalc",
+                            "type": "boolean",
+                            "description": "If set to true, the formula fields are not recalculated after the line is inserted.",
+                            "optional": true
+                        }
+                    ],
+                    "returns": "currentRecord.CurrentRecord",
+                    "returnType": "N/currentRecord#CurrentRecord"
+                },
+                {
+                    "name": "removeCurrentSublistSubrecord",
+                    "description": "Removes the subrecord for the associated sublist field on the current line.",
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist."
+                        },
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist field."
+                        }
+                    ],
+                    "returns": "currentRecord.CurrentRecord",
+                    "returnType": "N/currentRecord#CurrentRecord"
+                },
+                {
+                    "name": "removeLine",
+                    "description": "Removes a line from a sublist.",
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist."
+                        },
+                        {
+                            "name": "options.line",
+                            "type": "number",
+                            "description": "The line number."
+                        },
+                        {
+                            "name": "options.ignoreRecalc",
+                            "type": "boolean",
+                            "description": "If set to true, the formula fields are not recalculated after the line is removed.",
+                            "optional": true
+                        }
+                    ],
+                    "returns": "currentRecord.CurrentRecord",
+                    "returnType": "N/currentRecord#CurrentRecord"
+                },
+                {
+                    "name": "removeSublistSubrecord",
+                    "description": "Removes the subrecord for the associated sublist field. (standard mode only)",
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist."
+                        },
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist field."
+                        },
+                        {
+                            "name": "options.line",
+                            "type": "number",
+                            "description": "The line number."
+                        }
+                    ],
+                    "returns": "currentRecord.CurrentRecord",
+                    "returnType": "N/currentRecord#CurrentRecord"
+                },
+                {
+                    "name": "removeSubrecord",
+                    "description": "Removes the subrecord associated with the field.",
+                    "params": [
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the field."
+                        }
+                    ],
+                    "returns": "currentRecord.CurrentRecord",
+                    "returnType": "N/currentRecord#CurrentRecord"
+                },
+                {
+                    "name": "save",
+                    "description": "Submits a new record or saves edits to an existing record.",
+                    "params": [
+                        {
+                            "name": "options.enableSourcing",
+                            "type": "boolean",
+                            "description": "If set to true, body and sublist fields with source from will be sourced when the record is saved.",
+                            "optional": true
+                        },
+                        {
+                            "name": "options.ignoreMandatoryFields",
+                            "type": "boolean",
+                            "description": "If set to true, mandatory field validation is ignored when the record is submitted.",
+                            "optional": true
+                        }
+                    ],
+                    "returns": "number"
+                },
+                {
+                    "name": "save.promise",
+                    "description": "Submits a new record asynchronously or saves edits to an existing record asynchronously.",
+                    "params": [
+                        {
+                            "name": "options.enableSourcing",
+                            "type": "boolean",
+                            "description": "If set to true, body and sublist fields with source from will be sourced when the record is saved.",
+                            "optional": true
+                        },
+                        {
+                            "name": "options.ignoreMandatoryFields",
+                            "type": "boolean",
+                            "description": "If set to true, mandatory field validation is ignored when the record is submitted.",
+                            "optional": true
+                        }
+                    ],
+                    "returns": "Promise",
+                    "returnType": "Promise<number>"
+                },
+                {
+                    "name": "selectLine",
+                    "description": "Selects a line item in a sublist.",
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist."
+                        },
+                        {
+                            "name": "options.line",
+                            "type": "number",
+                            "description": "The line number."
+                        }
+                    ],
+                    "returns": "void"
+                },
+                {
+                    "name": "selectNewLine",
+                    "description": "Selects a new line at the end of the sublist.",
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist."
+                        }
+                    ],
+                    "returns": "currentRecord.CurrentRecord",
+                    "returnType": "N/currentRecord#CurrentRecord"
+                },
+                {
+                    "name": "setCurrentMatrixSublistValue",
+                    "description": "Sets the value for the currently selected line in the matrix.",
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist that contains the matrix."
+                        },
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the matrix field."
+                        },
+                        {
+                            "name": "options.column",
+                            "type": "number",
+                            "description": "The column number for the matrix field."
+                        },
+                        {
+                            "name": "options.value",
+                            "type": "number | Date | string | array | boolean",
+                            "description": "The value to set."
+                        },
+                        {
+                            "name": "options.ignoreFieldChange",
+                            "type": "boolean",
+                            "description": "Set to true to ignore the field change script.",
+                            "optional": true
+                        }
+                    ],
+                    "returns": "currentRecord.CurrentRecord",
+                    "returnType": "N/currentRecord#CurrentRecord"
+                },
+                {
+                    "name": "setCurrentSublistText",
+                    "description": "Sets the value of the field in the currently selected line using a string representation.",
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist."
+                        },
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the field."
+                        },
+                        {
+                            "name": "options.text",
+                            "type": "string",
+                            "description": "The text to change the field value to."
+                        },
+                        {
+                            "name": "options.ignoreFieldChange",
+                            "type": "boolean",
+                            "description": "Set to true to ignore the field change script.",
+                            "optional": true
+                        }
+                    ],
+                    "returns": "currentRecord.CurrentRecord",
+                    "returnType": "N/currentRecord#CurrentRecord"
+                },
+                {
+                    "name": "setCurrentSublistText.promise",
+                    "description": "Sets the value of the field in the currently selected line using a string representation asynchronously.",
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist."
+                        },
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the field."
+                        },
+                        {
+                            "name": "options.text",
+                            "type": "string",
+                            "description": "The text to change the field value to."
+                        },
+                        {
+                            "name": "options.ignoreFieldChange",
+                            "type": "boolean",
+                            "description": "Set to true to ignore the field change script.",
+                            "optional": true
+                        }
+                    ],
+                    "returns": "Promise",
+                    "returnType": "Promise<N/currentRecord#CurrentRecord>"
+                },
+                {
+                    "name": "setCurrentSublistValue",
+                    "description": "Sets the value of the field in the currently selected line.",
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist."
+                        },
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the field."
+                        },
+                        {
+                            "name": "options.value",
+                            "type": "number | Date | string | array | boolean",
+                            "description": "The value to set."
+                        },
+                        {
+                            "name": "options.ignoreFieldChange",
+                            "type": "boolean",
+                            "description": "Set to true to ignore the field change script.",
+                            "optional": true
+                        }
+                    ],
+                    "returns": "currentRecord.CurrentRecord",
+                    "returnType": "N/currentRecord#CurrentRecord"
+                },
+                {
+                    "name": "setCurrentSublistValue.promise",
+                    "description": "Sets the value of the field in the currently selected line asynchronously.",
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist."
+                        },
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the field."
+                        },
+                        {
+                            "name": "options.value",
+                            "type": "number | Date | string | array | boolean",
+                            "description": "The value to set."
+                        },
+                        {
+                            "name": "options.ignoreFieldChange",
+                            "type": "boolean",
+                            "description": "Set to true to ignore the field change script.",
+                            "optional": true
+                        }
+                    ],
+                    "returns": "Promise",
+                    "returnType": "Promise<N/currentRecord#CurrentRecord>"
+                },
+                {
+                    "name": "setMatrixHeaderValue",
+                    "description": "Sets the value for the associated header in the matrix.",
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist that contains the matrix."
+                        },
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the matrix field."
+                        },
+                        {
+                            "name": "options.column",
+                            "type": "number",
+                            "description": "The column number for the matrix field."
+                        },
+                        {
+                            "name": "options.value",
+                            "type": "number | Date | string | array | boolean",
+                            "description": "The value to set."
+                        },
+                        {
+                            "name": "options.ignoreFieldChange",
+                            "type": "boolean",
+                            "description": "Set to true to ignore the field change script.",
+                            "optional": true
+                        }
+                    ],
+                    "returns": "currentRecord.CurrentRecord",
+                    "returnType": "N/currentRecord#CurrentRecord"
+                },
+                {
+                    "name": "setMatrixSublistValue",
+                    "description": "Sets the value for the associated field in the matrix.",
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist that contains the matrix."
+                        },
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the matrix field."
+                        },
+                        {
+                            "name": "options.line",
+                            "type": "number",
+                            "description": "The line number for the matrix field."
+                        },
+                        {
+                            "name": "options.column",
+                            "type": "number",
+                            "description": "The column number for the matrix field."
+                        },
+                        {
+                            "name": "options.value",
+                            "type": "number | Date | string | array | boolean",
+                            "description": "The value to set."
+                        }
+                    ],
+                    "returns": "currentRecord.CurrentRecord",
+                    "returnType": "N/currentRecord#CurrentRecord"
+                },
+                {
+                    "name": "setSublistText",
+                    "description": "Sets the value of a sublist field by a text representation. (standard mode only)",
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist."
+                        },
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the field."
+                        },
+                        {
+                            "name": "options.line",
+                            "type": "number",
+                            "description": "The line number."
+                        },
+                        {
+                            "name": "options.text",
+                            "type": "string",
+                            "description": "The text to set."
+                        }
+                    ],
+                    "returns": "currentRecord.CurrentRecord",
+                    "returnType": "N/currentRecord#CurrentRecord"
+                },
+                {
+                    "name": "setSublistValue",
+                    "description": "Sets the value of a sublist field. (standard mode only)",
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist."
+                        },
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the field."
+                        },
+                        {
+                            "name": "options.line",
+                            "type": "number",
+                            "description": "The line number."
+                        },
+                        {
+                            "name": "options.value",
+                            "type": "number | Date | string | array | boolean",
+                            "description": "The value to set."
+                        }
+                    ],
+                    "returns": "currentRecord.CurrentRecord",
+                    "returnType": "N/currentRecord#CurrentRecord"
+                },
+                {
+                    "name": "setText",
+                    "description": "Sets the value of the field using a string representation.",
+                    "params": [
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the field."
+                        },
+                        {
+                            "name": "options.text",
+                            "type": "string | string[]",
+                            "description": "The text to set."
+                        },
+                        {
+                            "name": "options.ignoreFieldChange",
+                            "type": "boolean",
+                            "description": "Set to true to ignore the field change script.",
+                            "optional": true
+                        }
+                    ],
+                    "returns": "currentRecord.CurrentRecord",
+                    "returnType": "N/currentRecord#CurrentRecord"
+                },
+                {
+                    "name": "setText.promise",
+                    "description": "Sets the value of the field using a string representation asynchronously.",
+                    "params": [
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the field."
+                        },
+                        {
+                            "name": "options.text",
+                            "type": "string | string[]",
+                            "description": "The text to set."
+                        },
+                        {
+                            "name": "options.ignoreFieldChange",
+                            "type": "boolean",
+                            "description": "Set to true to ignore the field change script.",
+                            "optional": true
+                        }
+                    ],
+                    "returns": "Promise",
+                    "returnType": "Promise<N/currentRecord#CurrentRecord>"
+                },
+                {
+                    "name": "setValue",
+                    "description": "Sets the value of the field.",
+                    "params": [
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the field."
+                        },
+                        {
+                            "name": "options.value",
+                            "type": "number | Date | string | array | boolean",
+                            "description": "The value to set."
+                        },
+                        {
+                            "name": "options.ignoreFieldChange",
+                            "type": "boolean",
+                            "description": "Set to true to ignore the field change script.",
+                            "optional": true
+                        }
+                    ],
+                    "returns": "currentRecord.CurrentRecord",
+                    "returnType": "N/currentRecord#CurrentRecord"
+                },
+                {
+                    "name": "setValue.promise",
+                    "description": "Sets the value of the field asynchronously.",
+                    "params": [
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the field."
+                        },
+                        {
+                            "name": "options.value",
+                            "type": "number | Date | string | array | boolean",
+                            "description": "The value to set."
+                        },
+                        {
+                            "name": "options.ignoreFieldChange",
+                            "type": "boolean",
+                            "description": "Set to true to ignore the field change script.",
+                            "optional": true
+                        }
+                    ],
+                    "returns": "Promise",
+                    "returnType": "Promise<N/currentRecord#CurrentRecord>"
+                }
+            ],
+            "properties": [
+                {
+                    "name": "id",
+                    "type": "number",
+                    "readOnly": true,
+                    "description": "Returns the internal record ID."
+                },
+                {
+                    "name": "isDynamic",
+                    "type": "boolean",
+                    "readOnly": true,
+                    "description": "Indicates whether the record is dynamic."
+                },
+                {
+                    "name": "type",
+                    "type": "string",
+                    "readOnly": true,
+                    "description": "Returns the record type."
+                }
+            ]
+        }
+    ]
+}

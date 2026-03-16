@@ -1,0 +1,30 @@
+{
+    "module": "N/documentCapture",
+    "description": "Extract text content and structured key information from supported documents (invoices, receipts, contracts, etc.). SuiteScript 2.1 only.",
+    "supportedIn": ["server"],
+    "methods": [
+        {
+            "name": "extract",
+            "description": "Extracts structured content from a document.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.file", "type": "file.File", "description": "The document file to extract content from" },
+                { "name": "options.documentType", "type": "string", "description": "The type of document (documentCapture.DocumentType.*)", "optional": true }
+            ],
+            "returns": "Object",
+            "supportedIn": ["server"]
+        }
+    ],
+    "enums": [
+        {
+            "name": "DocumentType",
+            "description": "Supported document types for content extraction.",
+            "members": [
+                { "name": "INVOICE", "value": "INVOICE", "description": "Invoice document" },
+                { "name": "RECEIPT", "value": "RECEIPT", "description": "Receipt document" },
+                { "name": "GENERAL", "value": "GENERAL", "description": "General document" }
+            ]
+        }
+    ],
+    "objectTypes": []
+}

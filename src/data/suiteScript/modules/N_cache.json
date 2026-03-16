@@ -1,0 +1,128 @@
+{
+    "module": "N/cache",
+    "description": "Use the N/cache module to enable temporary, short-term storage of data. Using a cache improves performance by eliminating the need for scripts to repeatedly retrieve the same piece of data.",
+    "supportedIn": ["server"],
+    "methods": [
+        {
+            "name": "getCache",
+            "description": "Checks for a cache object with the specified name. If the cache exists, returns the cache object. If not, creates and returns a new cache object.",
+            "params": [
+                {
+                    "name": "options",
+                    "type": "Object",
+                    "description": "Options"
+                },
+                {
+                    "name": "options.name",
+                    "type": "string",
+                    "description": "The name of the cache to be retrieved or created. The maximum size is 1 KB."
+                },
+                {
+                    "name": "options.scope",
+                    "type": "string",
+                    "description": "Sets the availability of the cache. Use the cache.Scope enum. Default is cache.Scope.PRIVATE.",
+                    "optional": true
+                }
+            ],
+            "returns": "cache.Cache",
+            "returnType": "N/cache#Cache"
+        }
+    ],
+    "enums": [
+        {
+            "name": "Scope",
+            "description": "Holds the string values that describe the availability of the cache.",
+            "members": [
+                { "name": "PRIVATE", "value": "PRIVATE", "description": "The cache is available only to the current script. This is the default value." },
+                { "name": "PROTECTED", "value": "PROTECTED", "description": "The cache is available to all scripts in the same bundle, or to all scripts not in any bundle." },
+                { "name": "PUBLIC", "value": "PUBLIC", "description": "The cache is available to all server scripts in the NetSuite account." }
+            ]
+        }
+    ],
+    "objectTypes": [
+        {
+            "name": "Cache",
+            "description": "A segment of memory that can be used to store data on a temporary, short-term basis.",
+            "methods": [
+                {
+                    "name": "get",
+                    "description": "Retrieves a string value from the cache based on a key. If the value is not present, calls the user-defined loader function.",
+                    "params": [
+                        {
+                            "name": "options",
+                            "type": "Object",
+                            "description": "Options"
+                        },
+                        {
+                            "name": "options.key",
+                            "type": "string",
+                            "description": "The key corresponding to the value to be retrieved from the cache."
+                        },
+                        {
+                            "name": "options.loader",
+                            "type": "string|function",
+                            "description": "A user-defined loader function used to return the requested value when it is not present in the cache.",
+                            "optional": true
+                        },
+                        {
+                            "name": "options.ttl",
+                            "type": "number",
+                            "description": "The maximum duration, in seconds, that a value retrieved by the loader can remain in the cache. Minimum is 300.",
+                            "optional": true
+                        }
+                    ],
+                    "returns": "string"
+                },
+                {
+                    "name": "put",
+                    "description": "Puts a value into the cache. If the value is not a string, JSON.stringify() is used to convert it.",
+                    "params": [
+                        {
+                            "name": "options",
+                            "type": "Object",
+                            "description": "Options"
+                        },
+                        {
+                            "name": "options.key",
+                            "type": "string",
+                            "description": "The key corresponding to the value to be placed in the cache."
+                        },
+                        {
+                            "name": "options.value",
+                            "type": "string",
+                            "description": "The value to place in the cache. The maximum size is 500 KB."
+                        },
+                        {
+                            "name": "options.ttl",
+                            "type": "number",
+                            "description": "The maximum duration, in seconds, that the value may remain in the cache. Minimum is 300.",
+                            "optional": true
+                        }
+                    ],
+                    "returns": "void"
+                },
+                {
+                    "name": "remove",
+                    "description": "Removes a value from the cache.",
+                    "params": [
+                        {
+                            "name": "options",
+                            "type": "Object",
+                            "description": "Options"
+                        },
+                        {
+                            "name": "options.key",
+                            "type": "string",
+                            "description": "The key corresponding to the value to be removed from the cache."
+                        }
+                    ],
+                    "returns": "void"
+                }
+            ],
+            "properties": [
+                { "name": "name", "type": "string", "description": "The name of the cache.", "readOnly": true },
+                { "name": "scope", "type": "string", "description": "The availability of the cache. Set using the cache.Scope enum.", "readOnly": true }
+            ]
+        }
+    ]
+}

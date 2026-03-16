@@ -1,0 +1,158 @@
+{
+    "module": "N/xml",
+    "description": "Use the N/xml module to validate, parse, read, and modify XML documents.",
+    "supportedIn": ["client", "server"],
+    "methods": [
+        {
+            "name": "escape",
+            "description": "Prepares a string for use in XML by escaping XML markup, such as angle brackets, quotation marks, and ampersands.",
+            "supportedIn": ["client", "server"],
+            "params": [
+                {
+                    "name": "options.xmlText",
+                    "type": "string",
+                    "description": "The string to escape for use in XML.",
+                    "optional": false
+                }
+            ],
+            "returns": "string"
+        },
+        {
+            "name": "validate",
+            "description": "Validates an XML document against an XML Schema (XSD).",
+            "supportedIn": ["server"],
+            "params": [
+                {
+                    "name": "options.xml",
+                    "type": "xml.Document",
+                    "description": "The XML document to validate.",
+                    "optional": false
+                },
+                {
+                    "name": "options.xsdFilePathOrId",
+                    "type": "string",
+                    "description": "File Cabinet path or internal ID of the XSD schema.",
+                    "optional": false
+                },
+                {
+                    "name": "options.importFolderPathOrId",
+                    "type": "string",
+                    "description": "File Cabinet path or ID of folder for imported schemas.",
+                    "optional": true
+                }
+            ],
+            "returns": "void"
+        }
+    ],
+    "enums": [
+        {
+            "name": "NodeType",
+            "description": "Holds the string values for the supported node types. Use this enum to determine the type of a node in an XML document and to set the Node.nodeType property. Enum values are constants and therefore read-only.",
+            "members": [
+                { "name": "ELEMENT_NODE", "value": "1", "description": "Element node" },
+                { "name": "ATTRIBUTE_NODE", "value": "2", "description": "Attribute node" },
+                { "name": "TEXT_NODE", "value": "3", "description": "Text node" },
+                { "name": "CDATA_SECTION_NODE", "value": "4", "description": "CDATA section node" },
+                { "name": "ENTITY_REFERENCE_NODE", "value": "5", "description": "Entity reference node" },
+                { "name": "ENTITY_NODE", "value": "6", "description": "Entity node" },
+                { "name": "PROCESSING_INSTRUCTION_NODE", "value": "7", "description": "Processing instruction node" },
+                { "name": "COMMENT_NODE", "value": "8", "description": "Comment node" },
+                { "name": "DOCUMENT_NODE", "value": "9", "description": "Document node" },
+                { "name": "DOCUMENT_TYPE_NODE", "value": "10", "description": "Document type node" },
+                { "name": "DOCUMENT_FRAGMENT_NODE", "value": "11", "description": "Document fragment node" },
+                { "name": "NOTATION_NODE", "value": "12", "description": "Notation node" }
+            ]
+        }
+    ],
+    "objectTypes": [
+        {
+            "name": "Parser",
+            "description": "Encapsulates the functionality used by NetSuite to parse XML.",
+            "methods": [
+                {
+                    "name": "fromString",
+                    "description": "Parses a string into a W3C XML document object.",
+                    "params": [
+                        { "name": "options.text", "type": "string", "description": "The XML string to parse." }
+                    ],
+                    "returns": "xml.Document"
+                },
+                {
+                    "name": "toString",
+                    "description": "Converts (serializes) an xml.Document object into a string.",
+                    "params": [
+                        { "name": "options.document", "type": "xml.Document", "description": "The document to serialize." }
+                    ],
+                    "returns": "string"
+                }
+            ]
+        },
+        {
+            "name": "XPath",
+            "description": "Encapsulates the functionality used by NetSuite to run XPath expressions. XPath is a standard for enumerating paths in an XML document collection.",
+            "methods": [
+                {
+                    "name": "select",
+                    "description": "Selects an array of nodes from an XML document using an XPath expression.",
+                    "params": [
+                        { "name": "options.node", "type": "xml.Node", "description": "The context node." },
+                        { "name": "options.xpath", "type": "string", "description": "The XPath expression." }
+                    ],
+                    "returns": "xml.Node[]"
+                }
+            ]
+        },
+        {
+            "name": "Document",
+            "description": "Represents an entire XML document. The XML DOM presents a document as a hierarchy of node objects. Document inherits from Node.",
+            "properties": [
+                { "name": "doctype", "type": "Object", "readOnly": true, "description": "Returns a node of type DOCUMENT_TYPE_NODE that represents the doctype." },
+                { "name": "documentElement", "type": "xml.Element", "readOnly": true, "description": "Root node of the XML document." },
+                { "name": "documentURI", "type": "string", "readOnly": true, "description": "Location of the document or null if undefined." },
+                { "name": "inputEncoding", "type": "string", "readOnly": true, "description": "Encoding used when the document was parsed." },
+                { "name": "xmlEncoding", "type": "string", "readOnly": true, "description": "Part of the XML declaration, the XML encoding of the document." },
+                { "name": "xmlStandalone", "type": "boolean", "description": "Part of the XML declaration, returns true if the document is standalone." },
+                { "name": "xmlVersion", "type": "string", "description": "Part of the XML declaration, the version number of the document." }
+            ]
+        },
+        {
+            "name": "Node",
+            "description": "Represents a generic XML node in an XML document. A node can be a Document, Element, or Attribute.",
+            "properties": [
+                { "name": "nodeType", "type": "string", "description": "The type of node defined as a value from xml.NodeType enum." },
+                { "name": "nodeName", "type": "string", "readOnly": true, "description": "Name of a node, depending on the type." },
+                { "name": "nodeValue", "type": "string", "description": "The value of a node, depending on its type." },
+                { "name": "childNodes", "type": "xml.Node[]", "readOnly": true, "description": "Array of all child nodes or empty array if none." },
+                { "name": "parentNode", "type": "xml.Node", "readOnly": true, "description": "The parent node." },
+                { "name": "firstChild", "type": "xml.Node", "readOnly": true, "description": "First child node or null." },
+                { "name": "lastChild", "type": "xml.Node", "readOnly": true, "description": "Last child node or null." },
+                { "name": "nextSibling", "type": "xml.Node", "readOnly": true, "description": "The next node in a node list or null." },
+                { "name": "previousSibling", "type": "xml.Node", "readOnly": true, "description": "The previous node in a node list or null." },
+                { "name": "ownerDocument", "type": "xml.Document", "readOnly": true, "description": "The root element for a node as xml.Document." },
+                { "name": "attributes", "type": "Object", "readOnly": true, "description": "Key-value pairs for all attributes for an Element node. Returns null for other node types." },
+                { "name": "baseURI", "type": "string", "readOnly": true, "description": "Absolute base URI of a node or null." },
+                { "name": "localName", "type": "string", "readOnly": true, "description": "The local part of the qualified name." },
+                { "name": "namespaceURI", "type": "string", "readOnly": true, "description": "The namespace URI or null." },
+                { "name": "prefix", "type": "string", "description": "The namespace prefix or null." },
+                { "name": "textContent", "type": "string", "description": "The textual content of a node and its descendants." }
+            ]
+        },
+        {
+            "name": "Element",
+            "description": "Represents an element in an XML document. Elements may contain attributes, other elements, or text. Element inherits from Node.",
+            "properties": [
+                { "name": "tagName", "type": "string", "readOnly": true, "description": "The tag name of this Element object." }
+            ]
+        },
+        {
+            "name": "Attr",
+            "description": "Represents an attribute node of an xml.Element object.",
+            "properties": [
+                { "name": "name", "type": "string", "readOnly": true, "description": "The name of an attribute." },
+                { "name": "value", "type": "string", "description": "Value of an attribute. Character and general entity references are replaced with their values." },
+                { "name": "specified", "type": "boolean", "description": "Returns true if the attribute value is set in the parsed XML, false if it is a default value in a DTD or Schema." },
+                { "name": "ownerElement", "type": "xml.Element", "readOnly": true, "description": "The Element object that is the parent of this Attr." }
+            ]
+        }
+    ]
+}

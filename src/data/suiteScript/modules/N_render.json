@@ -1,0 +1,484 @@
+{
+    "module": "N/render",
+    "description": "Use the N/render module for printing, PDF creation, form creation from templates, and email creation from templates.",
+    "supportedIn": ["server"],
+    "methods": [
+        {
+            "name": "bom",
+            "description": "Creates a PDF or HTML file object containing a bill of materials.",
+            "params": [
+                {
+                    "name": "options.entityId",
+                    "type": "number",
+                    "description": "The internal ID of the transaction associated with the bom."
+                },
+                {
+                    "name": "options.printMode",
+                    "type": "string",
+                    "description": "The print output type. Use the render.PrintMode enum to set this value.",
+                    "optional": true
+                },
+                {
+                    "name": "options.inCustLocale",
+                    "type": "boolean",
+                    "description": "Applies when advanced templates are used. Print the document in the customer's locale.",
+                    "optional": true
+                }
+            ],
+            "returns": "file.File",
+            "returnType": "N/file#File"
+        },
+        {
+            "name": "create",
+            "description": "Creates a render.TemplateRenderer object.",
+            "params": [],
+            "returns": "render.TemplateRenderer",
+            "returnType": "N/render#TemplateRenderer"
+        },
+        {
+            "name": "mergeEmail",
+            "description": "Creates a render.EmailMergeResult object for a mail merge with an existing scriptable email template.",
+            "params": [
+                {
+                    "name": "options.templateId",
+                    "type": "number",
+                    "description": "Internal ID of the template."
+                },
+                {
+                    "name": "options.entity",
+                    "type": "RecordRef",
+                    "description": "The entity. Object with id (number) and type (string) properties.",
+                    "optional": true
+                },
+                {
+                    "name": "options.recipient",
+                    "type": "RecordRef",
+                    "description": "The recipient. Object with id (number) and type (string) properties.",
+                    "optional": true
+                },
+                {
+                    "name": "options.customRecord",
+                    "type": "RecordRef",
+                    "description": "The custom record. Object with id (number) and type (string) properties.",
+                    "optional": true
+                },
+                {
+                    "name": "options.supportCaseId",
+                    "type": "number",
+                    "description": "The support case ID.",
+                    "optional": true
+                },
+                {
+                    "name": "options.transactionId",
+                    "type": "number",
+                    "description": "The transaction ID.",
+                    "optional": true
+                }
+            ],
+            "returns": "render.EmailMergeResult",
+            "returnType": "N/render#EmailMergeResult"
+        },
+        {
+            "name": "packingSlip",
+            "description": "Creates a PDF or HTML file object containing a packing slip.",
+            "params": [
+                {
+                    "name": "options.entityId",
+                    "type": "number",
+                    "description": "The internal ID of the transaction associated with the packing slip."
+                },
+                {
+                    "name": "options.printMode",
+                    "type": "string",
+                    "description": "The print output type. Set using the render.PrintMode enum.",
+                    "optional": true
+                },
+                {
+                    "name": "options.formId",
+                    "type": "number",
+                    "description": "The packing slip form number.",
+                    "optional": true
+                },
+                {
+                    "name": "options.fulfillmentId",
+                    "type": "number",
+                    "description": "The fulfillment ID number.",
+                    "optional": true
+                },
+                {
+                    "name": "options.inCustLocale",
+                    "type": "boolean",
+                    "description": "Applies when advanced templates are used. Print the document in the customer's locale.",
+                    "optional": true
+                }
+            ],
+            "returns": "file.File",
+            "returnType": "N/file#File"
+        },
+        {
+            "name": "pickingTicket",
+            "description": "Creates a PDF or HTML file object containing a picking ticket.",
+            "params": [
+                {
+                    "name": "options.entityId",
+                    "type": "number",
+                    "description": "The internal ID of the transaction associated with the picking ticket."
+                },
+                {
+                    "name": "options.printMode",
+                    "type": "string",
+                    "description": "The print output type. Use the render.PrintMode enum to set this value.",
+                    "optional": true
+                },
+                {
+                    "name": "options.formId",
+                    "type": "number",
+                    "description": "The picking ticket form number.",
+                    "optional": true
+                },
+                {
+                    "name": "options.shipgroup",
+                    "type": "number",
+                    "description": "The shipping group for the ticket.",
+                    "optional": true
+                },
+                {
+                    "name": "options.location",
+                    "type": "number",
+                    "description": "The location for the ticket.",
+                    "optional": true
+                },
+                {
+                    "name": "options.inCustLocale",
+                    "type": "boolean",
+                    "description": "Applies when advanced templates are used. Prints the document in the customer's locale.",
+                    "optional": true
+                }
+            ],
+            "returns": "file.File",
+            "returnType": "N/file#File"
+        },
+        {
+            "name": "statement",
+            "description": "Creates a PDF or HTML file object containing a statement.",
+            "params": [
+                {
+                    "name": "options.entityId",
+                    "type": "number",
+                    "description": "The internal ID of the statement to print."
+                },
+                {
+                    "name": "options.printMode",
+                    "type": "string",
+                    "description": "The print output type. Use the render.PrintMode enum to set this value.",
+                    "optional": true
+                },
+                {
+                    "name": "options.formId",
+                    "type": "number",
+                    "description": "The internal ID of the form to use to print the statement.",
+                    "optional": true
+                },
+                {
+                    "name": "options.startDate",
+                    "type": "Date",
+                    "description": "Date of the oldest transaction to appear on the statement.",
+                    "optional": true
+                },
+                {
+                    "name": "options.statementDate",
+                    "type": "Date",
+                    "description": "The statement date.",
+                    "optional": true
+                },
+                {
+                    "name": "options.openTransactionsOnly",
+                    "type": "boolean",
+                    "description": "Flag to include only open transactions.",
+                    "optional": true
+                },
+                {
+                    "name": "options.consolidateStatements",
+                    "type": "boolean",
+                    "description": "Flag to convert all amount values to the base currency.",
+                    "optional": true
+                },
+                {
+                    "name": "options.inCustLocale",
+                    "type": "boolean",
+                    "description": "Applies when advanced templates are used. Prints the document in the customer's locale.",
+                    "optional": true
+                },
+                {
+                    "name": "options.subsidiaryId",
+                    "type": "number",
+                    "description": "ID of the subsidiary. Only works for advanced printing.",
+                    "optional": true
+                }
+            ],
+            "returns": "file.File",
+            "returnType": "N/file#File"
+        },
+        {
+            "name": "transaction",
+            "description": "Creates a PDF or HTML file object of a transaction.",
+            "params": [
+                {
+                    "name": "options.entityId",
+                    "type": "number",
+                    "description": "The internal ID of the transaction to print."
+                },
+                {
+                    "name": "options.printMode",
+                    "type": "string",
+                    "description": "The print output type. Use the render.PrintMode enum to set this value.",
+                    "optional": true
+                },
+                {
+                    "name": "options.formId",
+                    "type": "number",
+                    "description": "The transaction form number.",
+                    "optional": true
+                },
+                {
+                    "name": "options.inCustLocale",
+                    "type": "boolean",
+                    "description": "Applies when advanced templates are used. Prints the document in the customer's locale.",
+                    "optional": true
+                }
+            ],
+            "returns": "file.File",
+            "returnType": "N/file#File"
+        },
+        {
+            "name": "xmlToPdf",
+            "description": "Passes XML to the BFO tag library (which is stored by NetSuite), and returns a PDF file.",
+            "params": [
+                {
+                    "name": "options.xmlString",
+                    "type": "string",
+                    "description": "XML string to convert to PDF."
+                }
+            ],
+            "returns": "file.File",
+            "returnType": "N/file#File"
+        }
+    ],
+    "enums": [
+        {
+            "name": "DataSource",
+            "description": "Holds the string values for supported data source types. Use this enum to set the options.format parameter of the TemplateRenderer.addCustomDataSource(options) method.",
+            "members": [
+                {
+                    "name": "JSON",
+                    "value": "JSON",
+                    "description": "JSON string data source"
+                },
+                {
+                    "name": "OBJECT",
+                    "value": "OBJECT",
+                    "description": "JavaScript object data source"
+                },
+                {
+                    "name": "XML_DOC",
+                    "value": "XML_DOC",
+                    "description": "XML document data source"
+                },
+                {
+                    "name": "XML_STRING",
+                    "value": "XML_STRING",
+                    "description": "XML string data source"
+                }
+            ]
+        },
+        {
+            "name": "PrintMode",
+            "description": "Holds the string values for supported print output types.",
+            "members": [
+                {
+                    "name": "DEFAULT",
+                    "value": "DEFAULT",
+                    "description": "Uses the company/user preference for print output"
+                },
+                {
+                    "name": "HTML",
+                    "value": "HTML",
+                    "description": "Render as HTML"
+                },
+                {
+                    "name": "PDF",
+                    "value": "PDF",
+                    "description": "Render as PDF"
+                }
+            ]
+        }
+    ],
+    "objectTypes": [
+        {
+            "name": "EmailMergeResult",
+            "description": "Encapsulates an email merge result.",
+            "methods": [],
+            "properties": [
+                {
+                    "name": "body",
+                    "type": "string",
+                    "readOnly": true,
+                    "description": "The body of the email distribution in string format."
+                },
+                {
+                    "name": "subject",
+                    "type": "string",
+                    "readOnly": true,
+                    "description": "The subject of the email distribution in string format."
+                }
+            ]
+        },
+        {
+            "name": "TemplateRenderer",
+            "description": "Encapsulates a template object that produces HTML and PDF printed forms utilizing advanced PDF/HTML template capabilities.",
+            "methods": [
+                {
+                    "name": "addCustomDataSource",
+                    "description": "Adds XML or JSON as custom data source to an advanced PDF/HTML template.",
+                    "params": [
+                        {
+                            "name": "options.alias",
+                            "type": "string",
+                            "description": "Data source alias."
+                        },
+                        {
+                            "name": "options.format",
+                            "type": "string",
+                            "description": "Data format. Use render.DataSource enum values."
+                        },
+                        {
+                            "name": "options.data",
+                            "type": "Object | Document | string",
+                            "description": "Object, document, or string."
+                        }
+                    ],
+                    "returns": "void"
+                },
+                {
+                    "name": "addQuery",
+                    "description": "Uses a query as the renderer's data source.",
+                    "params": [
+                        {
+                            "name": "options.templateName",
+                            "type": "string",
+                            "description": "Variable name in the template."
+                        },
+                        {
+                            "name": "options.query",
+                            "type": "query.Query",
+                            "description": "Query object."
+                        }
+                    ],
+                    "returns": "void"
+                },
+                {
+                    "name": "addRecord",
+                    "description": "Binds a record to a template variable.",
+                    "params": [
+                        {
+                            "name": "options.templateName",
+                            "type": "string",
+                            "description": "Variable name in the template."
+                        },
+                        {
+                            "name": "options.record",
+                            "type": "record.Record",
+                            "description": "Record object to bind."
+                        }
+                    ],
+                    "returns": "void"
+                },
+                {
+                    "name": "addSearchResults",
+                    "description": "Binds a search result to a template variable.",
+                    "params": [
+                        {
+                            "name": "options.templateName",
+                            "type": "string",
+                            "description": "Variable name in the template."
+                        },
+                        {
+                            "name": "options.searchResult",
+                            "type": "search.Result[]",
+                            "description": "Search result array."
+                        }
+                    ],
+                    "returns": "void"
+                },
+                {
+                    "name": "renderAsPdf",
+                    "description": "Uses an advanced template to produce a PDF printed form.",
+                    "params": [],
+                    "returns": "file.File",
+                    "returnType": "N/file#File"
+                },
+                {
+                    "name": "renderAsString",
+                    "description": "Returns template content in string form.",
+                    "params": [],
+                    "returns": "string"
+                },
+                {
+                    "name": "renderPdfToResponse",
+                    "description": "Renders PDF template content as a server response.",
+                    "params": [
+                        {
+                            "name": "options.response",
+                            "type": "http.ServerResponse",
+                            "description": "Response object to render PDF to."
+                        }
+                    ],
+                    "returns": "void"
+                },
+                {
+                    "name": "renderToResponse",
+                    "description": "Renders HTML template content as a server response.",
+                    "params": [
+                        {
+                            "name": "options.response",
+                            "type": "http.ServerResponse",
+                            "description": "Response object to render to."
+                        }
+                    ],
+                    "returns": "void"
+                },
+                {
+                    "name": "setTemplateById",
+                    "description": "Sets the template using the internal ID.",
+                    "params": [
+                        {
+                            "name": "options.id",
+                            "type": "number",
+                            "description": "Template internal ID."
+                        }
+                    ],
+                    "returns": "void"
+                },
+                {
+                    "name": "setTemplateByScriptId",
+                    "description": "Sets the template using the script ID.",
+                    "params": [
+                        {
+                            "name": "options.scriptId",
+                            "type": "string",
+                            "description": "Template script ID."
+                        }
+                    ],
+                    "returns": "void"
+                }
+            ],
+            "properties": [
+                {
+                    "name": "templateContent",
+                    "type": "string",
+                    "description": "Content of the template."
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,335 @@
+{
+    "module": "N/http",
+    "description": "Use the N/http module to make HTTP calls from server or client scripts.",
+    "supportedIn": ["client", "server"],
+    "methods": [
+        {
+            "name": "get",
+            "description": "Sends an HTTP GET request and returns the response.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Request options" },
+                { "name": "options.url", "type": "string", "description": "The HTTP URL being requested." },
+                { "name": "options.headers", "type": "Object", "description": "Request headers.", "optional": true }
+            ],
+            "returns": "http.ClientResponse",
+            "returnType": "N/http#ClientResponse"
+        },
+        {
+            "name": "get.promise",
+            "description": "Sends an HTTP GET request asynchronously and returns the response.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Request options" },
+                { "name": "options.url", "type": "string", "description": "The HTTP URL being requested." },
+                { "name": "options.headers", "type": "Object", "description": "Request headers.", "optional": true }
+            ],
+            "returns": "Promise<http.ClientResponse>"
+        },
+        {
+            "name": "post",
+            "description": "Sends an HTTP POST request and returns the response.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Request options" },
+                { "name": "options.url", "type": "string", "description": "The HTTP URL being requested." },
+                { "name": "options.body", "type": "string|Object", "description": "The POST data." },
+                { "name": "options.headers", "type": "Object", "description": "Request headers.", "optional": true }
+            ],
+            "returns": "http.ClientResponse",
+            "returnType": "N/http#ClientResponse"
+        },
+        {
+            "name": "post.promise",
+            "description": "Sends an HTTP POST request asynchronously and returns the response.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Request options" },
+                { "name": "options.url", "type": "string", "description": "The HTTP URL being requested." },
+                { "name": "options.body", "type": "string|Object", "description": "The POST data." },
+                { "name": "options.headers", "type": "Object", "description": "Request headers.", "optional": true }
+            ],
+            "returns": "Promise<http.ClientResponse>"
+        },
+        {
+            "name": "put",
+            "description": "Sends an HTTP PUT request and returns the response.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Request options" },
+                { "name": "options.url", "type": "string", "description": "The HTTP URL being requested." },
+                { "name": "options.body", "type": "string|Object", "description": "The PUT data." },
+                { "name": "options.headers", "type": "Object", "description": "Request headers.", "optional": true }
+            ],
+            "returns": "http.ClientResponse",
+            "returnType": "N/http#ClientResponse"
+        },
+        {
+            "name": "put.promise",
+            "description": "Sends an HTTP PUT request asynchronously and returns the response.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Request options" },
+                { "name": "options.url", "type": "string", "description": "The HTTP URL being requested." },
+                { "name": "options.body", "type": "string|Object", "description": "The PUT data." },
+                { "name": "options.headers", "type": "Object", "description": "Request headers.", "optional": true }
+            ],
+            "returns": "Promise<http.ClientResponse>"
+        },
+        {
+            "name": "delete",
+            "description": "Sends an HTTP DELETE request and returns the response.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Request options" },
+                { "name": "options.url", "type": "string", "description": "The HTTP URL being requested." },
+                { "name": "options.headers", "type": "Object", "description": "Request headers.", "optional": true }
+            ],
+            "returns": "http.ClientResponse",
+            "returnType": "N/http#ClientResponse"
+        },
+        {
+            "name": "delete.promise",
+            "description": "Sends an HTTP DELETE request asynchronously and returns the response.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Request options" },
+                { "name": "options.url", "type": "string", "description": "The HTTP URL being requested." },
+                { "name": "options.headers", "type": "Object", "description": "Request headers.", "optional": true }
+            ],
+            "returns": "Promise<http.ClientResponse>"
+        },
+        {
+            "name": "request",
+            "description": "Sends an HTTP request and returns the response.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Request options" },
+                { "name": "options.method", "type": "string", "description": "The HTTP method. Use http.Method enum to set the value." },
+                { "name": "options.url", "type": "string", "description": "The HTTP URL being requested." },
+                { "name": "options.body", "type": "string|Object", "description": "The request body.", "optional": true },
+                { "name": "options.headers", "type": "Object", "description": "Request headers.", "optional": true }
+            ],
+            "returns": "http.ClientResponse",
+            "returnType": "N/http#ClientResponse"
+        },
+        {
+            "name": "request.promise",
+            "description": "Sends an HTTP request asynchronously and returns the response.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Request options" },
+                { "name": "options.method", "type": "string", "description": "The HTTP method. Use http.Method enum to set the value." },
+                { "name": "options.url", "type": "string", "description": "The HTTP URL being requested." },
+                { "name": "options.body", "type": "string|Object", "description": "The request body.", "optional": true },
+                { "name": "options.headers", "type": "Object", "description": "Request headers.", "optional": true }
+            ],
+            "returns": "Promise<http.ClientResponse>"
+        }
+    ],
+    "enums": [
+        {
+            "name": "CacheDuration",
+            "description": "Holds the string values for supported cache durations.",
+            "members": [
+                { "name": "UNIQUE", "value": "UNIQUE", "description": "Never cached, always executed on request." },
+                { "name": "SHORT", "value": "SHORT", "description": "Conceptually corresponds to minutes." },
+                { "name": "MEDIUM", "value": "MEDIUM", "description": "Conceptually corresponds to hours." },
+                { "name": "LONG", "value": "LONG", "description": "Conceptually corresponds to days." }
+            ]
+        },
+        {
+            "name": "Method",
+            "description": "Holds the string values for supported HTTP requests.",
+            "members": [
+                { "name": "GET", "value": "GET", "description": "HTTP GET" },
+                { "name": "POST", "value": "POST", "description": "HTTP POST" },
+                { "name": "PUT", "value": "PUT", "description": "HTTP PUT" },
+                { "name": "DELETE", "value": "DELETE", "description": "HTTP DELETE" },
+                { "name": "HEAD", "value": "HEAD", "description": "HTTP HEAD" }
+            ]
+        },
+        {
+            "name": "RedirectType",
+            "description": "Holds the string values for supported NetSuite resources that you can redirect to.",
+            "members": [
+                { "name": "MEDIA_ITEM", "value": "MEDIA_ITEM", "description": "Redirect to a media item." },
+                { "name": "RECORD", "value": "RECORD", "description": "Redirect to a record." },
+                { "name": "RESTLET", "value": "RESTLET", "description": "Redirect to a RESTlet." },
+                { "name": "SUITELET", "value": "SUITELET", "description": "Redirect to a Suitelet." },
+                { "name": "TASK_LINK", "value": "TASK_LINK", "description": "Redirect to a task link." }
+            ]
+        }
+    ],
+    "objectTypes": [
+        {
+            "name": "ClientResponse",
+            "description": "Encapsulates the response to an HTTP client request.",
+            "methods": [
+                {
+                    "name": "getAllHeaders",
+                    "description": "Returns all response headers.",
+                    "params": [],
+                    "returns": "Object"
+                }
+            ],
+            "properties": [
+                { "name": "body", "type": "string", "description": "The client response body.", "readOnly": true },
+                { "name": "code", "type": "number", "description": "The client response code.", "readOnly": true },
+                { "name": "headers", "type": "Object", "description": "The client response headers.", "readOnly": true }
+            ]
+        },
+        {
+            "name": "ServerRequest",
+            "description": "Encapsulates the HTTP request information sent to an HTTP server. For example, a request received by a Suitelet or RESTlet.",
+            "methods": [
+                {
+                    "name": "getHeader",
+                    "description": "Returns the value of a request header.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options" },
+                        { "name": "options.name", "type": "string", "description": "The header name." }
+                    ],
+                    "returns": "string"
+                },
+                {
+                    "name": "getLineCount",
+                    "description": "Returns the number of lines in a sublist.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options" },
+                        { "name": "options.group", "type": "string", "description": "The sublist internal ID." }
+                    ],
+                    "returns": "number"
+                },
+                {
+                    "name": "getSublistValue",
+                    "description": "Returns the value of a sublist line item.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options" },
+                        { "name": "options.group", "type": "string", "description": "The sublist internal ID." },
+                        { "name": "options.name", "type": "string", "description": "The field ID." },
+                        { "name": "options.line", "type": "string", "description": "The line number." }
+                    ],
+                    "returns": "string"
+                },
+                {
+                    "name": "getAllHeaders",
+                    "description": "Returns all request headers.",
+                    "params": [],
+                    "returns": "Object"
+                }
+            ],
+            "properties": [
+                { "name": "body", "type": "string", "description": "The server request body.", "readOnly": true },
+                { "name": "clientIpAddress", "type": "string", "description": "The remote client IP address.", "readOnly": true },
+                { "name": "files", "type": "Object", "description": "The server request files.", "readOnly": true },
+                { "name": "headers", "type": "Object", "description": "The server request headers.", "readOnly": true },
+                { "name": "method", "type": "string", "description": "The server request HTTP method.", "readOnly": true },
+                { "name": "parameters", "type": "Object", "description": "The server request parameters.", "readOnly": true },
+                { "name": "url", "type": "string", "description": "The server request URL.", "readOnly": true }
+            ]
+        },
+        {
+            "name": "ServerResponse",
+            "description": "Encapsulates the response from an HTTP server to an HTTP request. For example, a response from a Suitelet or RESTlet.",
+            "methods": [
+                {
+                    "name": "addHeader",
+                    "description": "Adds a header to the response.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options" },
+                        { "name": "options.name", "type": "string", "description": "The header name." },
+                        { "name": "options.value", "type": "string", "description": "The header value." }
+                    ],
+                    "returns": "void"
+                },
+                {
+                    "name": "getHeader",
+                    "description": "Returns the value of a response header.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options" },
+                        { "name": "options.name", "type": "string", "description": "The header name." }
+                    ],
+                    "returns": "string|string[]"
+                },
+                {
+                    "name": "getAllHeaders",
+                    "description": "Returns all response headers.",
+                    "params": [],
+                    "returns": "Object"
+                },
+                {
+                    "name": "renderPdf",
+                    "description": "Generates and renders a PDF directly to the response.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options" },
+                        { "name": "options.xmlString", "type": "string", "description": "The XML/BFO template string." }
+                    ],
+                    "returns": "void"
+                },
+                {
+                    "name": "sendRedirect",
+                    "description": "Sets the redirect URL by resolving to a NetSuite resource.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Redirect options" },
+                        { "name": "options.type", "type": "string", "description": "The redirect type. Use http.RedirectType enum to set the value." },
+                        { "name": "options.identifier", "type": "string", "description": "The target identifier." },
+                        { "name": "options.id", "type": "string", "description": "The record internal ID.", "optional": true },
+                        { "name": "options.editMode", "type": "boolean", "description": "Open in edit mode.", "optional": true },
+                        { "name": "options.parameters", "type": "Object", "description": "URL parameters.", "optional": true }
+                    ],
+                    "returns": "void"
+                },
+                {
+                    "name": "setCdnCacheable",
+                    "description": "Sets CDN caching for a period of time.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options" },
+                        { "name": "options.type", "type": "string", "description": "The CDN cache duration. Use http.CacheDuration enum to set the value." }
+                    ],
+                    "returns": "void"
+                },
+                {
+                    "name": "setHeader",
+                    "description": "Sets the value of a response header.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options" },
+                        { "name": "options.name", "type": "string", "description": "The header name." },
+                        { "name": "options.value", "type": "string", "description": "The header value." }
+                    ],
+                    "returns": "void"
+                },
+                {
+                    "name": "write",
+                    "description": "Writes information (text/xml/html) to the response.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options" },
+                        { "name": "options.output", "type": "string", "description": "The content to write to the response." }
+                    ],
+                    "returns": "void"
+                },
+                {
+                    "name": "writeFile",
+                    "description": "Writes a file to the response.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options" },
+                        { "name": "options.file", "type": "file.File", "description": "The file to write." },
+                        { "name": "options.isInline", "type": "boolean", "description": "Display inline vs. download.", "optional": true }
+                    ],
+                    "returns": "void"
+                },
+                {
+                    "name": "writeLine",
+                    "description": "Writes line information (text/xml/html) to the response.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options" },
+                        { "name": "options.output", "type": "string", "description": "The content to write." }
+                    ],
+                    "returns": "void"
+                },
+                {
+                    "name": "writePage",
+                    "description": "Generates a page.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options" },
+                        { "name": "options.pageObject", "type": "Object", "description": "A serverWidget.Form, serverWidget.List, or serverWidget.Assistant object." }
+                    ],
+                    "returns": "void"
+                }
+            ],
+            "properties": [
+                { "name": "headers", "type": "Object", "description": "The server response headers.", "readOnly": true }
+            ]
+        }
+    ]
+}

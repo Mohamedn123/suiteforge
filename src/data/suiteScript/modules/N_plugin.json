@@ -1,0 +1,31 @@
+{
+    "module": "N/plugin",
+    "description": "Load custom plug-in implementations. Use to find and instantiate implementations of custom plug-in types.",
+    "supportedIn": ["server"],
+    "methods": [
+        {
+            "name": "findImplementations",
+            "description": "Returns the script IDs of custom plug-in type implementations. If includeDefault is true, the default implementation is included.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.type", "type": "string", "description": "The script ID of the custom plug-in type" },
+                { "name": "options.includeDefault", "type": "boolean", "description": "Include the default implementation", "optional": true }
+            ],
+            "returns": "string[]",
+            "supportedIn": ["server"]
+        },
+        {
+            "name": "loadImplementation",
+            "description": "Instantiates an implementation of the custom plug-in type. If no implementation is specified, the default implementation is loaded.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.type", "type": "string", "description": "The script ID of the custom plug-in type" },
+                { "name": "options.implementation", "type": "string", "description": "The script ID of the plug-in implementation to load", "optional": true }
+            ],
+            "returns": "Object",
+            "supportedIn": ["server"]
+        }
+    ],
+    "enums": [],
+    "objectTypes": []
+}

@@ -1,0 +1,6 @@
+<addressForm scriptid="{{SCRIPTID}}">
+    <name></name>
+    <isinactive>F</isinactive>
+    <mainfields>
+    </mainfields>
+</addressForm>

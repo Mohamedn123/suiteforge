@@ -1,0 +1,161 @@
+{
+    "module": "N/action",
+    "description": "Use the N/action module to execute business logic to update the state of records in view mode. Action APIs are the programmatic equivalent to clicking a button in the UI.",
+    "supportedIn": ["client", "server"],
+    "methods": [
+        {
+            "name": "execute",
+            "description": "Executes the record action and returns action results in an object.",
+            "supportedIn": ["client", "server"],
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options object." },
+                { "name": "options.recordType", "type": "string", "description": "The record type." },
+                { "name": "options.id", "type": "string", "description": "The action ID." },
+                { "name": "options.params", "type": "Object", "description": "Action arguments.", "optional": true },
+                { "name": "options.params.recordId", "type": "number", "description": "The record instance ID.", "optional": true }
+            ],
+            "returns": "Object",
+            "returnType": "Object"
+        },
+        {
+            "name": "execute.promise",
+            "description": "Asynchronously executes the record action and returns the action results in an object.",
+            "supportedIn": ["client"],
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options object." },
+                { "name": "options.recordType", "type": "string", "description": "The record type." },
+                { "name": "options.id", "type": "string", "description": "The action ID." },
+                { "name": "options.params", "type": "Object", "description": "Action arguments.", "optional": true },
+                { "name": "options.params.recordId", "type": "number", "description": "The record instance ID.", "optional": true }
+            ],
+            "returns": "Promise<Object>",
+            "returnType": "Promise<Object>"
+        },
+        {
+            "name": "executeBulk",
+            "description": "Executes an asynchronous bulk record action and returns its task ID for later status inquiry.",
+            "supportedIn": ["client", "server"],
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options object." },
+                { "name": "options.recordType", "type": "string", "description": "The record type." },
+                { "name": "options.id", "type": "string", "description": "The action ID." },
+                { "name": "options.params", "type": "Array", "description": "An array of parameter objects. Each object corresponds to one record ID for which the action is to be executed." },
+                { "name": "options.condition", "type": "string", "description": "The condition used to select record IDs. Only action.ALL_QUALIFIED_INSTANCES is currently supported.", "optional": true },
+                { "name": "options.paramCallback", "type": "string", "description": "The name of the function that takes a record ID and returns the parameter object for the specified record ID.", "optional": true }
+            ],
+            "returns": "string",
+            "returnType": "string"
+        },
+        {
+            "name": "find",
+            "description": "Returns a plain JavaScript object of available record actions for the given record type.",
+            "supportedIn": ["client", "server"],
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options object." },
+                { "name": "options.recordType", "type": "string", "description": "The record type." },
+                { "name": "options.recordId", "type": "number | string", "description": "The record instance ID.", "optional": true }
+            ],
+            "returns": "Object",
+            "returnType": "Object"
+        },
+        {
+            "name": "find.promise",
+            "description": "Asynchronously returns a plain JavaScript object of available record actions for the given record type.",
+            "supportedIn": ["client"],
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options object." },
+                { "name": "options.recordType", "type": "string", "description": "The record type." },
+                { "name": "options.recordId", "type": "number | string", "description": "The record instance ID.", "optional": true }
+            ],
+            "returns": "Promise<Object>",
+            "returnType": "Promise<Object>"
+        },
+        {
+            "name": "get",
+            "description": "Returns an executable record action for the given record type.",
+            "supportedIn": ["client", "server"],
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options object." },
+                { "name": "options.recordType", "type": "string", "description": "The record type." },
+                { "name": "options.id", "type": "string", "description": "The ID of the action." }
+            ],
+            "returns": "action.Action",
+            "returnType": "N/action#Action"
+        },
+        {
+            "name": "get.promise",
+            "description": "Asynchronously returns an executable record action for the given record type.",
+            "supportedIn": ["client"],
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options object." },
+                { "name": "options.recordType", "type": "string", "description": "The record type." },
+                { "name": "options.id", "type": "string", "description": "The ID of the action." }
+            ],
+            "returns": "Promise<action.Action>",
+            "returnType": "Promise<N/action#Action>"
+        },
+        {
+            "name": "getBulkStatus",
+            "description": "Returns the current status of action.executeBulk(options) for the specified task ID.",
+            "supportedIn": ["client", "server"],
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options object." },
+                { "name": "options.taskId", "type": "string", "description": "The task ID returned by a previous action.executeBulk(options) call." }
+            ],
+            "returns": "Object",
+            "returnType": "Object"
+        }
+    ],
+    "enums": [],
+    "objectTypes": [
+        {
+            "name": "Action",
+            "description": "Encapsulates a NetSuite record action.",
+            "supportedIn": ["client", "server"],
+            "methods": [
+                {
+                    "name": "execute",
+                    "description": "Executes the action and returns the action results in an object.",
+                    "supportedIn": ["client", "server"],
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Action parameters. The parameters depend on the action implementation.", "optional": true },
+                        { "name": "options.params.recordId", "type": "number", "description": "The record instance ID of the record on which the action is to be performed.", "optional": true }
+                    ],
+                    "returns": "Object",
+                    "returnType": "Object"
+                },
+                {
+                    "name": "execute.promise",
+                    "description": "Executes the action asynchronously and returns the action results in an object.",
+                    "supportedIn": ["client"],
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Action parameters. The parameters depend on the action implementation.", "optional": true },
+                        { "name": "options.params.recordId", "type": "number", "description": "The record instance ID of the record on which the action is to be performed.", "optional": true }
+                    ],
+                    "returns": "Promise<Object>",
+                    "returnType": "Promise<Object>"
+                },
+                {
+                    "name": "executeBulk",
+                    "description": "Executes an asynchronous bulk record action and returns its task ID for later status inquiry.",
+                    "supportedIn": ["client", "server"],
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options object." },
+                        { "name": "options.params", "type": "Array", "description": "An array of parameter objects. Each object corresponds to one record ID for which the action is to be executed." },
+                        { "name": "options.condition", "type": "string", "description": "The condition used to select record IDs. Only action.ALL_QUALIFIED_INSTANCES is currently supported.", "optional": true },
+                        { "name": "options.paramCallback", "type": "string", "description": "The name of the function that takes a record ID and returns the parameter object for the specified record ID.", "optional": true }
+                    ],
+                    "returns": "string",
+                    "returnType": "string"
+                }
+            ],
+            "properties": [
+                { "name": "description", "type": "string", "description": "The action description.", "readOnly": true },
+                { "name": "id", "type": "string", "description": "The ID of the action.", "readOnly": true },
+                { "name": "label", "type": "string", "description": "The action label.", "readOnly": true },
+                { "name": "parameters", "type": "Object", "description": "The action parameters.", "readOnly": true },
+                { "name": "recordType", "type": "string", "description": "The type of the record on which the action is to be performed.", "readOnly": true }
+            ]
+        }
+    ]
+}

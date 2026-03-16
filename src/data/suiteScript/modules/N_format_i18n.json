@@ -1,0 +1,173 @@
+{
+    "module": "N/format/i18n",
+    "description": "Format strings in international context — format numbers to currency or number strings, spell out numbers, and format/parse phone numbers.",
+    "supportedIn": ["client", "server"],
+    "methods": [
+        {
+            "name": "getCurrencyFormatter",
+            "description": "Creates a CurrencyFormatter object to format numbers to currency strings.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.currency", "type": "string", "description": "Currency code (format.Currency.*)" }
+            ],
+            "returns": "format.CurrencyFormatter",
+            "returnType": "N/format/i18n#CurrencyFormatter"
+        },
+        {
+            "name": "getNumberFormatter",
+            "description": "Creates a NumberFormatter object to format numbers to strings.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.groupSeparator", "type": "string", "description": "The group (thousands) separator character", "optional": true },
+                { "name": "options.decimalSeparator", "type": "string", "description": "The decimal separator character", "optional": true },
+                { "name": "options.precision", "type": "number", "description": "Number of decimal places", "optional": true },
+                { "name": "options.negativeNumberFormat", "type": "string", "description": "Negative number format (format.NegativeNumberFormat.*)", "optional": true }
+            ],
+            "returns": "format.NumberFormatter",
+            "returnType": "N/format/i18n#NumberFormatter"
+        },
+        {
+            "name": "spellOut",
+            "description": "Creates a string containing the spelled-out version of the specified number in a specified locale.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.number", "type": "number", "description": "The number to spell out" },
+                { "name": "options.locale", "type": "string", "description": "The locale (e.g. 'en_US')", "optional": true }
+            ],
+            "returns": "string"
+        },
+        {
+            "name": "getPhoneNumberFormatter",
+            "description": "Creates a PhoneNumberFormatter object to format phone numbers to strings.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.formatType", "type": "string", "description": "Phone format type (format.PhoneNumberFormatType.*)" }
+            ],
+            "returns": "format.PhoneNumberFormatter",
+            "returnType": "N/format/i18n#PhoneNumberFormatter"
+        },
+        {
+            "name": "getPhoneNumberParser",
+            "description": "Returns a PhoneNumberParser object to parse phone number strings.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.defaultCountry", "type": "string", "description": "Default country code (format.Country.*)", "optional": true }
+            ],
+            "returns": "format.PhoneNumberParser",
+            "returnType": "N/format/i18n#PhoneNumberParser"
+        }
+    ],
+    "enums": [
+        {
+            "name": "NegativeNumberFormat",
+            "description": "Negative number formatting styles.",
+            "members": [
+                { "name": "BRACKETS", "value": "BRACKETS", "description": "Wrap in brackets: (123)" },
+                { "name": "MINUS", "value": "MINUS", "description": "Prefix with minus: -123" }
+            ]
+        },
+        {
+            "name": "Currency",
+            "description": "Holds the values for the currency code. Used with format.getCurrencyFormatter(options).",
+            "members": [
+                { "name": "AED", "value": "AED", "description": "UAE Dirham" },
+                { "name": "CAD", "value": "CAD", "description": "Canadian Dollar" },
+                { "name": "CZK", "value": "CZK", "description": "Czech Koruna" },
+                { "name": "EEK", "value": "EEK", "description": "Estonian Kroon" },
+                { "name": "EUR", "value": "EUR", "description": "Euro" },
+                { "name": "GBP", "value": "GBP", "description": "British Pound" },
+                { "name": "IDR", "value": "IDR", "description": "Indonesian Rupiah" },
+                { "name": "INR", "value": "INR", "description": "Indian Rupee" },
+                { "name": "JPY", "value": "JPY", "description": "Japanese Yen" },
+                { "name": "USD", "value": "USD", "description": "US Dollar" },
+                { "name": "UYU", "value": "UYU", "description": "Uruguayan Peso" }
+            ]
+        },
+        {
+            "name": "PhoneNumberFormatType",
+            "description": "Phone number format types.",
+            "members": [
+                { "name": "E164", "value": "E164", "description": "E.164 international format (+1234567890)" },
+                { "name": "INTERNATIONAL", "value": "INTERNATIONAL", "description": "International format with spaces" },
+                { "name": "NATIONAL", "value": "NATIONAL", "description": "National format" },
+                { "name": "RFC3966", "value": "RFC3966", "description": "RFC 3966 URI format (tel:+1-234-567-890)" }
+            ]
+        }
+    ],
+    "objectTypes": [
+        {
+            "name": "CurrencyFormatter",
+            "description": "Formats numbers to currency strings.",
+            "methods": [
+                {
+                    "name": "format",
+                    "description": "Formats a number to a currency string.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options" },
+                        { "name": "options.number", "type": "number", "description": "The number to format" }
+                    ],
+                    "returns": "string"
+                }
+            ],
+            "properties": [
+                { "name": "currency", "type": "string", "description": "The currency code.", "readOnly": true },
+                { "name": "locale", "type": "string", "description": "The locale of the formatter.", "readOnly": true },
+                { "name": "symbol", "type": "string", "description": "The currency symbol.", "readOnly": true },
+                { "name": "numberFormatter", "type": "format.NumberFormatter", "description": "The underlying NumberFormatter with the same formatting parameters." }
+            ]
+        },
+        {
+            "name": "NumberFormatter",
+            "description": "Formats numbers to strings.",
+            "methods": [
+                {
+                    "name": "format",
+                    "description": "Formats a number to a string.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options" },
+                        { "name": "options.number", "type": "number", "description": "The number to format" }
+                    ],
+                    "returns": "string"
+                }
+            ],
+            "properties": [
+                { "name": "groupSeparator", "type": "string", "description": "The group (thousands) separator.", "readOnly": true },
+                { "name": "decimalSeparator", "type": "string", "description": "The decimal separator.", "readOnly": true },
+                { "name": "precision", "type": "number", "description": "Number of decimal places.", "readOnly": true },
+                { "name": "locale", "type": "string", "description": "The locale of the formatter.", "readOnly": true }
+            ]
+        },
+        {
+            "name": "PhoneNumberFormatter",
+            "description": "Formats phone number objects to strings.",
+            "methods": [
+                {
+                    "name": "format",
+                    "description": "Formats a phone number object to a string.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options" },
+                        { "name": "options.phoneNumber", "type": "Object", "description": "The phone number object to format" }
+                    ],
+                    "returns": "string"
+                }
+            ],
+            "properties": []
+        },
+        {
+            "name": "PhoneNumberParser",
+            "description": "Parses phone number strings into phone number objects.",
+            "methods": [
+                {
+                    "name": "parse",
+                    "description": "Parses a string containing the phone number and returns the phone number object.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options" },
+                        { "name": "options.number", "type": "string", "description": "The string to be parsed" }
+                    ],
+                    "returns": "Object"
+                }
+            ],
+            "properties": []
+        }
+    ]
+}

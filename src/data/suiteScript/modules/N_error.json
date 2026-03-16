@@ -1,0 +1,105 @@
+{
+    "module": "N/error",
+    "description": "Use the N/error module to create custom SuiteScript errors that you can use in try-catch statements to abort script execution.",
+    "supportedIn": ["server"],
+    "methods": [
+        {
+            "name": "create",
+            "description": "Creates a new error.SuiteScriptError object.",
+            "params": [
+                {
+                    "name": "options",
+                    "type": "Object",
+                    "description": "Error options object."
+                },
+                {
+                    "name": "options.name",
+                    "type": "string",
+                    "description": "Error name or error code. Use error.Type to set the value. This sets the value of the SuiteScriptError.type property."
+                },
+                {
+                    "name": "options.message",
+                    "type": "string",
+                    "description": "Error message text displayed in the Details column of the Execution Log."
+                },
+                {
+                    "name": "options.notifyOff",
+                    "type": "boolean",
+                    "description": "Suppresses email notification when set to true.",
+                    "optional": true
+                }
+            ],
+            "returns": "error.SuiteScriptError",
+            "returnType": "N/error#SuiteScriptError"
+        }
+    ],
+    "enums": [
+        {
+            "name": "Type",
+            "description": "Holds the string values for error types. Use this enum to set the value for the SuiteScriptError.name parameter of the error.create(options) method.",
+            "members": [
+                {"name": "SSS_MISSING_REQD_ARGUMENT", "value": "SSS_MISSING_REQD_ARGUMENT", "description": "Missing required argument."},
+                {"name": "WRONG_PARAMETER_TYPE", "value": "WRONG_PARAMETER_TYPE", "description": "Wrong parameter type."},
+                {"name": "INVALID_EMAILS_FOUND", "value": "INVALID_EMAILS_FOUND", "description": "Invalid emails found."},
+                {"name": "MISSING_REQD_ARGUMENT", "value": "MISSING_REQD_ARGUMENT", "description": "Missing required argument."},
+                {"name": "MUTUALLY_EXCLUSIVE_ARGUMENTS", "value": "MUTUALLY_EXCLUSIVE_ARGUMENTS", "description": "Mutually exclusive arguments."},
+                {"name": "FAILED_AN_UNEXPECTED_ERROR_OCCURRED", "value": "FAILED_AN_UNEXPECTED_ERROR_OCCURRED", "description": "An unexpected error occurred."},
+                {"name": "SERVER_SIDE_VALIDATION_FAILED", "value": "SERVER_SIDE_VALIDATION_FAILED", "description": "Server-side validation failed."},
+                {"name": "SCRIPT_EXECUTION_USAGE_LIMIT_EXCEEDED", "value": "SCRIPT_EXECUTION_USAGE_LIMIT_EXCEEDED", "description": "Script execution usage limit exceeded."},
+                {"name": "SSS_INVALID_CURRENCY_ID", "value": "SSS_INVALID_CURRENCY_ID", "description": "Invalid currency ID."},
+                {"name": "SSS_RECORD_DOES_NOT_SATISFY_CONDITION", "value": "SSS_RECORD_DOES_NOT_SATISFY_CONDITION", "description": "Record does not satisfy condition."}
+            ]
+        }
+    ],
+    "objectTypes": [
+        {
+            "name": "SuiteScriptError",
+            "description": "Encapsulates a custom SuiteScript error for any server script type.",
+            "methods": [],
+            "properties": [
+                {
+                    "name": "cause",
+                    "type": "string",
+                    "description": "Cause of the error.",
+                    "readOnly": true
+                },
+                {
+                    "name": "id",
+                    "type": "string",
+                    "description": "Error ID that is automatically generated when a new error is created.",
+                    "readOnly": true
+                },
+                {
+                    "name": "message",
+                    "type": "string",
+                    "description": "Error message text displayed in the Details column of the Execution Log.",
+                    "readOnly": true
+                },
+                {
+                    "name": "name",
+                    "type": "string",
+                    "description": "Error name or error code.",
+                    "readOnly": true
+                },
+                {
+                    "name": "notifyOff",
+                    "type": "boolean",
+                    "description": "Suppresses email notification when set to true.",
+                    "readOnly": true
+                },
+                {
+                    "name": "stack",
+                    "type": "string[]",
+                    "description": "List of method calls that the script is executing when the error is thrown.",
+                    "readOnly": true
+                },
+                {
+                    "name": "type",
+                    "type": "error.Type",
+                    "description": "Error type (error.SuiteScriptError).",
+                    "readOnly": true
+                }
+            ]
+        }
+    ]
+}

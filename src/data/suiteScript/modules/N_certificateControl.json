@@ -1,0 +1,144 @@
+{
+    "module": "N/certificateControl",
+    "description": "Access the Digital Certificates list to find, create, update, and delete certificate records for digital signing.",
+    "supportedIn": ["server"],
+    "methods": [
+        {
+            "name": "findCertificates",
+            "description": "Returns metadata about certificates matching the search criteria.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Search criteria", "optional": true },
+                { "name": "options.name", "type": "string", "description": "Filter by certificate name", "optional": true },
+                { "name": "options.nameOperator", "type": "string", "description": "Operator for name filter (certificateControl.Operator.*)", "optional": true },
+                { "name": "options.description", "type": "string", "description": "Filter by description", "optional": true },
+                { "name": "options.descriptionOperator", "type": "string", "description": "Operator for description filter", "optional": true },
+                { "name": "options.type", "type": "string", "description": "Filter by certificate type (certificateControl.Type.*)", "optional": true },
+                { "name": "options.subsidiary", "type": "number", "description": "Filter by subsidiary ID", "optional": true },
+                { "name": "options.scriptId", "type": "string", "description": "Filter by script ID", "optional": true }
+            ],
+            "returns": "Object",
+            "supportedIn": ["server"]
+        },
+        {
+            "name": "findUsages",
+            "description": "Returns an audit trail of how a certificate has been used, including operations performed with timestamps.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.scriptId", "type": "string", "description": "The script ID of the certificate" },
+                { "name": "options.operation", "type": "string", "description": "Filter by operation (certificateControl.Operation.*)", "optional": true }
+            ],
+            "returns": "Object[]",
+            "supportedIn": ["server"]
+        },
+        {
+            "name": "createCertificate",
+            "description": "Creates a certificate record using a file from the File Cabinet.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.file", "type": "file.File", "description": "The certificate file from the File Cabinet" },
+                { "name": "options.name", "type": "string", "description": "Name for the certificate record" },
+                { "name": "options.password", "type": "string", "description": "Password for the certificate", "optional": true },
+                { "name": "options.scriptId", "type": "string", "description": "Custom script ID for the certificate", "optional": true },
+                { "name": "options.description", "type": "string", "description": "Description for the certificate", "optional": true },
+                { "name": "options.subsidiaries", "type": "number[]", "description": "Subsidiary IDs to associate", "optional": true },
+                { "name": "options.restrictions", "type": "number[]", "description": "Employee IDs to restrict access", "optional": true },
+                { "name": "options.notifications", "type": "number[]", "description": "Employee IDs for expiration notifications", "optional": true }
+            ],
+            "returns": "certificateControl.Certificate",
+            "returnType": "N/certificateControl#Certificate",
+            "supportedIn": ["server"]
+        },
+        {
+            "name": "deleteCertificate",
+            "description": "Deletes a certificate record.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.scriptId", "type": "string", "description": "The script ID of the certificate to delete" }
+            ],
+            "returns": "string",
+            "supportedIn": ["server"]
+        },
+        {
+            "name": "loadCertificate",
+            "description": "Loads a certificate record by its script ID.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.scriptId", "type": "string", "description": "The script ID of the certificate to load" }
+            ],
+            "returns": "certificateControl.Certificate",
+            "returnType": "N/certificateControl#Certificate",
+            "supportedIn": ["server"]
+        },
+        {
+            "name": "lock",
+            "description": "Locks a certificate so it cannot be edited in the UI.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.scriptId", "type": "string", "description": "The script ID of the certificate to lock" }
+            ],
+            "returns": "string",
+            "supportedIn": ["server"]
+        },
+        {
+            "name": "unlock",
+            "description": "Unlocks a previously locked certificate.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.scriptId", "type": "string", "description": "The script ID of the certificate to unlock" }
+            ],
+            "returns": "string",
+            "supportedIn": ["server"]
+        }
+    ],
+    "enums": [
+        {
+            "name": "Operation",
+            "description": "Certificate usage operation types.",
+            "members": [
+                { "name": "SIGN", "value": "SIGN", "description": "Signing operation" },
+                { "name": "VERIFY", "value": "VERIFY", "description": "Verification operation" },
+                { "name": "REQUEST", "value": "REQUEST", "description": "SSL request operation" }
+            ]
+        },
+        {
+            "name": "Operator",
+            "description": "Operators for filtering certificates.",
+            "members": [
+                { "name": "CONTAINS", "value": "CONTAINS", "description": "Contains the value" },
+                { "name": "STARTS_WITH", "value": "STARTS_WITH", "description": "Starts with the value" },
+                { "name": "EQUALS", "value": "EQUALS", "description": "Exactly equals the value" }
+            ]
+        },
+        {
+            "name": "Type",
+            "description": "Certificate file types.",
+            "members": [
+                { "name": "PEM", "value": "PEM", "description": "PEM format certificate" },
+                { "name": "P12", "value": "P12", "description": "PKCS#12 format certificate" },
+                { "name": "PFX", "value": "PFX", "description": "PFX format certificate" }
+            ]
+        }
+    ],
+    "objectTypes": [
+        {
+            "name": "Certificate",
+            "description": "Represents a digital certificate record.",
+            "methods": [
+                { "name": "save", "description": "Saves the certificate record.", "params": [], "returns": "Object" }
+            ],
+            "properties": [
+                { "name": "scriptId", "type": "string", "description": "The script ID of the certificate." },
+                { "name": "name", "type": "string", "description": "The name of the certificate." },
+                { "name": "description", "type": "string", "description": "Description of the certificate." },
+                { "name": "file", "type": "file.File", "description": "The certificate file object." },
+                { "name": "password", "type": "string", "description": "Password for the certificate (write-only)." },
+                { "name": "subsidiaries", "type": "number[]", "description": "Associated subsidiary IDs." },
+                { "name": "restrictions", "type": "number[]", "description": "Restricted employee IDs." },
+                { "name": "notifications", "type": "number[]", "description": "Notification employee IDs." },
+                { "name": "monthReminder", "type": "boolean", "description": "Whether the month expiration reminder is enabled." },
+                { "name": "threeMonthsReminder", "type": "boolean", "description": "Whether the 3-month expiration reminder is enabled." },
+                { "name": "weekReminder", "type": "boolean", "description": "Whether the week expiration reminder is enabled." }
+            ]
+        }
+    ]
+}

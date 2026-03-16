@@ -1,0 +1,134 @@
+[
+    {
+        "id": "CHECKBOX",
+        "label": "Checkbox",
+        "description": "A boolean (true/false) field rendered as a checkbox on forms.",
+        "xmlValue": "CHECKBOX"
+    },
+    {
+        "id": "CLOBTEXT",
+        "label": "Long Text",
+        "description": "A large text field storing up to 100,000 characters. Use for lengthy plain-text content.",
+        "xmlValue": "CLOBTEXT"
+    },
+    {
+        "id": "CURRENCY",
+        "label": "Currency",
+        "description": "A monetary value field. Automatically formatted with the subsidiary's base currency symbol.",
+        "xmlValue": "CURRENCY"
+    },
+    {
+        "id": "DATE",
+        "label": "Date",
+        "description": "A calendar date field (no time component). Displayed according to the user's locale date format.",
+        "xmlValue": "DATE"
+    },
+    {
+        "id": "DATETIME",
+        "label": "Date / Time",
+        "description": "A combined date and time field. Values are stored in UTC and displayed in the user's timezone.",
+        "xmlValue": "DATETIME"
+    },
+    {
+        "id": "DATETIMETZ",
+        "label": "Date / Time with Timezone",
+        "description": "A date and time field that stores and displays timezone information alongside the value.",
+        "xmlValue": "DATETIMETZ"
+    },
+    {
+        "id": "DOCUMENT",
+        "label": "File (Document)",
+        "description": "A reference to a file stored in the NetSuite File Cabinet. Renders as a file link on forms.",
+        "xmlValue": "DOCUMENT"
+    },
+    {
+        "id": "EMAIL",
+        "label": "Email Address",
+        "description": "A single-line text field validated to the email address format (e.g. user@example.com).",
+        "xmlValue": "EMAIL"
+    },
+    {
+        "id": "FLOAT",
+        "label": "Decimal Number",
+        "description": "A floating-point number field. Use for quantities, rates, and values requiring decimal precision.",
+        "xmlValue": "FLOAT"
+    },
+    {
+        "id": "HELP",
+        "label": "Help Text (Display Only)",
+        "description": "A display-only field that renders inline help text on the form. Stores no data.",
+        "xmlValue": "HELP"
+    },
+    {
+        "id": "IMAGE",
+        "label": "Image",
+        "description": "A reference to an image in the NetSuite File Cabinet. The image is rendered inline on the record form.",
+        "xmlValue": "IMAGE"
+    },
+    {
+        "id": "INLINEHTML",
+        "label": "Inline HTML",
+        "description": "A display-only field that renders arbitrary HTML content inline on the form. Stores no data.",
+        "xmlValue": "INLINEHTML"
+    },
+    {
+        "id": "INTEGER",
+        "label": "Integer",
+        "description": "A whole number field. Decimal values are not allowed. Use for counts, quantities without fractions, etc.",
+        "xmlValue": "INTEGER"
+    },
+    {
+        "id": "MULTISELECT",
+        "label": "Multi-Select List",
+        "description": "Allows the user to select multiple values from a list or record type. Use sourceList or sourceFrom to specify the source.",
+        "xmlValue": "MULTISELECT"
+    },
+    {
+        "id": "PERCENT",
+        "label": "Percent",
+        "description": "A numeric field displayed as a percentage. The value 25 is stored and displayed as 25%.",
+        "xmlValue": "PERCENT"
+    },
+    {
+        "id": "PHONE",
+        "label": "Phone Number",
+        "description": "A text field formatted as a phone number. Provides phone-number-specific input formatting.",
+        "xmlValue": "PHONE"
+    },
+    {
+        "id": "RICHTEXT",
+        "label": "Rich Text",
+        "description": "A full rich text editor field (WYSIWYG). Stores HTML. Allows bold, italic, lists, hyperlinks, images, etc.",
+        "xmlValue": "RICHTEXT"
+    },
+    {
+        "id": "SELECT",
+        "label": "List / Record (Select)",
+        "description": "A dropdown field referencing a custom list or a record type. Set sourceList for a custom list, or sourceFrom for a record type.",
+        "xmlValue": "SELECT"
+    },
+    {
+        "id": "TEXT",
+        "label": "Free-Form Text",
+        "description": "A single-line plain text field. Stores up to 300 characters. The most commonly used field type.",
+        "xmlValue": "TEXT"
+    },
+    {
+        "id": "TEXTAREA",
+        "label": "Text Area",
+        "description": "A multi-line plain text area. Stores up to 4,000 characters.",
+        "xmlValue": "TEXTAREA"
+    },
+    {
+        "id": "TIMEOFDAY",
+        "label": "Time of Day",
+        "description": "A time field storing hours and minutes (no date). Displayed in HH:MM AM/PM format.",
+        "xmlValue": "TIMEOFDAY"
+    },
+    {
+        "id": "URL",
+        "label": "Hyperlink (URL)",
+        "description": "A text field validated as a URL. Rendered as a clickable hyperlink on the record form.",
+        "xmlValue": "URL"
+    }
+]

@@ -1,0 +1,243 @@
+{
+    "module": "N/email",
+    "description": "Use the N/email module to send email messages from within NetSuite. You can use the N/email module to send regular, bulk, and campaign email.",
+    "supportedIn": ["client", "server"],
+    "methods": [
+        {
+            "name": "send",
+            "description": "Sends transactional email to an individual or group of recipients and receives bounceback notifications.",
+            "supportedIn": ["client", "server"],
+            "params": [
+                {
+                    "name": "options",
+                    "type": "Object",
+                    "description": "Email options object."
+                },
+                {
+                    "name": "options.author",
+                    "type": "number",
+                    "description": "Internal ID of the email sender. To find the internal ID of the sender in the UI, go to Lists > Employees."
+                },
+                {
+                    "name": "options.recipients",
+                    "type": "number|string|number[]|string[]",
+                    "description": "The internal ID or email address of the recipient(s). For multiple recipients, use an array of internal IDs or email addresses."
+                },
+                {
+                    "name": "options.subject",
+                    "type": "string",
+                    "description": "Subject of the outgoing message."
+                },
+                {
+                    "name": "options.body",
+                    "type": "string",
+                    "description": "Contents of the outgoing message. SuiteScript formats the body in either plain text or HTML."
+                },
+                {
+                    "name": "options.replyTo",
+                    "type": "string",
+                    "description": "The email address that appears in the reply-to header.",
+                    "optional": true
+                },
+                {
+                    "name": "options.cc",
+                    "type": "number[]|string[]",
+                    "description": "The internal ID or email address of the secondary recipient(s) to copy.",
+                    "optional": true
+                },
+                {
+                    "name": "options.bcc",
+                    "type": "number[]|string[]",
+                    "description": "The internal ID or email address of the recipient(s) to blind copy.",
+                    "optional": true
+                },
+                {
+                    "name": "options.attachments",
+                    "type": "file.File[]",
+                    "description": "Email file attachments. Supported for server scripts only.",
+                    "optional": true
+                },
+                {
+                    "name": "options.relatedRecords",
+                    "type": "Object",
+                    "description": "Object that contains key-value pairs to associate the Message record with related records (transactionId, entityId, customRecord, activityId).",
+                    "optional": true
+                },
+                {
+                    "name": "options.relatedRecords.transactionId",
+                    "type": "number",
+                    "description": "The Transaction record to attach the Message record to.",
+                    "optional": true
+                },
+                {
+                    "name": "options.relatedRecords.entityId",
+                    "type": "number",
+                    "description": "The Entity record to attach the Message record to.",
+                    "optional": true
+                },
+                {
+                    "name": "options.relatedRecords.customRecord",
+                    "type": "Object",
+                    "description": "The custom record to attach the Message record to. Must specify both id and recordType.",
+                    "optional": true
+                },
+                {
+                    "name": "options.relatedRecords.activityId",
+                    "type": "number",
+                    "description": "The Activity record to attach the Message record to.",
+                    "optional": true
+                },
+                {
+                    "name": "options.isInternalOnly",
+                    "type": "boolean",
+                    "description": "If true, the Message record is not visible to an external Entity. Default is false.",
+                    "optional": true
+                }
+            ],
+            "returns": "void"
+        },
+        {
+            "name": "send.promise",
+            "description": "Sends transactional email asynchronously to an individual or group of recipients and receives bounceback notifications.",
+            "supportedIn": ["client"],
+            "params": [
+                {
+                    "name": "options",
+                    "type": "Object",
+                    "description": "Same parameters as email.send(options)."
+                }
+            ],
+            "returns": "Promise<void>"
+        },
+        {
+            "name": "sendBulk",
+            "description": "Sends bulk email (for use when a bounceback notification is not required).",
+            "supportedIn": ["client", "server"],
+            "params": [
+                {
+                    "name": "options",
+                    "type": "Object",
+                    "description": "Bulk email options object."
+                },
+                {
+                    "name": "options.author",
+                    "type": "number",
+                    "description": "Internal ID of the email sender."
+                },
+                {
+                    "name": "options.recipients",
+                    "type": "number|string|number[]|string[]",
+                    "description": "The internal ID or email address of the recipient(s)."
+                },
+                {
+                    "name": "options.subject",
+                    "type": "string",
+                    "description": "Subject of the outgoing message."
+                },
+                {
+                    "name": "options.body",
+                    "type": "string",
+                    "description": "Contents of the outgoing message."
+                },
+                {
+                    "name": "options.replyTo",
+                    "type": "string",
+                    "description": "The email address that appears in the reply-to header.",
+                    "optional": true
+                },
+                {
+                    "name": "options.cc",
+                    "type": "number[]|string[]",
+                    "description": "The internal ID or email address of the secondary recipient(s) to copy.",
+                    "optional": true
+                },
+                {
+                    "name": "options.bcc",
+                    "type": "number[]|string[]",
+                    "description": "The internal ID or email address of the recipient(s) to blind copy.",
+                    "optional": true
+                },
+                {
+                    "name": "options.attachments",
+                    "type": "file.File[]",
+                    "description": "Email file attachments. Supported for server scripts only.",
+                    "optional": true
+                },
+                {
+                    "name": "options.relatedRecords",
+                    "type": "Object",
+                    "description": "Object to associate the Message record with related records.",
+                    "optional": true
+                },
+                {
+                    "name": "options.isInternalOnly",
+                    "type": "boolean",
+                    "description": "If true, the Message record is not visible to an external Entity.",
+                    "optional": true
+                }
+            ],
+            "returns": "void"
+        },
+        {
+            "name": "sendBulk.promise",
+            "description": "Sends bulk email asynchronously (for use when a bounceback notification is not required).",
+            "supportedIn": ["client"],
+            "params": [
+                {
+                    "name": "options",
+                    "type": "Object",
+                    "description": "Same parameters as email.sendBulk(options)."
+                }
+            ],
+            "returns": "Promise<void>"
+        },
+        {
+            "name": "sendCampaignEvent",
+            "description": "Sends a single 'on-demand' campaign email to a specified recipient and returns a campaign response ID.",
+            "supportedIn": ["client", "server"],
+            "params": [
+                {
+                    "name": "options",
+                    "type": "Object",
+                    "description": "Campaign event options."
+                },
+                {
+                    "name": "options.campaignEventId",
+                    "type": "number",
+                    "description": "The internal ID of the campaign event. The campaign must use a Lead Nurturing (campaigndrip) sublist."
+                },
+                {
+                    "name": "options.recipientId",
+                    "type": "number",
+                    "description": "The internal ID of the recipient. The recipient's record must contain an email address."
+                }
+            ],
+            "returns": "number"
+        },
+        {
+            "name": "sendCampaignEvent.promise",
+            "description": "Sends a single 'on-demand' campaign email asynchronously to a specified recipient and returns a campaign response ID.",
+            "supportedIn": ["client", "server"],
+            "params": [
+                {
+                    "name": "options",
+                    "type": "Object",
+                    "description": "Campaign event options."
+                },
+                {
+                    "name": "options.campaignEventId",
+                    "type": "number",
+                    "description": "The internal ID of the campaign event."
+                },
+                {
+                    "name": "options.recipientId",
+                    "type": "number",
+                    "description": "The internal ID of the recipient."
+                }
+            ],
+            "returns": "Promise<number>"
+        }
+    ],
+    "enums": [],
+    "objectTypes": []
+}

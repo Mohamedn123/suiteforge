@@ -1,0 +1,70 @@
+{
+    "module": "N/llm",
+    "description": "Use generative AI capabilities to send requests to large language models (LLMs) supported by NetSuite. SuiteScript 2.1 only.",
+    "supportedIn": ["server"],
+    "methods": [
+        {
+            "name": "generateText",
+            "description": "Sends a prompt to an LLM and returns the generated text response.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.prompt", "type": "string", "description": "The text prompt to send to the LLM" },
+                { "name": "options.modelFamily", "type": "string", "description": "The model family to use (llm.ModelFamily.*)", "optional": true },
+                { "name": "options.modelParameters", "type": "Object", "description": "Model parameters (temperature, maxTokens, etc.)", "optional": true },
+                { "name": "options.timeout", "type": "number", "description": "Request timeout in seconds", "optional": true }
+            ],
+            "returns": "llm.LlmResponse",
+            "supportedIn": ["server"]
+        },
+        {
+            "name": "generateText.promise",
+            "description": "Asynchronously sends a prompt to an LLM and returns a Promise resolving to the response.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.prompt", "type": "string", "description": "The text prompt to send to the LLM" },
+                { "name": "options.modelFamily", "type": "string", "description": "The model family to use", "optional": true },
+                { "name": "options.modelParameters", "type": "Object", "description": "Model parameters", "optional": true },
+                { "name": "options.timeout", "type": "number", "description": "Request timeout in seconds", "optional": true }
+            ],
+            "returns": "Promise<llm.LlmResponse>",
+            "supportedIn": ["server"]
+        },
+        {
+            "name": "chat",
+            "description": "Sends a multi-turn conversation to an LLM and returns the response.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.messages", "type": "Array", "description": "Array of message objects { role, content }" },
+                { "name": "options.modelFamily", "type": "string", "description": "The model family to use", "optional": true },
+                { "name": "options.modelParameters", "type": "Object", "description": "Model parameters", "optional": true },
+                { "name": "options.timeout", "type": "number", "description": "Request timeout in seconds", "optional": true }
+            ],
+            "returns": "llm.LlmResponse",
+            "supportedIn": ["server"]
+        },
+        {
+            "name": "chat.promise",
+            "description": "Asynchronously sends a multi-turn conversation to an LLM.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.messages", "type": "Array", "description": "Array of message objects { role, content }" },
+                { "name": "options.modelFamily", "type": "string", "description": "The model family to use", "optional": true },
+                { "name": "options.modelParameters", "type": "Object", "description": "Model parameters", "optional": true },
+                { "name": "options.timeout", "type": "number", "description": "Request timeout in seconds", "optional": true }
+            ],
+            "returns": "Promise<llm.LlmResponse>",
+            "supportedIn": ["server"]
+        }
+    ],
+    "enums": [
+        {
+            "name": "ModelFamily",
+            "description": "Supported LLM model families.",
+            "members": [
+                { "name": "COHERE", "value": "COHERE", "description": "Cohere model family" },
+                { "name": "META", "value": "META", "description": "Meta (Llama) model family" }
+            ]
+        }
+    ],
+    "objectTypes": []
+}

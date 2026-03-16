@@ -1,0 +1,142 @@
+{
+    "module": "N/format",
+    "description": "Use the format module to parse formatted data into strings and to convert strings into a specified format. The format module formats data according to personal preferences set on the Set Preferences page, accessible from Home > Set Preferences.",
+    "supportedIn": ["client", "server"],
+    "methods": [
+        {
+            "name": "format",
+            "description": "Takes a raw value and returns a formatted value. This method is overloaded when you format a datetime or datetimetz value.",
+            "supportedIn": ["client", "server"],
+            "params": [
+                {
+                    "name": "options.value",
+                    "type": "Date | string | number",
+                    "description": "The input data to format.",
+                    "optional": false
+                },
+                {
+                    "name": "options.type",
+                    "type": "string",
+                    "description": "The field type (for example, DATE, CURRENCY, INTEGER). Use the format.Type enum to set this value.",
+                    "optional": false
+                },
+                {
+                    "name": "options.timezone",
+                    "type": "format.Timezone | number",
+                    "description": "The time zone specified for the returned string. Set using the format.Timezone enum or key. If not specified, the time zone is set based on user preference. Applies to datetime and datetimetz values only.",
+                    "optional": true
+                }
+            ],
+            "returns": "string | Date"
+        },
+        {
+            "name": "parse",
+            "description": "Takes a formatted value and returns a raw value. This method is overloaded when you parse a datetime or datetimetz value.",
+            "supportedIn": ["client", "server"],
+            "params": [
+                {
+                    "name": "options.value",
+                    "type": "string",
+                    "description": "The formatted value to parse.",
+                    "optional": false
+                },
+                {
+                    "name": "options.type",
+                    "type": "string",
+                    "description": "The field type (for example, DATE, CURRENCY, INTEGER). Use the format.Type enum to set this value.",
+                    "optional": false
+                },
+                {
+                    "name": "options.timezone",
+                    "type": "format.Timezone | number",
+                    "description": "The time zone for parsing. Set using the format.Timezone enum or key. Applies to datetime and datetimetz values only.",
+                    "optional": true
+                }
+            ],
+            "returns": "Date | number | string"
+        }
+    ],
+    "enums": [
+        {
+            "name": "Type",
+            "description": "Holds the string values for the supported field types. Use this enum to set the value of the options.type parameter when calling format.format(options) or format.parse(options).",
+            "members": [
+                { "name": "ADDRESS", "value": "ADDRESS", "description": "Address field type" },
+                { "name": "CCEXPDATE", "value": "CCEXPDATE", "description": "Credit card expiration date" },
+                { "name": "CCNUMBER", "value": "CCNUMBER", "description": "Credit card number" },
+                { "name": "CCVALIDFROM", "value": "CCVALIDFROM", "description": "Credit card valid from date" },
+                { "name": "CHECKBOX", "value": "CHECKBOX", "description": "Checkbox field type" },
+                { "name": "CLOBTEXT", "value": "CLOBTEXT", "description": "CLOB text field type" },
+                { "name": "COLOR", "value": "COLOR", "description": "Color field type" },
+                { "name": "CURRENCY", "value": "CURRENCY", "description": "Currency value (rounds based on user's currency precision, limited to 2 decimals)" },
+                { "name": "CURRENCY2", "value": "CURRENCY2", "description": "Currency with record's currency precision" },
+                { "name": "DATE", "value": "DATE", "description": "Date value" },
+                { "name": "DATETIME", "value": "DATETIME", "description": "Date and time value" },
+                { "name": "DATETIMETZ", "value": "DATETIMETZ", "description": "Date and time with timezone" },
+                { "name": "DOCUMENT", "value": "DOCUMENT", "description": "Document field type" },
+                { "name": "DYNAMICPRECISION", "value": "DYNAMICPRECISION", "description": "Dynamic precision (controlled by NetSuite)" },
+                { "name": "EMAIL", "value": "EMAIL", "description": "Email field type" },
+                { "name": "EMAILS", "value": "EMAILS", "description": "Multiple emails" },
+                { "name": "FLOAT", "value": "FLOAT", "description": "Floating-point number" },
+                { "name": "FULLPHONE", "value": "FULLPHONE", "description": "Full phone number" },
+                { "name": "FUNCTION", "value": "FUNCTION", "description": "Function field type" },
+                { "name": "FURIGANA", "value": "FURIGANA", "description": "Furigana field type" },
+                { "name": "IDENTIFIER", "value": "IDENTIFIER", "description": "Identifier field type" },
+                { "name": "IDENTIFIERANYCASE", "value": "IDENTIFIERANYCASE", "description": "Identifier (any case)" },
+                { "name": "INTEGER", "value": "INTEGER", "description": "Integer number" },
+                { "name": "MMYYDATE", "value": "MMYYDATE", "description": "Month/Year date format" },
+                { "name": "MULTISELECT", "value": "MULTISELECT", "description": "Multi-select field type" },
+                { "name": "NONNEGCURRENCY", "value": "NONNEGCURRENCY", "description": "Non-negative currency" },
+                { "name": "NONNEGFLOAT", "value": "NONNEGFLOAT", "description": "Non-negative float (>= 0)" },
+                { "name": "PACKAGE", "value": "PACKAGE", "description": "Package field type" },
+                { "name": "PCTCOMPLETE", "value": "PCTCOMPLETE", "description": "Percentage complete (0.0-1.0)" },
+                { "name": "PERCENT", "value": "PERCENT", "description": "Percentage" },
+                { "name": "PHONE", "value": "PHONE", "description": "Phone number" },
+                { "name": "POSCURRENCY", "value": "POSCURRENCY", "description": "Positive currency (> 0)" },
+                { "name": "POSFLOAT", "value": "POSFLOAT", "description": "Positive float (> 0)" },
+                { "name": "POSINTEGER", "value": "POSINTEGER", "description": "Positive integer (> 0)" },
+                { "name": "QUOTEDFUNCTION", "value": "QUOTEDFUNCTION", "description": "Quoted function field type" },
+                { "name": "RADIO", "value": "RADIO", "description": "Radio button field type" },
+                { "name": "RATE", "value": "RATE", "description": "Rate field type" },
+                { "name": "RATEHIGHPRECISION", "value": "RATEHIGHPRECISION", "description": "Rate with high precision" },
+                { "name": "SELECT", "value": "SELECT", "description": "Select field type" },
+                { "name": "TEXT", "value": "TEXT", "description": "Text field type" },
+                { "name": "TEXTAREA", "value": "TEXTAREA", "description": "Text area field type" },
+                { "name": "TIME", "value": "TIME", "description": "Time value" },
+                { "name": "TIMEOFDAY", "value": "TIMEOFDAY", "description": "Time of day" },
+                { "name": "TIMETRACK", "value": "TIMETRACK", "description": "Time tracking duration" },
+                { "name": "URL", "value": "URL", "description": "URL string" }
+            ]
+        },
+        {
+            "name": "Timezone",
+            "description": "Holds the string values for supported time zone formats. Use this enum to set the value of the options.timezone parameter when calling format.format(options) or format.parse(options). Values are in Olson format.",
+            "members": [
+                { "name": "ETC_GMT_PLUS_12", "value": "Etc/GMT+12", "description": "(GMT-12:00) International Date Line West" },
+                { "name": "PACIFIC_SAMOA", "value": "Pacific/Samoa", "description": "(GMT-11:00) Midway Island, Samoa" },
+                { "name": "PACIFIC_HONOLULU", "value": "Pacific/Honolulu", "description": "(GMT-10:00) Hawaii" },
+                { "name": "AMERICA_ANCHORAGE", "value": "America/Anchorage", "description": "(GMT-09:00) Alaska" },
+                { "name": "AMERICA_LOS_ANGELES", "value": "America/Los_Angeles", "description": "(GMT-08:00) Pacific Time (US & Canada)" },
+                { "name": "AMERICA_TIJUANA", "value": "America/Tijuana", "description": "(GMT-08:00) Tijuana, Baja California" },
+                { "name": "AMERICA_DENVER", "value": "America/Denver", "description": "(GMT-07:00) Mountain Time (US & Canada)" },
+                { "name": "AMERICA_PHOENIX", "value": "America/Phoenix", "description": "(GMT-07:00) Arizona" },
+                { "name": "AMERICA_CHICAGO", "value": "America/Chicago", "description": "(GMT-06:00) Central Time (US & Canada)" },
+                { "name": "AMERICA_MEXICO_CITY", "value": "America/Mexico_City", "description": "(GMT-06:00) Guadalajara, Mexico City, Monterrey" },
+                { "name": "AMERICA_NEW_YORK", "value": "America/New_York", "description": "(GMT-05:00) Eastern Time (US & Canada)" },
+                { "name": "AMERICA_BOGOTA", "value": "America/Bogota", "description": "(GMT-05:00) Bogota, Lima, Quito" },
+                { "name": "AMERICA_SAO_PAULO", "value": "America/Sao_Paulo", "description": "(GMT-03:00) Brasilia" },
+                { "name": "AMERICA_BUENOS_AIRES", "value": "America/Buenos_Aires", "description": "(GMT-03:00) Buenos Aires" },
+                { "name": "EUROPE_LONDON", "value": "Europe/London", "description": "(GMT) Greenwich Mean Time: Dublin, Edinburgh, Lisbon, London" },
+                { "name": "GMT", "value": "GMT", "description": "(GMT) Casablanca" },
+                { "name": "EUROPE_PARIS", "value": "Europe/Paris", "description": "(GMT+01:00) Brussels, Copenhagen, Madrid, Paris" },
+                { "name": "EUROPE_AMSTERDAM", "value": "Europe/Amsterdam", "description": "(GMT+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna" },
+                { "name": "ASIA_TOKYO", "value": "Asia/Tokyo", "description": "(GMT+09:00) Osaka, Sapporo, Tokyo" },
+                { "name": "ASIA_HONG_KONG", "value": "Asia/Hong_Kong", "description": "(GMT+08:00) Beijing, Chongqing, Hong Kong, Urumqi" },
+                { "name": "AUSTRALIA_SYDNEY", "value": "Australia/Sydney", "description": "(GMT+10:00) Canberra, Melbourne, Sydney" },
+                { "name": "PACIFIC_AUCKLAND", "value": "Pacific/Auckland", "description": "(GMT+12:00) Auckland, Wellington" },
+                { "name": "ETC_GMT", "value": "Etc/GMT", "description": "UTC/GMT" }
+            ]
+        }
+    ],
+    "objectTypes": []
+}

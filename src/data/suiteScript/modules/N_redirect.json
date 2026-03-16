@@ -1,0 +1,201 @@
+{
+    "module": "N/redirect",
+    "description": "Use the N/redirect module to customize navigation within NetSuite by setting up a redirect URL that resolves to a NetSuite resource or external URL. You can redirect users to: URL, Suitelet, Record, Task link, Saved search, Unsaved search. Note: Suitelets, beforeLoad user events, and synchronous afterSubmit user events are supported. This module does not support beforeSubmit or asynchronous afterSubmit user events. This module is only supported when triggered from the UI. Backend contexts such as CSV Import and Scheduled Scripts are not supported.",
+    "supportedIn": ["server"],
+    "methods": [
+        {
+            "name": "redirect",
+            "description": "Redirects to the URL of a Suitelet that is available externally (available without login).",
+            "supportedIn": ["server"],
+            "params": [
+                {
+                    "name": "options.url",
+                    "type": "string",
+                    "description": "The URL of a Suitelet that is available externally.",
+                    "optional": false
+                },
+                {
+                    "name": "options.parameters",
+                    "type": "Object",
+                    "description": "Contains additional URL parameters as key-value pairs.",
+                    "optional": true
+                }
+            ],
+            "returns": "void"
+        },
+        {
+            "name": "toRecord",
+            "description": "Redirects to a NetSuite record.",
+            "supportedIn": ["server"],
+            "params": [
+                {
+                    "name": "options.type",
+                    "type": "string",
+                    "description": "The type of record.",
+                    "optional": false
+                },
+                {
+                    "name": "options.id",
+                    "type": "string",
+                    "description": "The internal ID of the target record.",
+                    "optional": false
+                },
+                {
+                    "name": "options.isEditMode",
+                    "type": "boolean",
+                    "description": "Determines whether to return a URL for the record in edit mode or view mode. Default is false (view mode).",
+                    "optional": true
+                },
+                {
+                    "name": "options.parameters",
+                    "type": "Object",
+                    "description": "Contains additional URL parameters as key-value pairs.",
+                    "optional": true
+                }
+            ],
+            "returns": "void"
+        },
+        {
+            "name": "toRecordTransform",
+            "description": "Redirects to a standard or custom transaction instance. Transforms a record to a standard or custom transaction instance.",
+            "supportedIn": ["server"],
+            "params": [
+                {
+                    "name": "options.fromType",
+                    "type": "string",
+                    "description": "The ID of the source record type.",
+                    "optional": false
+                },
+                {
+                    "name": "options.fromId",
+                    "type": "number",
+                    "description": "The ID of the source record.",
+                    "optional": false
+                },
+                {
+                    "name": "options.toType",
+                    "type": "string",
+                    "description": "The ID of the target record type.",
+                    "optional": false
+                },
+                {
+                    "name": "options.parameters",
+                    "type": "Object",
+                    "description": "Contains additional parameters as key-value pairs.",
+                    "optional": true
+                }
+            ],
+            "returns": "void"
+        },
+        {
+            "name": "toSavedSearch",
+            "description": "Redirects to a saved search.",
+            "supportedIn": ["server"],
+            "params": [
+                {
+                    "name": "options.id",
+                    "type": "number | string",
+                    "description": "The internal ID of the saved search.",
+                    "optional": false
+                }
+            ],
+            "returns": "void"
+        },
+        {
+            "name": "toSavedSearchResult",
+            "description": "Redirects to a saved search result.",
+            "supportedIn": ["server"],
+            "params": [
+                {
+                    "name": "options.id",
+                    "type": "number | string",
+                    "description": "The internal ID of the saved search.",
+                    "optional": false
+                }
+            ],
+            "returns": "void"
+        },
+        {
+            "name": "toSearch",
+            "description": "Redirects to search.",
+            "supportedIn": ["server"],
+            "params": [
+                {
+                    "name": "options.search",
+                    "type": "search.Search",
+                    "description": "The search object to redirect to.",
+                    "optional": false
+                }
+            ],
+            "returns": "void"
+        },
+        {
+            "name": "toSearchResult",
+            "description": "Redirects to search results.",
+            "supportedIn": ["server"],
+            "params": [
+                {
+                    "name": "options.search",
+                    "type": "search.Search",
+                    "description": "The search object to redirect to.",
+                    "optional": false
+                }
+            ],
+            "returns": "void"
+        },
+        {
+            "name": "toSuitelet",
+            "description": "Redirects to a Suitelet.",
+            "supportedIn": ["server"],
+            "params": [
+                {
+                    "name": "options.scriptId",
+                    "type": "string",
+                    "description": "The script ID for the Suitelet.",
+                    "optional": false
+                },
+                {
+                    "name": "options.deploymentId",
+                    "type": "string",
+                    "description": "The deployment ID for the Suitelet.",
+                    "optional": false
+                },
+                {
+                    "name": "options.isExternal",
+                    "type": "boolean",
+                    "description": "Indicates an external Suitelet URL. Default is false.",
+                    "optional": true
+                },
+                {
+                    "name": "options.parameters",
+                    "type": "Object",
+                    "description": "Contains additional URL parameters as key-value pairs.",
+                    "optional": true
+                }
+            ],
+            "returns": "void"
+        },
+        {
+            "name": "toTaskLink",
+            "description": "Redirects to a tasklink.",
+            "supportedIn": ["server"],
+            "params": [
+                {
+                    "name": "options.id",
+                    "type": "string",
+                    "description": "The task link identifier.",
+                    "optional": false
+                },
+                {
+                    "name": "options.parameters",
+                    "type": "Object",
+                    "description": "Contains additional URL parameters as key-value pairs.",
+                    "optional": true
+                }
+            ],
+            "returns": "void"
+        }
+    ],
+    "enums": [],
+    "objectTypes": []
+}

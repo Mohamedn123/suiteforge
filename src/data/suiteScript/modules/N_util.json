@@ -1,0 +1,99 @@
+{
+    "module": "N/util",
+    "description": "Utility methods to verify object and primitive types. These methods are also available on the global util object.",
+    "supportedIn": ["client", "server"],
+    "methods": [
+        {
+            "name": "each",
+            "description": "Iterates over each member in an Object or Array, invoking the callback for each.",
+            "params": [
+                { "name": "iterable", "type": "Object|Array", "description": "The Object or Array to iterate over" },
+                { "name": "callback", "type": "Function", "description": "Callback invoked for each member. Return false to break." }
+            ],
+            "returns": "Object|Array"
+        },
+        {
+            "name": "extend",
+            "description": "Copies all properties from the contributor object to the receiver object.",
+            "params": [
+                { "name": "receiver", "type": "Object", "description": "The destination object to copy properties into" },
+                { "name": "contributor", "type": "Object", "description": "The source object to copy properties from" }
+            ],
+            "returns": "Object"
+        },
+        {
+            "name": "isArray",
+            "description": "Returns true if the obj parameter is a JavaScript Array object.",
+            "params": [
+                { "name": "obj", "type": "any", "description": "The object to test" }
+            ],
+            "returns": "boolean"
+        },
+        {
+            "name": "isAsyncFunction",
+            "description": "Returns true if the obj parameter is a JavaScript Async Function.",
+            "params": [
+                { "name": "obj", "type": "any", "description": "The object to test" }
+            ],
+            "returns": "boolean"
+        },
+        {
+            "name": "isBoolean",
+            "description": "Returns true if the obj parameter is a JavaScript Boolean.",
+            "params": [
+                { "name": "obj", "type": "any", "description": "The object to test" }
+            ],
+            "returns": "boolean"
+        },
+        {
+            "name": "isDate",
+            "description": "Returns true if the obj parameter is a JavaScript Date object.",
+            "params": [
+                { "name": "obj", "type": "any", "description": "The object to test" }
+            ],
+            "returns": "boolean"
+        },
+        {
+            "name": "isFunction",
+            "description": "Returns true if the obj parameter is a JavaScript Function or Async Function.",
+            "params": [
+                { "name": "obj", "type": "any", "description": "The object to test" }
+            ],
+            "returns": "boolean"
+        },
+        {
+            "name": "isNumber",
+            "description": "Returns true if the obj parameter is a JavaScript Number or evaluates to one.",
+            "params": [
+                { "name": "obj", "type": "any", "description": "The object to test" }
+            ],
+            "returns": "boolean"
+        },
+        {
+            "name": "isObject",
+            "description": "Returns true if the obj parameter is a plain JavaScript object (new Object() or {}).",
+            "params": [
+                { "name": "obj", "type": "any", "description": "The object to test" }
+            ],
+            "returns": "boolean"
+        },
+        {
+            "name": "isRegExp",
+            "description": "Returns true if the obj parameter is a JavaScript RegExp object.",
+            "params": [
+                { "name": "obj", "type": "any", "description": "The object to test" }
+            ],
+            "returns": "boolean"
+        },
+        {
+            "name": "isString",
+            "description": "Returns true if the obj parameter is a JavaScript String or evaluates to one.",
+            "params": [
+                { "name": "obj", "type": "any", "description": "The object to test" }
+            ],
+            "returns": "boolean"
+        }
+    ],
+    "enums": [],
+    "objectTypes": []
+}

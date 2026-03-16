@@ -1,0 +1,8 @@
+<itemnumbercustomfield scriptid="{{SCRIPTID}}">
+    <label></label>
+    <description></description>
+    <fieldtype>TEXT</fieldtype>
+    <isinactive>F</isinactive>
+    <ismandatory>F</ismandatory>
+    <displaytype>NORMAL</displaytype>
+</itemnumbercustomfield>

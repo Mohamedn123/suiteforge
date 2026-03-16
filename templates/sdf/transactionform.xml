@@ -1,0 +1,7 @@
+<transactionForm scriptid="{{SCRIPTID}}">
+    <name></name>
+    <recordtype></recordtype>
+    <isinactive>F</isinactive>
+    <tabs>
+    </tabs>
+</transactionForm>

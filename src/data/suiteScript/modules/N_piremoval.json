@@ -1,0 +1,96 @@
+{
+    "module": "N/piremoval",
+    "description": "Remove personal information (PI) from system notes, workflow history, and field values to comply with privacy regulations (right to be forgotten).",
+    "supportedIn": ["server"],
+    "methods": [
+        {
+            "name": "createTask",
+            "description": "Creates a personal information removal task.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.recordType", "type": "string", "description": "The record type to process" },
+                { "name": "options.recordIds", "type": "number[]", "description": "Internal IDs of the records to process" },
+                { "name": "options.fieldIds", "type": "string[]", "description": "Field IDs whose values should be removed", "optional": true },
+                { "name": "options.workflowIds", "type": "number[]", "description": "Workflow IDs whose history should be removed", "optional": true },
+                { "name": "options.historyOnly", "type": "boolean", "description": "If true, only removes system notes, not field values or workflow history", "optional": true },
+                { "name": "options.historyReplacement", "type": "string", "description": "Text to replace original values in system notes", "optional": true }
+            ],
+            "returns": "piremoval.PiRemovalTask",
+            "returnType": "N/piremoval#PiRemovalTask",
+            "supportedIn": ["server"]
+        },
+        {
+            "name": "deleteTask",
+            "description": "Deletes a personal information removal task.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.id", "type": "number", "description": "The ID of the task to delete" }
+            ],
+            "returns": "void",
+            "supportedIn": ["server"]
+        },
+        {
+            "name": "getTaskStatus",
+            "description": "Retrieves the status of a personal information removal task.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.id", "type": "number", "description": "The ID of the task" }
+            ],
+            "returns": "piremoval.PiRemovalTaskStatus",
+            "supportedIn": ["server"]
+        },
+        {
+            "name": "loadTask",
+            "description": "Loads an existing personal information removal task.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.id", "type": "number", "description": "The ID of the task to load" }
+            ],
+            "returns": "piremoval.PiRemovalTask",
+            "returnType": "N/piremoval#PiRemovalTask",
+            "supportedIn": ["server"]
+        }
+    ],
+    "enums": [],
+    "objectTypes": [
+        {
+            "name": "PiRemovalTask",
+            "description": "Represents a personal information removal task.",
+            "methods": [
+                { "name": "run", "description": "Runs the PI removal task.", "params": [], "returns": "void" },
+                { "name": "save", "description": "Saves the PI removal task.", "params": [], "returns": "void" },
+                { "name": "deleteTask", "description": "Deletes the PI removal task.", "params": [], "returns": "void" }
+            ],
+            "properties": [
+                { "name": "id", "type": "number", "description": "The ID of the personal information removal task.", "readOnly": true },
+                { "name": "recordType", "type": "string", "description": "The record type updated by the PI removal task.", "readOnly": true },
+                { "name": "recordIds", "type": "number[]", "description": "The record IDs processed by the PI removal task.", "readOnly": true },
+                { "name": "fieldIds", "type": "string[]", "description": "The field IDs processed by the PI removal task.", "readOnly": true },
+                { "name": "workflowIds", "type": "number[]", "description": "The workflow IDs whose history is processed by the PI removal task.", "readOnly": true },
+                { "name": "historyOnly", "type": "boolean", "description": "Indicates whether the PI removal task removes system note information only, not field values or workflow history." },
+                { "name": "historyReplacement", "type": "string", "description": "The text used in system notes to replace the original values.", "readOnly": true },
+                { "name": "status", "type": "piremoval.PiRemovalTaskStatus", "description": "Describes the status of the submitted personal information removal task." }
+            ]
+        },
+        {
+            "name": "PiRemovalTaskLogItem",
+            "description": "Encapsulates a log item of the personal information removal task status.",
+            "methods": [],
+            "properties": [
+                { "name": "exception", "type": "string", "description": "Describes the exception for the log item, including what caused it.", "readOnly": true },
+                { "name": "message", "type": "string", "description": "Describes the message for the log item and an explanation for any errors.", "readOnly": true },
+                { "name": "status", "type": "string", "description": "Describes the status of the log item. Values from task.TaskStatus.", "readOnly": true },
+                { "name": "type", "type": "string", "description": "Describes the type of personal information removed: FieldValue, SystemNote, or Workflow.", "readOnly": true }
+            ]
+        },
+        {
+            "name": "PiRemovalTaskStatus",
+            "description": "Encapsulates the status of a personal information removal task.",
+            "methods": [],
+            "properties": [
+                { "name": "logList", "type": "Array", "description": "A list of logs for the PI removal task job." },
+                { "name": "status", "type": "string", "description": "Describes the status of the submitted personal information removal task." }
+            ]
+        }
+    ]
+}

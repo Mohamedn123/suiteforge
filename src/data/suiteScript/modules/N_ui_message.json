@@ -1,0 +1,57 @@
+{
+    "module": "N/ui/message",
+    "description": "Display a message banner at the top of the screen under the menu bar. Supported only in client scripts.",
+    "supportedIn": ["client"],
+    "methods": [
+        {
+            "name": "create",
+            "description": "Creates a message that can be shown or hidden near the top of the page.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Message options" },
+                { "name": "options.type", "type": "string", "description": "The type of message (message.Type.*)" },
+                { "name": "options.title", "type": "string", "description": "The title of the message", "optional": true },
+                { "name": "options.message", "type": "string", "description": "The content of the message", "optional": true },
+                { "name": "options.duration", "type": "number", "description": "Amount of time (in milliseconds) to show the message. Set to 0 to show indefinitely.", "optional": true }
+            ],
+            "returns": "message.Message",
+            "returnType": "N/ui/message#Message",
+            "supportedIn": ["client"]
+        }
+    ],
+    "enums": [
+        {
+            "name": "Type",
+            "description": "The type of message to display, which determines background color and indicator.",
+            "members": [
+                { "name": "CONFIRMATION", "value": "CONFIRMATION", "description": "Green confirmation message" },
+                { "name": "INFORMATION", "value": "INFORMATION", "description": "Blue informational message" },
+                { "name": "WARNING", "value": "WARNING", "description": "Yellow warning message" },
+                { "name": "ERROR", "value": "ERROR", "description": "Red error message" }
+            ]
+        }
+    ],
+    "objectTypes": [
+        {
+            "name": "Message",
+            "description": "Encapsulates a message object created by message.create(options).",
+            "methods": [
+                {
+                    "name": "show",
+                    "description": "Shows the message. Optionally set a duration (in milliseconds) after which the message is automatically hidden.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Show options", "optional": true },
+                        { "name": "options.duration", "type": "number|string", "description": "Time in milliseconds to show the message. Default 0 shows until hide() is called. String values are parsed to number.", "optional": true }
+                    ],
+                    "returns": "void"
+                },
+                {
+                    "name": "hide",
+                    "description": "Hides the message.",
+                    "params": [],
+                    "returns": "void"
+                }
+            ],
+            "properties": []
+        }
+    ]
+}

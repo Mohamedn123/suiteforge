@@ -1,0 +1,38 @@
+{
+    "module": "N/workflow",
+    "description": "Initiate new workflow instances or trigger existing workflow instances programmatically.",
+    "supportedIn": ["server"],
+    "methods": [
+        {
+            "name": "initiate",
+            "description": "Initiates a workflow on-demand and returns the internal ID of the workflow instance used to track the workflow against the record.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Initiate options" },
+                { "name": "options.recordType", "type": "string", "description": "The record type of the workflow base record" },
+                { "name": "options.recordId", "type": "number", "description": "The internal ID of the base record" },
+                { "name": "options.workflowId", "type": "string|number", "description": "The script ID or internal ID of the workflow" },
+                { "name": "options.defaultValues", "type": "Object", "description": "Sets field default values as name/value pairs", "optional": true }
+            ],
+            "returns": "number",
+            "supportedIn": ["server"]
+        },
+        {
+            "name": "trigger",
+            "description": "Triggers a workflow on a record. The actions and transitions are evaluated based on the current state for the workflow instance.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Trigger options" },
+                { "name": "options.recordType", "type": "string", "description": "The record type of the workflow base record" },
+                { "name": "options.recordId", "type": "number", "description": "The internal ID of the base record" },
+                { "name": "options.workflowId", "type": "string|number", "description": "The script ID or internal ID of the workflow" },
+                { "name": "options.workflowInstanceId", "type": "string|number", "description": "The internal ID of the workflow instance", "optional": true },
+                { "name": "options.actionId", "type": "string|number", "description": "The internal ID or script ID of the workflow action", "optional": true },
+                { "name": "options.stateId", "type": "string|number", "description": "The internal ID or script ID of the workflow state", "optional": true },
+                { "name": "options.defaultValues", "type": "Object", "description": "Sets field default values as name/value pairs", "optional": true }
+            ],
+            "returns": "number",
+            "supportedIn": ["server"]
+        }
+    ],
+    "enums": [],
+    "objectTypes": []
+}

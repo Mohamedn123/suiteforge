@@ -1,0 +1,28 @@
+{
+    "module": "N/recordContext",
+    "description": "Get the context type of a record, such as localization context indicating which country a script is using for execution.",
+    "supportedIn": ["client", "server"],
+    "methods": [
+        {
+            "name": "getContext",
+            "description": "Returns the record context object containing key-value pairs for the requested context types.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.recordType", "type": "string", "description": "The record type" },
+                { "name": "options.recordId", "type": "number", "description": "The internal ID of the record", "optional": true },
+                { "name": "options.contextTypes", "type": "Array", "description": "Array of context types to retrieve (recordContext.ContextType.*)" }
+            ],
+            "returns": "recordContext.RecordContext"
+        }
+    ],
+    "enums": [
+        {
+            "name": "ContextType",
+            "description": "Context types that can be requested.",
+            "members": [
+                { "name": "LOCALIZATION", "value": "LOCALIZATION", "description": "The localization context of the record, indicating the country used for execution" }
+            ]
+        }
+    ],
+    "objectTypes": []
+}

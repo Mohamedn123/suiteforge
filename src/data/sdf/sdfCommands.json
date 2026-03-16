@@ -1,0 +1,37 @@
+[
+    {
+        "category": "Account",
+        "commands": [
+            { "id": "account:setup",    "label": "Setup Account",      "description": "Sets up an account to use with SuiteCloud CLI for Node.js. Requires browser-based login to NetSuite.", "flow": "upload",   "icon": "log-in" },
+            { "id": "account:setup:ci", "label": "Setup Account (CI)", "description": "Sets up an account for automated environments such as CI. Does not require browser-based login.", "flow": "upload",   "icon": "server-process" },
+            { "id": "account:manageauth", "label": "Manage Auth IDs",  "description": "Manages authentication IDs for all your projects. List, rename, or remove saved profiles.", "flow": "local", "icon": "key" }
+        ]
+    },
+    {
+        "category": "Project",
+        "commands": [
+            { "id": "project:create",          "label": "Create Project",     "description": "Creates a SuiteCloud project, either a SuiteApp or an Account Customization Project (ACP).", "flow": "local",  "icon": "new-folder" },
+            { "id": "project:validate",        "label": "Validate Project",   "description": "Validates your SuiteCloud project against your NetSuite account without deploying.", "flow": "upload", "icon": "check-all" },
+            { "id": "project:deploy",          "label": "Deploy Project",     "description": "Deploys the folder containing your project to your NetSuite account.", "flow": "upload", "icon": "cloud-upload" },
+            { "id": "project:package",         "label": "Package Project",    "description": "Generates a ZIP file from your project, following the structure specified in deploy.xml.", "flow": "local",  "icon": "package" },
+            { "id": "project:adddependencies", "label": "Add Dependencies",   "description": "Adds any missing dependencies to the manifest file.", "flow": "local",  "icon": "library" }
+        ]
+    },
+    {
+        "category": "File",
+        "commands": [
+            { "id": "file:create", "label": "Create File",  "description": "Creates a SuiteScript file in the selected folder.",               "flow": "local",    "icon": "new-file" },
+            { "id": "file:import", "label": "Import Files", "description": "Imports files from an account to your Account Customization Project.", "flow": "download", "icon": "cloud-download" },
+            { "id": "file:list",   "label": "List Files",   "description": "Lists the files in your account's File Cabinet.",                  "flow": "download", "icon": "list-tree" },
+            { "id": "file:upload", "label": "Upload Files", "description": "Uploads files from your project to your account.",                 "flow": "upload",   "icon": "arrow-up" }
+        ]
+    },
+    {
+        "category": "Object",
+        "commands": [
+            { "id": "object:import", "label": "Import Objects", "description": "Imports SDF custom objects from an account to your SuiteCloud project.", "flow": "download", "icon": "cloud-download" },
+            { "id": "object:list",   "label": "List Objects",   "description": "Lists the SDF custom objects deployed in your account.",               "flow": "download", "icon": "list-tree" },
+            { "id": "object:update", "label": "Update Objects", "description": "Overwrites the SDF custom objects in your project with the matching ones from your account.", "flow": "download", "icon": "sync" }
+        ]
+    }
+]

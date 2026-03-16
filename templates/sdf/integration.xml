@@ -1,0 +1,5 @@
+<integration scriptid="{{SCRIPTID}}">
+    <name></name>
+    <description></description>
+    <state>ENABLED</state>
+</integration>

@@ -1,0 +1,1144 @@
+{
+    "module": "N/task",
+    "description": "Use the N/task module to create tasks and place them in the internal NetSuite scheduling or task queue. You can use this module to submit scheduled scripts, run map/reduce scripts, import CSV files, merge duplicate records, and execute asynchronous searches, document capture tasks, constructed queries, SuiteQL queries, and workflows.",
+    "supportedIn": ["server"],
+    "methods": [
+        {
+            "name": "checkStatus",
+            "description": "Returns a task status object associated with a specific task ID.",
+            "params": [
+                {
+                    "name": "options.taskId",
+                    "type": "string",
+                    "description": "The ID of the task to check the status of."
+                }
+            ],
+            "returns": "task.CsvImportTaskStatus | task.EntityDeduplicationTaskStatus | task.MapReduceScriptTaskStatus | task.QueryTaskStatus | task.RecordActionTaskStatus | task.ScheduledScriptTaskStatus | task.SearchTaskStatus | task.SuiteQLTaskStatus | task.WorkflowTriggerTaskStatus"
+        },
+        {
+            "name": "create",
+            "description": "Creates an object for a specific task type and returns the task object.",
+            "params": [
+                {
+                    "name": "options.taskType",
+                    "type": "string",
+                    "description": "The type of task to create. Use task.TaskType enum values."
+                }
+            ],
+            "returns": "task.CsvImportTask | task.EntityDeduplicationTask | task.MapReduceScriptTask | task.QueryTask | task.RecordActionTask | task.ScheduledScriptTask | task.SearchTask | task.SuiteQLTask | task.WorkflowTriggerTask"
+        }
+    ],
+    "enums": [
+        {
+            "name": "ActionCondition",
+            "description": "Holds the string values for the possible record action conditions.",
+            "members": [
+                {
+                    "name": "ALL_QUALIFIED_INSTANCES",
+                    "value": "ALL_QUALIFIED_INSTANCES",
+                    "description": "All qualified instances"
+                }
+            ]
+        },
+        {
+            "name": "DedupeEntityType",
+            "description": "Holds the string values for entity types for which you can merge duplicate records with task.EntityDeduplicationTask.",
+            "members": [
+                {
+                    "name": "CUSTOMER",
+                    "value": "CUSTOMER",
+                    "description": "Customer"
+                },
+                {
+                    "name": "CONTACT",
+                    "value": "CONTACT",
+                    "description": "Contact"
+                },
+                {
+                    "name": "VENDOR",
+                    "value": "VENDOR",
+                    "description": "Vendor"
+                },
+                {
+                    "name": "PARTNER",
+                    "value": "PARTNER",
+                    "description": "Partner"
+                },
+                {
+                    "name": "LEAD",
+                    "value": "LEAD",
+                    "description": "Lead"
+                },
+                {
+                    "name": "PROSPECT",
+                    "value": "PROSPECT",
+                    "description": "Prospect"
+                }
+            ]
+        },
+        {
+            "name": "DedupeMode",
+            "description": "Holds the string values for available deduplication modes when merging duplicate records with task.EntityDeduplicationTask.",
+            "members": [
+                {
+                    "name": "MERGE",
+                    "value": "MERGE",
+                    "description": "Merge duplicate records"
+                },
+                {
+                    "name": "DELETE",
+                    "value": "DELETE",
+                    "description": "Delete duplicate records"
+                },
+                {
+                    "name": "MAKE_MASTER_PARENT",
+                    "value": "MAKE_MASTER_PARENT",
+                    "description": "Make master parent"
+                },
+                {
+                    "name": "MARK_AS_NOT_DUPES",
+                    "value": "MARK_AS_NOT_DUPES",
+                    "description": "Mark as not duplicates"
+                }
+            ]
+        },
+        {
+            "name": "MapReduceStage",
+            "description": "Holds the string values for possible stages in a map/reduce script deployment.",
+            "members": [
+                {
+                    "name": "GET_INPUT",
+                    "value": "GET_INPUT",
+                    "description": "Get input stage"
+                },
+                {
+                    "name": "MAP",
+                    "value": "MAP",
+                    "description": "Map stage"
+                },
+                {
+                    "name": "SHUFFLE",
+                    "value": "SHUFFLE",
+                    "description": "Shuffle stage"
+                },
+                {
+                    "name": "REDUCE",
+                    "value": "REDUCE",
+                    "description": "Reduce stage"
+                },
+                {
+                    "name": "SUMMARIZE",
+                    "value": "SUMMARIZE",
+                    "description": "Summarize stage"
+                }
+            ]
+        },
+        {
+            "name": "MasterSelectionMode",
+            "description": "Holds the string values for supported master selection modes when merging duplicate records with task.EntityDeduplicationTask.",
+            "members": [
+                {
+                    "name": "CREATED_EARLIEST",
+                    "value": "CREATED_EARLIEST",
+                    "description": "Select the record created earliest as master"
+                },
+                {
+                    "name": "MOST_RECENT_ACTIVITY",
+                    "value": "MOST_RECENT_ACTIVITY",
+                    "description": "Select the record with the most recent activity as master"
+                },
+                {
+                    "name": "MOST_POPULATED_FIELDS",
+                    "value": "MOST_POPULATED_FIELDS",
+                    "description": "Select the record with the most populated fields as master"
+                },
+                {
+                    "name": "SELECT_BY_ID",
+                    "value": "SELECT_BY_ID",
+                    "description": "Select master by ID"
+                }
+            ]
+        },
+        {
+            "name": "TaskStatus",
+            "description": "Holds the string values for the possible status of tasks created and submitted with the N/task module.",
+            "members": [
+                {
+                    "name": "PENDING",
+                    "value": "PENDING",
+                    "description": "Waiting to start"
+                },
+                {
+                    "name": "PROCESSING",
+                    "value": "PROCESSING",
+                    "description": "Currently executing"
+                },
+                {
+                    "name": "COMPLETE",
+                    "value": "COMPLETE",
+                    "description": "Finished successfully"
+                },
+                {
+                    "name": "FAILED",
+                    "value": "FAILED",
+                    "description": "Finished with errors"
+                }
+            ]
+        },
+        {
+            "name": "TaskType",
+            "description": "Holds the string values for the types of task objects you can create using task.create(options).",
+            "members": [
+                {
+                    "name": "CSV_IMPORT",
+                    "value": "CSV_IMPORT",
+                    "description": "CSV import task"
+                },
+                {
+                    "name": "DOCUMENT_CAPTURE",
+                    "value": "DOCUMENT_CAPTURE",
+                    "description": "Document capture task"
+                },
+                {
+                    "name": "ENTITY_DEDUPLICATION",
+                    "value": "ENTITY_DEDUPLICATION",
+                    "description": "Entity deduplication task"
+                },
+                {
+                    "name": "MAP_REDUCE",
+                    "value": "MAP_REDUCE",
+                    "description": "Map/reduce script task"
+                },
+                {
+                    "name": "QUERY",
+                    "value": "QUERY",
+                    "description": "Query task"
+                },
+                {
+                    "name": "RECORD_ACTION",
+                    "value": "RECORD_ACTION",
+                    "description": "Record action task"
+                },
+                {
+                    "name": "SCHEDULED_SCRIPT",
+                    "value": "SCHEDULED_SCRIPT",
+                    "description": "Scheduled script task"
+                },
+                {
+                    "name": "SEARCH",
+                    "value": "SEARCH",
+                    "description": "Search task"
+                },
+                {
+                    "name": "SUITE_QL",
+                    "value": "SUITE_QL",
+                    "description": "SuiteQL query task"
+                },
+                {
+                    "name": "WORKFLOW_TRIGGER",
+                    "value": "WORKFLOW_TRIGGER",
+                    "description": "Workflow trigger task"
+                }
+            ]
+        }
+    ],
+    "objectTypes": [
+        {
+            "name": "CsvImportTask",
+            "description": "The properties of a CSV import task. Use the methods and properties for this object to submit a CSV import task into the task queue and asynchronously import record data into NetSuite.",
+            "methods": [
+                {
+                    "name": "submit",
+                    "description": "Directs NetSuite to place a CSV import task into the NetSuite task queue and returns a unique ID for the task.",
+                    "params": [],
+                    "returns": "string"
+                }
+            ],
+            "properties": [
+                {
+                    "name": "id",
+                    "type": "string",
+                    "description": "The ID of the task."
+                },
+                {
+                    "name": "importFile",
+                    "type": "file.File | string",
+                    "description": "CSV file to import. Use a file.File object or a string that represents the CSV text to be imported."
+                },
+                {
+                    "name": "linkedFiles",
+                    "type": "Object",
+                    "description": "A map of key-value pairs that sets the data to be imported in a linked file for a multi-file import job."
+                },
+                {
+                    "name": "mappingId",
+                    "type": "number | string",
+                    "description": "Script ID or internal ID of the saved import map that you created when you ran the Import Assistant."
+                },
+                {
+                    "name": "name",
+                    "type": "string",
+                    "description": "Name for the CSV import task."
+                },
+                {
+                    "name": "queueId",
+                    "type": "number",
+                    "description": "Overrides the Queue Number property under Advanced Options on the Import Options page of the Import Assistant."
+                }
+            ]
+        },
+        {
+            "name": "CsvImportTaskStatus",
+            "description": "The status of a CSV import task placed into the NetSuite scheduling queue.",
+            "methods": [],
+            "properties": [
+                {
+                    "name": "status",
+                    "type": "string",
+                    "readOnly": true,
+                    "description": "Status for a CSV import task. Returns a task.TaskStatus enum value."
+                },
+                {
+                    "name": "taskId",
+                    "type": "string",
+                    "readOnly": true,
+                    "description": "The task ID associated with the specified task."
+                }
+            ]
+        },
+        {
+            "name": "DocumentCaptureTask",
+            "description": "The properties of a document capture task. Use the methods and properties of this object to submit a document capture task into the NetSuite task queue.",
+            "methods": [
+                {
+                    "name": "addInboundDependency",
+                    "description": "Adds a scheduled script task to the document capture task as a dependent task.",
+                    "params": [
+                        {
+                            "name": "options.taskType",
+                            "type": "string",
+                            "description": "The type of dependent task."
+                        },
+                        {
+                            "name": "options.scriptId",
+                            "type": "string",
+                            "description": "The script ID of the dependent script."
+                        },
+                        {
+                            "name": "options.deploymentId",
+                            "type": "string",
+                            "description": "The deployment ID of the dependent script.",
+                            "optional": true
+                        },
+                        {
+                            "name": "options.params",
+                            "type": "Object",
+                            "description": "Key-value pairs for script parameters.",
+                            "optional": true
+                        }
+                    ],
+                    "returns": "void"
+                },
+                {
+                    "name": "submit",
+                    "description": "Submits the document capture task for asynchronous processing and returns the task ID.",
+                    "params": [],
+                    "returns": "string"
+                }
+            ],
+            "properties": [
+                {
+                    "name": "documentType",
+                    "type": "string",
+                    "description": "The document type."
+                },
+                {
+                    "name": "features",
+                    "type": "string[]",
+                    "description": "The features to extract from the document (such as fields, tables, or text)."
+                },
+                {
+                    "name": "id",
+                    "type": "string",
+                    "description": "The ID of the task."
+                },
+                {
+                    "name": "inboundDependencies",
+                    "type": "Object[]",
+                    "description": "Key-value pairs that contain information about the dependent tasks added to the document capture task."
+                },
+                {
+                    "name": "inputFile",
+                    "type": "file.File",
+                    "description": "The document to extract content from."
+                },
+                {
+                    "name": "language",
+                    "type": "string",
+                    "description": "The language of the document."
+                },
+                {
+                    "name": "outputFilePath",
+                    "type": "string",
+                    "description": "The path of the JSON file to export document capture results to."
+                },
+                {
+                    "name": "ociConfig",
+                    "type": "Object",
+                    "description": "Oracle Cloud Infrastructure (OCI) credentials when using unlimited usage mode."
+                }
+            ]
+        },
+        {
+            "name": "DocumentCaptureTaskStatus",
+            "description": "The status of a document capture task placed into the NetSuite task queue.",
+            "methods": [],
+            "properties": [
+                {
+                    "name": "status",
+                    "type": "string",
+                    "readOnly": true,
+                    "description": "The status for a document capture task. Returns a task.TaskStatus enum value."
+                },
+                {
+                    "name": "taskId",
+                    "type": "string",
+                    "readOnly": true,
+                    "description": "The task ID associated with the specified task."
+                }
+            ]
+        },
+        {
+            "name": "EntityDeduplicationTask",
+            "description": "All the properties of a merge duplicate records task request. Use the methods and properties of this object to submit a merge duplicate record job task into the NetSuite task queue.",
+            "methods": [
+                {
+                    "name": "submit",
+                    "description": "Directs NetSuite to place the merge duplicate records task into the NetSuite task queue and returns a unique ID for the task.",
+                    "params": [],
+                    "returns": "string"
+                }
+            ],
+            "properties": [
+                {
+                    "name": "dedupeMode",
+                    "type": "string",
+                    "description": "The mode in which to merge or delete duplicate records. Use values from the task.DedupeMode enum."
+                },
+                {
+                    "name": "entityType",
+                    "type": "string",
+                    "description": "The type of entity on which you want to merge duplicate records. Use a task.DedupeEntityType enum to set the value."
+                },
+                {
+                    "name": "id",
+                    "type": "string",
+                    "description": "The ID of the task."
+                },
+                {
+                    "name": "masterRecordId",
+                    "type": "number",
+                    "description": "Master record ID."
+                },
+                {
+                    "name": "masterSelectionMode",
+                    "type": "string",
+                    "description": "Master selection mode. Use values from the task.MasterSelectionMode enum."
+                },
+                {
+                    "name": "recordIds",
+                    "type": "number[]",
+                    "description": "Number array of record internal IDs to perform the merge or delete operation on."
+                }
+            ]
+        },
+        {
+            "name": "EntityDeduplicationTaskStatus",
+            "description": "The status of a merge duplicate record task placed into the NetSuite task queue.",
+            "methods": [],
+            "properties": [
+                {
+                    "name": "status",
+                    "type": "string",
+                    "readOnly": true,
+                    "description": "Status for a merge duplicate record task. Returns a task.TaskStatus enum value."
+                },
+                {
+                    "name": "taskId",
+                    "type": "string",
+                    "readOnly": true,
+                    "description": "The task ID associated with the specified task."
+                }
+            ]
+        },
+        {
+            "name": "MapReduceScriptTask",
+            "description": "A map/reduce script deployment.",
+            "methods": [
+                {
+                    "name": "submit",
+                    "description": "Submits a map/reduce script deployment for processing.",
+                    "params": [],
+                    "returns": "string"
+                }
+            ],
+            "properties": [
+                {
+                    "name": "deploymentId",
+                    "type": "string",
+                    "description": "Script ID (as a string), for the script deployment record for a map/reduce script."
+                },
+                {
+                    "name": "id",
+                    "type": "string",
+                    "description": "The ID of the task."
+                },
+                {
+                    "name": "params",
+                    "type": "Object",
+                    "description": "Object that represents key-value pairs that override static script parameter field values on the script deployment record."
+                },
+                {
+                    "name": "scriptId",
+                    "type": "number | string",
+                    "description": "Internal ID (as a number), or script ID (as a string), for the map/reduce script record."
+                }
+            ]
+        },
+        {
+            "name": "MapReduceScriptTaskStatus",
+            "description": "The status of a map/reduce script deployment that has been submitted for processing.",
+            "methods": [
+                {
+                    "name": "getCurrentTotalSize",
+                    "description": "Returns the total size in bytes of all stored work in progress.",
+                    "params": [],
+                    "returns": "number"
+                },
+                {
+                    "name": "getPendingMapCount",
+                    "description": "Returns the total number of records or rows not yet processed by the map stage.",
+                    "params": [],
+                    "returns": "number"
+                },
+                {
+                    "name": "getPendingMapSize",
+                    "description": "Returns the total number of bytes not yet processed by the map stage, as a component of total size.",
+                    "params": [],
+                    "returns": "number"
+                },
+                {
+                    "name": "getPendingOutputCount",
+                    "description": "Returns the total number of records or rows not yet processed.",
+                    "params": [],
+                    "returns": "number"
+                },
+                {
+                    "name": "getPendingOutputSize",
+                    "description": "Returns the total size in bytes of all key-value pairs written as output, as a component of total size.",
+                    "params": [],
+                    "returns": "number"
+                },
+                {
+                    "name": "getPendingReduceCount",
+                    "description": "Returns the total number of records or rows not yet processed by the reduce stage.",
+                    "params": [],
+                    "returns": "number"
+                },
+                {
+                    "name": "getPendingReduceSize",
+                    "description": "Returns the total number of bytes not yet processed by the reduce stage, as a component of total size.",
+                    "params": [],
+                    "returns": "number"
+                },
+                {
+                    "name": "getPercentageCompleted",
+                    "description": "Returns the current percentage complete for the current stage.",
+                    "params": [],
+                    "returns": "number"
+                },
+                {
+                    "name": "getTotalMapCount",
+                    "description": "Returns the total number of records or rows passed as input to the map stage.",
+                    "params": [],
+                    "returns": "number"
+                },
+                {
+                    "name": "getTotalOutputCount",
+                    "description": "Returns the total number of records or rows passed as inputs to the output phase.",
+                    "params": [],
+                    "returns": "number"
+                },
+                {
+                    "name": "getTotalReduceCount",
+                    "description": "Returns the total number of record or row inputs to the reduce stage.",
+                    "params": [],
+                    "returns": "number"
+                }
+            ],
+            "properties": [
+                {
+                    "name": "deploymentId",
+                    "type": "string",
+                    "readOnly": true,
+                    "description": "Script ID for a script deployment record."
+                },
+                {
+                    "name": "scriptId",
+                    "type": "number",
+                    "readOnly": true,
+                    "description": "Internal ID for a map/reduce script record."
+                },
+                {
+                    "name": "stage",
+                    "type": "string",
+                    "readOnly": true,
+                    "description": "The current stage of a map/reduce script deployment. See task.MapReduceStage for supported values."
+                },
+                {
+                    "name": "status",
+                    "type": "string",
+                    "readOnly": true,
+                    "description": "Status for a map/reduce script task. Returns a task.TaskStatus enum value."
+                },
+                {
+                    "name": "taskId",
+                    "type": "string",
+                    "readOnly": true,
+                    "description": "The task ID associated with the specified task."
+                }
+            ]
+        },
+        {
+            "name": "QueryTask",
+            "description": "The properties of a query task. Use the methods and properties of this object to submit a query task into the NetSuite task queue.",
+            "methods": [
+                {
+                    "name": "addInboundDependency",
+                    "description": "Adds a scheduled script task or map/reduce script task to the query task as a dependent task.",
+                    "params": [
+                        {
+                            "name": "options.taskType",
+                            "type": "string",
+                            "description": "The type of dependent task."
+                        },
+                        {
+                            "name": "options.scriptId",
+                            "type": "string",
+                            "description": "The script ID of the dependent script."
+                        },
+                        {
+                            "name": "options.deploymentId",
+                            "type": "string",
+                            "description": "The deployment ID of the dependent script.",
+                            "optional": true
+                        },
+                        {
+                            "name": "options.params",
+                            "type": "Object",
+                            "description": "Key-value pairs for script parameters.",
+                            "optional": true
+                        }
+                    ],
+                    "returns": "void"
+                },
+                {
+                    "name": "submit",
+                    "description": "Submits the query task for asynchronous processing and returns the task ID.",
+                    "params": [],
+                    "returns": "string"
+                }
+            ],
+            "properties": [
+                {
+                    "name": "fileId",
+                    "type": "number",
+                    "description": "Internal ID of the CSV file to export query results to. Mutually exclusive with filePath."
+                },
+                {
+                    "name": "filePath",
+                    "type": "string",
+                    "description": "Path of the CSV file to export query results to. Mutually exclusive with fileId."
+                },
+                {
+                    "name": "id",
+                    "type": "string",
+                    "description": "The ID of the task."
+                },
+                {
+                    "name": "inboundDependencies",
+                    "type": "Object[]",
+                    "description": "Key-value pairs that contain information about the dependent tasks added to the query task."
+                },
+                {
+                    "name": "query",
+                    "type": "string",
+                    "description": "Query definition for the query task."
+                }
+            ]
+        },
+        {
+            "name": "QueryTaskStatus",
+            "description": "The status of a query task placed into the NetSuite task queue.",
+            "methods": [],
+            "properties": [
+                {
+                    "name": "fileId",
+                    "type": "number",
+                    "readOnly": true,
+                    "description": "Internal ID of the CSV file that query results are exported to."
+                },
+                {
+                    "name": "query",
+                    "type": "query.Query",
+                    "readOnly": true,
+                    "description": "Query definition for the submitted query task."
+                },
+                {
+                    "name": "status",
+                    "type": "string",
+                    "readOnly": true,
+                    "description": "Status of the submitted query task."
+                },
+                {
+                    "name": "taskId",
+                    "type": "string",
+                    "readOnly": true,
+                    "description": "ID of the submitted query task."
+                }
+            ]
+        },
+        {
+            "name": "RecordActionTask",
+            "description": "The properties of a record action task. Use this object to place a record action task into the NetSuite scheduling queue.",
+            "methods": [
+                {
+                    "name": "submit",
+                    "description": "Submits a record action task for processing and returns its task ID.",
+                    "params": [],
+                    "returns": "string"
+                }
+            ],
+            "properties": [
+                {
+                    "name": "action",
+                    "type": "string",
+                    "description": "The ID of the action to be invoked."
+                },
+                {
+                    "name": "condition",
+                    "type": "Object",
+                    "description": "The condition used to select record IDs of records for which the action is to be executed."
+                },
+                {
+                    "name": "id",
+                    "type": "string",
+                    "description": "The ID of the task."
+                },
+                {
+                    "name": "paramCallback",
+                    "type": "Object",
+                    "description": "Function that takes record ID and returns the parameter object for the specified record ID."
+                },
+                {
+                    "name": "params",
+                    "type": "Object[]",
+                    "description": "An array of parameter objects. Each object corresponds to one record ID of the record for which the action is to be executed."
+                },
+                {
+                    "name": "recordType",
+                    "type": "string",
+                    "description": "The record type on which the action is to be performed."
+                }
+            ]
+        },
+        {
+            "name": "RecordActionTaskStatus",
+            "description": "The status of a record action task in the NetSuite scheduling queue.",
+            "methods": [],
+            "properties": [
+                {
+                    "name": "complete",
+                    "type": "number",
+                    "readOnly": true,
+                    "description": "The number of record action tasks with a completed status."
+                },
+                {
+                    "name": "errors",
+                    "type": "Object",
+                    "readOnly": true,
+                    "description": "The error details of failed action executions."
+                },
+                {
+                    "name": "failed",
+                    "type": "number",
+                    "readOnly": true,
+                    "description": "The number of record action tasks with a failed status."
+                },
+                {
+                    "name": "pending",
+                    "type": "number",
+                    "readOnly": true,
+                    "description": "The number of record action tasks with a pending status."
+                },
+                {
+                    "name": "results",
+                    "type": "Object",
+                    "readOnly": true,
+                    "description": "The results of successfully executed record action tasks."
+                },
+                {
+                    "name": "status",
+                    "type": "string",
+                    "readOnly": true,
+                    "description": "Represents the record action task status. Returns a value from the task.TaskStatus enum."
+                },
+                {
+                    "name": "succeeded",
+                    "type": "number",
+                    "readOnly": true,
+                    "description": "The number of record action tasks with a succeeded status."
+                },
+                {
+                    "name": "taskId",
+                    "type": "string",
+                    "readOnly": true,
+                    "description": "The task ID associated with the specified task."
+                }
+            ]
+        },
+        {
+            "name": "ScheduledScriptTask",
+            "description": "All the properties of a scheduled script task. Use this object to place a scheduled script deployment into the NetSuite scheduling queue.",
+            "methods": [
+                {
+                    "name": "submit",
+                    "description": "Directs NetSuite to place a scheduled script deployment into the NetSuite scheduling queue and returns a unique ID for the task.",
+                    "params": [],
+                    "returns": "string"
+                }
+            ],
+            "properties": [
+                {
+                    "name": "deploymentId",
+                    "type": "string",
+                    "description": "Script ID (as a string), for the script deployment record."
+                },
+                {
+                    "name": "id",
+                    "type": "string",
+                    "description": "The ID of the task."
+                },
+                {
+                    "name": "params",
+                    "type": "Object",
+                    "description": "Object with key-value pairs that override the static script parameter field values on the script deployment."
+                },
+                {
+                    "name": "scriptId",
+                    "type": "number | string",
+                    "description": "Internal ID (as a number), or script ID (as a string) for the script record."
+                }
+            ]
+        },
+        {
+            "name": "ScheduledScriptTaskStatus",
+            "description": "The status of a scheduled script placed into the NetSuite scheduling queue.",
+            "methods": [],
+            "properties": [
+                {
+                    "name": "deploymentId",
+                    "type": "string",
+                    "readOnly": true,
+                    "description": "Script ID for a script deployment record."
+                },
+                {
+                    "name": "scriptId",
+                    "type": "number",
+                    "readOnly": true,
+                    "description": "Internal ID for a script record."
+                },
+                {
+                    "name": "status",
+                    "type": "string",
+                    "readOnly": true,
+                    "description": "Status for a scheduled script task. Returns a task.TaskStatus enum value."
+                },
+                {
+                    "name": "taskId",
+                    "type": "string",
+                    "readOnly": true,
+                    "description": "The task ID associated with the specified task."
+                }
+            ]
+        },
+        {
+            "name": "SearchTask",
+            "description": "The properties required to initiate an asynchronous search.",
+            "methods": [
+                {
+                    "name": "addInboundDependency",
+                    "description": "Adds a scheduled script task or map/reduce script task to the search task as a dependent script.",
+                    "params": [
+                        {
+                            "name": "options.taskType",
+                            "type": "string",
+                            "description": "The type of dependent task."
+                        },
+                        {
+                            "name": "options.scriptId",
+                            "type": "string",
+                            "description": "The script ID of the dependent script."
+                        },
+                        {
+                            "name": "options.deploymentId",
+                            "type": "string",
+                            "description": "The deployment ID of the dependent script.",
+                            "optional": true
+                        },
+                        {
+                            "name": "options.params",
+                            "type": "Object",
+                            "description": "Key-value pairs for script parameters.",
+                            "optional": true
+                        }
+                    ],
+                    "returns": "void"
+                },
+                {
+                    "name": "submit",
+                    "description": "Places the asynchronous search initiation task into the SuiteScript task queue, and returns a unique ID for the task.",
+                    "params": [],
+                    "returns": "string"
+                }
+            ],
+            "properties": [
+                {
+                    "name": "fileId",
+                    "type": "number",
+                    "description": "ID of the CSV file to export search results into."
+                },
+                {
+                    "name": "filePath",
+                    "type": "string",
+                    "description": "Path of the CSV file to export search results into."
+                },
+                {
+                    "name": "id",
+                    "type": "string",
+                    "description": "The ID of the task."
+                },
+                {
+                    "name": "inboundDependencies",
+                    "type": "Object[]",
+                    "readOnly": true,
+                    "description": "Key-value pairs to describe the dependent scripts added to the search task."
+                },
+                {
+                    "name": "savedSearchId",
+                    "type": "number",
+                    "description": "ID of the saved search to be executed during the task."
+                }
+            ]
+        },
+        {
+            "name": "SearchTaskStatus",
+            "description": "The status of an asynchronous search initiation task that is placed into the NetSuite task queue.",
+            "methods": [],
+            "properties": [
+                {
+                    "name": "fileId",
+                    "type": "number",
+                    "readOnly": true,
+                    "description": "ID of the CSV file into which search results are exported."
+                },
+                {
+                    "name": "savedSearchId",
+                    "type": "number",
+                    "readOnly": true,
+                    "description": "ID of the saved search executed during the task."
+                },
+                {
+                    "name": "status",
+                    "type": "string",
+                    "readOnly": true,
+                    "description": "Status of an asynchronous search task. Returns one of the task.TaskStatus enum values."
+                },
+                {
+                    "name": "taskId",
+                    "type": "string",
+                    "readOnly": true,
+                    "description": "ID of the asynchronous task."
+                }
+            ]
+        },
+        {
+            "name": "SuiteQLTask",
+            "description": "The properties of a SuiteQL task. Use the methods and properties of this object to submit a SuiteQL query task into the NetSuite task queue.",
+            "methods": [
+                {
+                    "name": "addInboundDependency",
+                    "description": "Adds a scheduled script task or map/reduce script task to the SuiteQL task as a dependent task.",
+                    "params": [
+                        {
+                            "name": "options.taskType",
+                            "type": "string",
+                            "description": "The type of dependent task."
+                        },
+                        {
+                            "name": "options.scriptId",
+                            "type": "string",
+                            "description": "The script ID of the dependent script."
+                        },
+                        {
+                            "name": "options.deploymentId",
+                            "type": "string",
+                            "description": "The deployment ID of the dependent script.",
+                            "optional": true
+                        },
+                        {
+                            "name": "options.params",
+                            "type": "Object",
+                            "description": "Key-value pairs for script parameters.",
+                            "optional": true
+                        }
+                    ],
+                    "returns": "void"
+                },
+                {
+                    "name": "submit",
+                    "description": "Submits the SuiteQL task for asynchronous processing and returns the task ID.",
+                    "params": [],
+                    "returns": "string"
+                }
+            ],
+            "properties": [
+                {
+                    "name": "fileId",
+                    "type": "number",
+                    "description": "Internal ID of the CSV file to export SuiteQL query results to. Mutually exclusive with filePath."
+                },
+                {
+                    "name": "filePath",
+                    "type": "string",
+                    "description": "Path of the CSV file to export SuiteQL query results to. Mutually exclusive with fileId."
+                },
+                {
+                    "name": "id",
+                    "type": "string",
+                    "description": "The ID of the task."
+                },
+                {
+                    "name": "inboundDependencies",
+                    "type": "Object[]",
+                    "description": "Key-value pairs that contain information about the dependent tasks added to the SuiteQL task."
+                },
+                {
+                    "name": "params",
+                    "type": "Array",
+                    "description": "Parameters for the SuiteQL query."
+                },
+                {
+                    "name": "query",
+                    "type": "string",
+                    "description": "SuiteQL query definition for the SuiteQL task."
+                }
+            ]
+        },
+        {
+            "name": "SuiteQLTaskStatus",
+            "description": "The status of a SuiteQL task placed into the NetSuite task queue.",
+            "methods": [],
+            "properties": [
+                {
+                    "name": "fileId",
+                    "type": "number",
+                    "readOnly": true,
+                    "description": "Internal ID of the CSV file that SuiteQL query results are exported to."
+                },
+                {
+                    "name": "params",
+                    "type": "Array",
+                    "readOnly": true,
+                    "description": "Parameters for the SuiteQL query."
+                },
+                {
+                    "name": "query",
+                    "type": "string",
+                    "readOnly": true,
+                    "description": "SuiteQL query definition for the SuiteQL task."
+                },
+                {
+                    "name": "status",
+                    "type": "string",
+                    "readOnly": true,
+                    "description": "Status of the SuiteQL task."
+                },
+                {
+                    "name": "taskId",
+                    "type": "string",
+                    "readOnly": true,
+                    "description": "ID of the submitted SuiteQL task."
+                }
+            ]
+        },
+        {
+            "name": "WorkflowTriggerTask",
+            "description": "All the properties required to asynchronously initiate a workflow. Use WorkflowTriggerTask to create a task that initiates an instance of a specific workflow.",
+            "methods": [
+                {
+                    "name": "submit",
+                    "description": "Directs NetSuite to place the asynchronous workflow initiation task into the NetSuite scheduling queue and returns a unique ID for the task.",
+                    "params": [],
+                    "returns": "string"
+                }
+            ],
+            "properties": [
+                {
+                    "name": "id",
+                    "type": "string",
+                    "description": "The ID of the task."
+                },
+                {
+                    "name": "params",
+                    "type": "Object",
+                    "description": "Object that contains key-value pairs to set default values on fields specific to the workflow."
+                },
+                {
+                    "name": "recordId",
+                    "type": "number",
+                    "description": "Internal ID of the workflow definition base record."
+                },
+                {
+                    "name": "recordType",
+                    "type": "string",
+                    "description": "Record type of the workflow base record."
+                },
+                {
+                    "name": "workflowId",
+                    "type": "number | string",
+                    "description": "Internal ID (as a number), or script ID (as a string), for the workflow definition."
+                }
+            ]
+        },
+        {
+            "name": "WorkflowTriggerTaskStatus",
+            "description": "The status of an asynchronous workflow initiation task placed into the NetSuite task queue.",
+            "methods": [],
+            "properties": [
+                {
+                    "name": "status",
+                    "type": "string",
+                    "readOnly": true,
+                    "description": "Status for an asynchronous workflow placed in the NetSuite task queue. Returns a value from the task.TaskStatus enum."
+                },
+                {
+                    "name": "taskId",
+                    "type": "string",
+                    "readOnly": true,
+                    "description": "The task ID associated with the specified task."
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,115 @@
+{
+  "name": "suiteforge",
+  "displayName": "SuiteForge",
+  "description": "Professional scaffolding and productivity tools for NetSuite SDF.",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.110.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onLanguage:xml",
+    "onLanguage:javascript",
+    "onView:suiteforge.sdfCommandsView"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      { "command": "suiteforge.browseReference",   "title": "Browse SDF Reference",        "category": "SuiteForge" },
+      { "command": "suiteforge.newScript",         "title": "New SuiteScript File...",      "category": "SuiteForge" },
+      { "command": "suiteforge.newSdfScript",      "title": "Script Definition...",         "category": "SuiteForge" },
+      { "command": "suiteforge.newSdfRecord",      "title": "Record or List...",            "category": "SuiteForge" },
+      { "command": "suiteforge.newSdfField",       "title": "Field...",                     "category": "SuiteForge" },
+      { "command": "suiteforge.newSdfForm",        "title": "Form...",                      "category": "SuiteForge" },
+      { "command": "suiteforge.newSdfPlugin",      "title": "Plug-in...",                   "category": "SuiteForge" },
+      { "command": "suiteforge.newSdfCenter",      "title": "Center & Navigation...",       "category": "SuiteForge" },
+      { "command": "suiteforge.newSdfAnalytics",   "title": "Analytics...",                 "category": "SuiteForge" },
+      { "command": "suiteforge.newSdfTemplate",    "title": "Template & Translation...",    "category": "SuiteForge" },
+      { "command": "suiteforge.newSdfOther",       "title": "Other...",                     "category": "SuiteForge" },
+      { "command": "suiteforge.runSdfCommand",     "title": "Run SDF Command",             "category": "SuiteForge", "icon": "$(play)" },
+      { "command": "suiteforge.refreshSdfCommands", "title": "Refresh",                     "category": "SuiteForge", "icon": "$(refresh)" }
+    ],
+    "submenus": [
+      { "id": "suiteforge.newMenu", "label": "SuiteForge: New..." }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "submenu": "suiteforge.newMenu",
+          "when": "explorerResourceIsFolder",
+          "group": "suiteforge"
+        }
+      ],
+      "suiteforge.newMenu": [
+        { "command": "suiteforge.newScript",       "group": "1_js@1" },
+        { "command": "suiteforge.newSdfScript",    "group": "2_sdf@1" },
+        { "command": "suiteforge.newSdfRecord",    "group": "2_sdf@2" },
+        { "command": "suiteforge.newSdfField",     "group": "2_sdf@3" },
+        { "command": "suiteforge.newSdfForm",      "group": "2_sdf@4" },
+        { "command": "suiteforge.newSdfPlugin",    "group": "2_sdf@5" },
+        { "command": "suiteforge.newSdfCenter",    "group": "2_sdf@6" },
+        { "command": "suiteforge.newSdfAnalytics", "group": "2_sdf@7" },
+        { "command": "suiteforge.newSdfTemplate",  "group": "2_sdf@8" },
+        { "command": "suiteforge.newSdfOther",     "group": "2_sdf@9" }
+      ],
+      "view/title": [
+        {
+          "command": "suiteforge.refreshSdfCommands",
+          "when": "view == suiteforge.sdfCommandsView",
+          "group": "navigation"
+        }
+      ]
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "suiteforge-panel",
+          "title": "SuiteForge",
+          "icon": "$(cloud)"
+        }
+      ]
+    },
+    "views": {
+      "suiteforge-panel": [
+        {
+          "id": "suiteforge.sdfCommandsView",
+          "name": "SDF Commands",
+          "type": "webview"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "npm run check-types && npm run lint && node esbuild.js",
+    "watch": "npm-run-all -p watch:*",
+    "watch:esbuild": "node esbuild.js --watch",
+    "watch:tsc": "tsc --noEmit --watch --project tsconfig.json",
+    "package": "npm run check-types && npm run lint && node esbuild.js --production",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "npm run compile-tests && npm run compile && npm run lint",
+    "check-types": "tsc --noEmit",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.10",
+    "@types/node": "22.x",
+    "@types/vscode": "^1.110.0",
+    "@vscode/test-cli": "^0.0.12",
+    "@vscode/test-electron": "^2.5.2",
+    "esbuild": "^0.27.3",
+    "eslint": "^9.39.3",
+    "npm-run-all": "^4.1.5",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.56.1"
+  },
+  "dependencies": {
+    "vscode-languageclient": "^9.0.1",
+    "vscode-languageserver": "^9.0.1",
+    "vscode-languageserver-textdocument": "^1.0.12"
+  }
+}

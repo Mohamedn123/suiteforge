@@ -1,0 +1,101 @@
+{
+    "module": "N/log",
+    "description": "Use the N/log module to manually access methods for logging script execution details. Log messages appear on the Execution Log subtab of the script deployment for deployed scripts, or on the Execution Log subtab of the SuiteScript Debugger if you are debugging a script.",
+    "supportedIn": ["client", "server"],
+    "methods": [
+        {
+            "name": "audit",
+            "description": "Logs an Audit message. Audit messages appear on the Execution Log subtab if the Log Level on the script deployment is set to Audit or Debug. Use this method for scripts in production.",
+            "params": [
+                {
+                    "name": "options",
+                    "type": "Object",
+                    "description": "Log options object."
+                },
+                {
+                    "name": "options.title",
+                    "type": "string",
+                    "description": "The text to appear in the Title column on the Execution Log subtab. Maximum length is 99 characters."
+                },
+                {
+                    "name": "options.details",
+                    "type": "any",
+                    "description": "You can pass any value. If the value is a JavaScript Object type, JSON.stringify(obj) is called on the object before displaying.",
+                    "optional": true
+                }
+            ],
+            "returns": "void"
+        },
+        {
+            "name": "debug",
+            "description": "Logs a Debug message. Suitable only for testing scripts. Do not use Debug level for active scripts in production.",
+            "params": [
+                {
+                    "name": "options",
+                    "type": "Object",
+                    "description": "Log options object."
+                },
+                {
+                    "name": "options.title",
+                    "type": "string",
+                    "description": "The text to appear in the Title column on the Execution Log subtab."
+                },
+                {
+                    "name": "options.details",
+                    "type": "any",
+                    "description": "You can pass any value. If the value is a JavaScript Object type, JSON.stringify(obj) is called on the object before displaying.",
+                    "optional": true
+                }
+            ],
+            "returns": "void"
+        },
+        {
+            "name": "emergency",
+            "description": "Logs an Emergency message. Use to show only the most critical errors in the script log.",
+            "params": [
+                {
+                    "name": "options",
+                    "type": "Object",
+                    "description": "Log options object."
+                },
+                {
+                    "name": "options.title",
+                    "type": "string",
+                    "description": "The text to appear in the Title column on the Execution Log subtab."
+                },
+                {
+                    "name": "options.details",
+                    "type": "any",
+                    "description": "You can pass any value.",
+                    "optional": true
+                }
+            ],
+            "returns": "void"
+        },
+        {
+            "name": "error",
+            "description": "Logs an Error message. Use to show only unexpected script errors.",
+            "params": [
+                {
+                    "name": "options",
+                    "type": "Object",
+                    "description": "Log options object."
+                },
+                {
+                    "name": "options.title",
+                    "type": "string",
+                    "description": "The text to appear in the Title column on the Execution Log subtab."
+                },
+                {
+                    "name": "options.details",
+                    "type": "any",
+                    "description": "You can pass any value.",
+                    "optional": true
+                }
+            ],
+            "returns": "void"
+        }
+    ],
+    "enums": [],
+    "objectTypes": []
+}

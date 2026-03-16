@@ -1,0 +1,60 @@
+{
+    "module": "N/transaction",
+    "description": "Void transactions. When voided, the total and all line items are set to zero but the transaction remains in the system.",
+    "supportedIn": ["client", "server"],
+    "methods": [
+        {
+            "name": "void",
+            "description": "Voids a transaction record. The type of void (direct or reversing journal) depends on the account's Using Reversing Journals preference.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Void options" },
+                { "name": "options.type", "type": "string", "description": "The transaction type to void (transaction.Type.*)" },
+                { "name": "options.id", "type": "number", "description": "The internal ID of the transaction to void" }
+            ],
+            "returns": "number"
+        },
+        {
+            "name": "void.promise",
+            "description": "Voids a transaction record asynchronously.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Void options" },
+                { "name": "options.type", "type": "string", "description": "The transaction type to void (transaction.Type.*)" },
+                { "name": "options.id", "type": "number", "description": "The internal ID of the transaction to void" }
+            ],
+            "returns": "Promise<number>"
+        }
+    ],
+    "enums": [
+        {
+            "name": "Type",
+            "description": "Transaction types supported by the void method.",
+            "members": [
+                { "name": "CASH_REFUND", "value": "CASH_REFUND", "description": "Cash refund" },
+                { "name": "CASH_SALE", "value": "CASH_SALE", "description": "Cash sale" },
+                { "name": "CHECK", "value": "CHECK", "description": "Check" },
+                { "name": "CREDIT_CARD_CHARGE", "value": "CREDIT_CARD_CHARGE", "description": "Credit card charge" },
+                { "name": "CREDIT_CARD_REFUND", "value": "CREDIT_CARD_REFUND", "description": "Credit card refund" },
+                { "name": "CREDIT_MEMO", "value": "CREDIT_MEMO", "description": "Credit memo" },
+                { "name": "CUSTOMER_DEPOSIT", "value": "CUSTOMER_DEPOSIT", "description": "Customer deposit" },
+                { "name": "CUSTOMER_PAYMENT", "value": "CUSTOMER_PAYMENT", "description": "Customer payment" },
+                { "name": "CUSTOMER_REFUND", "value": "CUSTOMER_REFUND", "description": "Customer refund" },
+                { "name": "DEPOSIT", "value": "DEPOSIT", "description": "Deposit" },
+                { "name": "DEPOSIT_APPLICATION", "value": "DEPOSIT_APPLICATION", "description": "Deposit application" },
+                { "name": "EXPENSE_REPORT", "value": "EXPENSE_REPORT", "description": "Expense report" },
+                { "name": "INVOICE", "value": "INVOICE", "description": "Invoice" },
+                { "name": "ITEM_FULFILLMENT", "value": "ITEM_FULFILLMENT", "description": "Item fulfillment" },
+                { "name": "ITEM_RECEIPT", "value": "ITEM_RECEIPT", "description": "Item receipt" },
+                { "name": "JOURNAL_ENTRY", "value": "JOURNAL_ENTRY", "description": "Journal entry" },
+                { "name": "PAYCHECK_JOURNAL", "value": "PAYCHECK_JOURNAL", "description": "Paycheck journal" },
+                { "name": "PURCHASE_ORDER", "value": "PURCHASE_ORDER", "description": "Purchase order" },
+                { "name": "RETURN_AUTHORIZATION", "value": "RETURN_AUTHORIZATION", "description": "Return authorization" },
+                { "name": "SALES_ORDER", "value": "SALES_ORDER", "description": "Sales order" },
+                { "name": "VENDOR_BILL", "value": "VENDOR_BILL", "description": "Vendor bill" },
+                { "name": "VENDOR_CREDIT", "value": "VENDOR_CREDIT", "description": "Vendor credit" },
+                { "name": "VENDOR_PAYMENT", "value": "VENDOR_PAYMENT", "description": "Vendor payment" },
+                { "name": "VENDOR_RETURN_AUTHORIZATION", "value": "VENDOR_RETURN_AUTHORIZATION", "description": "Vendor return authorization" }
+            ]
+        }
+    ],
+    "objectTypes": []
+}

@@ -1,0 +1,23 @@
+{
+    "module": "N/portlet",
+    "description": "Resize or refresh a form portlet from client scripts.",
+    "supportedIn": ["client"],
+    "methods": [
+        {
+            "name": "resize",
+            "description": "Resizes a form portlet immediately.",
+            "params": [],
+            "returns": "void",
+            "supportedIn": ["client"]
+        },
+        {
+            "name": "refresh",
+            "description": "Refreshes a form portlet immediately.",
+            "params": [],
+            "returns": "void",
+            "supportedIn": ["client"]
+        }
+    ],
+    "enums": [],
+    "objectTypes": []
+}

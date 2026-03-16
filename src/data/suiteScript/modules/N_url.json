@@ -1,0 +1,145 @@
+{
+    "module": "N/url",
+    "description": "Use the N/url module to determine URL navigation paths within NetSuite and format URL strings.",
+    "supportedIn": ["client", "server"],
+    "methods": [
+        {
+            "name": "format",
+            "description": "Converts (serializes) URL query parameters into a string. Creates a serialized representation of an object containing query parameters. Use the returned value to build a URL query string.",
+            "supportedIn": ["client", "server"],
+            "params": [
+                {
+                    "name": "options.domain",
+                    "type": "string",
+                    "description": "The domain name.",
+                    "optional": false
+                },
+                {
+                    "name": "options.params",
+                    "type": "Object",
+                    "description": "Additional URL parameters as name/value pairs.",
+                    "optional": true
+                }
+            ],
+            "returns": "string"
+        },
+        {
+            "name": "resolveRecord",
+            "description": "Returns an internal URL to a NetSuite record.",
+            "supportedIn": ["client", "server"],
+            "params": [
+                {
+                    "name": "options.recordType",
+                    "type": "string",
+                    "description": "The type of record. For example, 'purchaseorder'.",
+                    "optional": false
+                },
+                {
+                    "name": "options.recordId",
+                    "type": "string | number",
+                    "description": "The record ID of the target record instance.",
+                    "optional": true
+                },
+                {
+                    "name": "options.isEditMode",
+                    "type": "boolean",
+                    "description": "If set to true, returns a URL for the record in Edit mode. If set to false, returns a URL for the record in View mode. The default value is View.",
+                    "optional": true
+                },
+                {
+                    "name": "options.params",
+                    "type": "Object",
+                    "description": "Object used to add parameters for a custom URL.",
+                    "optional": true
+                }
+            ],
+            "returns": "string"
+        },
+        {
+            "name": "resolveScript",
+            "description": "Returns an external or internal URL to a RESTlet or Suitelet.",
+            "supportedIn": ["client", "server"],
+            "params": [
+                {
+                    "name": "options.scriptId",
+                    "type": "string | number",
+                    "description": "The script ID (string) or internal ID (number) of the script. The ID must identify a RESTlet or a Suitelet.",
+                    "optional": false
+                },
+                {
+                    "name": "options.deploymentId",
+                    "type": "string | number",
+                    "description": "The script ID (string) or internal ID (number) of the deployment script.",
+                    "optional": false
+                },
+                {
+                    "name": "options.returnExternalUrl",
+                    "type": "boolean",
+                    "description": "Indicates whether to return the external URL. By default, the internal URL is returned (false).",
+                    "optional": true
+                },
+                {
+                    "name": "options.params",
+                    "type": "Object",
+                    "description": "The object containing name/value pairs to describe the query.",
+                    "optional": true
+                }
+            ],
+            "returns": "string"
+        },
+        {
+            "name": "resolveDomain",
+            "description": "Returns a domain name for a NetSuite account.",
+            "supportedIn": ["client", "server"],
+            "params": [
+                {
+                    "name": "options.hostType",
+                    "type": "string",
+                    "description": "The type of domain name you want to retrieve. Set this value using the url.HostType enum.",
+                    "optional": false
+                },
+                {
+                    "name": "options.accountId",
+                    "type": "string",
+                    "description": "The NetSuite account ID for which you want to retrieve data. If no account is specified, the system returns data on the account that is running the script.",
+                    "optional": true
+                }
+            ],
+            "returns": "string"
+        },
+        {
+            "name": "resolveTaskLink",
+            "description": "Returns the internal URL to a NetSuite tasklink.",
+            "supportedIn": ["client", "server"],
+            "params": [
+                {
+                    "name": "options.id",
+                    "type": "string",
+                    "description": "The task ID for the tasklink.",
+                    "optional": false
+                },
+                {
+                    "name": "options.params",
+                    "type": "Object",
+                    "description": "The Map object containing name/value pairs to describe the query.",
+                    "optional": true
+                }
+            ],
+            "returns": "string"
+        }
+    ],
+    "enums": [
+        {
+            "name": "HostType",
+            "description": "Holds the string values that describe a category of domain name. Use this enum to set the value of the hostType parameter of the url.resolveDomain(options) method.",
+            "members": [
+                { "name": "APPLICATION", "value": "APPLICATION", "description": "The domain for UI access (.app.netsuite.com)" },
+                { "name": "CUSTOMER_CENTER", "value": "CUSTOMER_CENTER", "description": "The customer center" },
+                { "name": "FORM", "value": "FORM", "description": "The domain for forms hosted online, usually in Suitelets (.extforms.netsuite.com)" },
+                { "name": "RESTLET", "value": "RESTLET", "description": "The domain for calling a RESTlet from an external source (.restlets.api.netsuite.com)" },
+                { "name": "SUITETALK", "value": "SUITETALK", "description": "The domain for SOAP web services requests (.suitetalk.api.netsuite.com)" }
+            ]
+        }
+    ],
+    "objectTypes": []
+}

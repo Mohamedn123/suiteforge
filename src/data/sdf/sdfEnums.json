@@ -1,0 +1,93 @@
+{
+    "accesstype": [
+        { "value": "CUSTRECORDENTRYPERM", "label": "Custom Record Entry Permission", "description": "Access controlled by the custom record's entry permissions." },
+        { "value": "NONENEEDED", "label": "No Permission Required", "description": "No special permission needed — all roles can access." },
+        { "value": "USEPERMISSIONLIST", "label": "Use Permission List", "description": "Access controlled by a defined permission list on the custom record type." }
+    ],
+    "displaytype": [
+        { "value": "NORMAL", "label": "Normal", "description": "Standard editable field displayed on the form." },
+        { "value": "HIDDEN", "label": "Hidden", "description": "Field exists on the record but is not visible on any form." },
+        { "value": "READONLY", "label": "Read Only", "description": "Field is visible but cannot be edited by the user." },
+        { "value": "DISABLED", "label": "Disabled", "description": "Field is visible but grayed out and not editable." },
+        { "value": "INLINE", "label": "Inline Text", "description": "Displayed as plain inline text (no input field)." }
+    ],
+    "customfieldcontext": [
+        { "value": "ENTITY", "label": "Entity", "description": "Field is added to entity records (Customer, Vendor, Employee, Partner, Contact, Lead, Prospect)." },
+        { "value": "ITEM", "label": "Item", "description": "Field is added to item records (Inventory Item, Service Item, Non-Inventory Item, Kit, Assembly, etc.)." },
+        { "value": "CRM", "label": "CRM", "description": "Field is added to CRM records (Opportunity, Task, Phone Call, Event, Campaign, etc.)." },
+        { "value": "TRANSACTIONBODY", "label": "Transaction Body", "description": "Field is added to the body (header) of transaction records." },
+        { "value": "TRANSACTIONCOLUMN", "label": "Transaction Column (Line)", "description": "Field is added as a column on transaction line items (sublists)." },
+        { "value": "ITEMNUMBER", "label": "Item Number", "description": "Field is added to item number records (lot/serial/bin tracking)." },
+        { "value": "OTHER", "label": "Other Record", "description": "Field is added to other record types not covered above." },
+        { "value": "CUSTOMRECORD", "label": "Custom Record", "description": "Field belongs to a custom record type (defined inside the customrecordtype XML)." }
+    ],
+    "scriptdeploymentstatus": [
+        { "value": "TESTING", "label": "Testing", "description": "The deployment is in testing mode — only visible to administrators." },
+        { "value": "RELEASED", "label": "Released", "description": "The deployment is live and active for all configured audiences." },
+        { "value": "NOTSCHEDULED", "label": "Not Scheduled", "description": "The deployment exists but is not scheduled to run." },
+        { "value": "SCHEDULED", "label": "Scheduled", "description": "The deployment is scheduled and will run automatically." }
+    ],
+    "loglevel": [
+        { "value": "DEBUG", "label": "Debug", "description": "All log levels are recorded (debug, audit, error, emergency)." },
+        { "value": "AUDIT", "label": "Audit", "description": "Audit, error, and emergency are recorded. Debug is skipped." },
+        { "value": "ERROR", "label": "Error", "description": "Only error and emergency are recorded." },
+        { "value": "EMERGENCY", "label": "Emergency", "description": "Only emergency-level messages are recorded." }
+    ],
+    "portlettype": [
+        { "value": "FORM", "label": "Form", "description": "Renders a form-based portlet (input fields and submit button)." },
+        { "value": "HTML", "label": "HTML", "description": "Renders raw HTML content." },
+        { "value": "LINKS", "label": "Links", "description": "Renders a list of clickable links." },
+        { "value": "LIST", "label": "List", "description": "Renders a tabular list of data." }
+    ],
+    "returntype": [
+        { "value": "JSON", "label": "JSON", "description": "RESTlet returns JSON (Content-Type: application/json)." },
+        { "value": "TEXT", "label": "Plain Text", "description": "RESTlet returns plain text (Content-Type: text/plain)." }
+    ],
+    "audienceallroles": [
+        { "value": "T", "label": "All Roles", "description": "The script is available to all roles in the account." },
+        { "value": "F", "label": "Specific Roles", "description": "The script is restricted to specific roles defined in the audience list." }
+    ],
+    "sdfobjtype": [
+        { "value": "customrecordtype", "label": "Custom Record Type", "description": "Defines a custom record type with fields, forms, and permissions." },
+        { "value": "customlist", "label": "Custom List", "description": "Defines a custom list (dropdown values)." },
+        { "value": "customsegment", "label": "Custom Segment", "description": "Defines a custom segment for classification and reporting across transactions and entities." },
+        { "value": "customtransactiontype", "label": "Custom Transaction Type", "description": "Defines a custom transaction type extending NetSuite's transaction framework." },
+        { "value": "role", "label": "Role", "description": "Defines a custom role with specific permissions, centers, and restrictions." },
+        { "value": "workflow", "label": "Workflow", "description": "Defines a SuiteFlow workflow (states, transitions, actions)." },
+        { "value": "center", "label": "Center", "description": "Defines a navigation center in the NetSuite UI." },
+        { "value": "centertab", "label": "Center Tab", "description": "Defines a tab within a center." },
+        { "value": "centerlink", "label": "Center Link", "description": "Defines a link within a center tab." },
+        { "value": "centercategory", "label": "Center Category", "description": "Defines a category within a center." },
+        { "value": "emailtemplate", "label": "Email Template", "description": "Defines an email template with merge fields and FreeMarker syntax." },
+        { "value": "emailcapture", "label": "Email Capture Plugin", "description": "Defines an email capture plugin configuration." },
+        { "value": "crmcustomfield", "label": "CRM Custom Field", "description": "A custom field on CRM records (Opportunity, Task, Phone Call, Event, Campaign, etc.)." },
+        { "value": "entitycustomfield", "label": "Entity Custom Field", "description": "A custom field on entity records (Customer, Vendor, Employee, Partner, Contact, etc.)." },
+        { "value": "itemcustomfield", "label": "Item Custom Field", "description": "A custom field on item records (Inventory, Service, Non-Inventory, Kit, Assembly, etc.)." },
+        { "value": "itemnumbercustomfield", "label": "Item Number Custom Field", "description": "A custom field on item number records (lot numbers, serial numbers, bin records)." },
+        { "value": "othercustomfield", "label": "Other Custom Field", "description": "A custom field on record types not covered by entity, item, CRM, or transaction fields." },
+        { "value": "transactionbodycustomfield", "label": "Transaction Body Custom Field", "description": "A custom field on the body (header) of transaction records." },
+        { "value": "transactioncolumncustomfield", "label": "Transaction Column Custom Field", "description": "A custom field on line items (sublist columns) of transaction records." },
+        { "value": "transactionForm", "label": "Transaction Form", "description": "A custom transaction form layout." },
+        { "value": "entryForm", "label": "Entry Form", "description": "A custom entry form for a record type." },
+        { "value": "savedsearch", "label": "Saved Search", "description": "A saved search definition." },
+        { "value": "kpiscorecard", "label": "KPI Scorecard", "description": "A KPI scorecard dashboard component." },
+        { "value": "publisheddashboard", "label": "Published Dashboard", "description": "A published dashboard layout shared across roles." },
+        { "value": "dataset", "label": "Dataset", "description": "A SuiteAnalytics dataset definition." },
+        { "value": "financiallayout", "label": "Financial Layout", "description": "A financial statement layout for reporting." },
+        { "value": "translationcollection", "label": "Translation Collection", "description": "A collection of translated strings for multi-language support." },
+        { "value": "plugintype", "label": "Plugin Type", "description": "Defines a custom plug-in type (interface for plug-in implementations)." },
+        { "value": "pluginimplementation", "label": "Plugin Implementation", "description": "A concrete implementation of a plug-in type." },
+        { "value": "integration", "label": "Integration Record", "description": "An integration record for OAuth and token-based authentication." },
+        { "value": "sspapplication", "label": "SuiteCommerce Application", "description": "A SuiteCommerce (SSP) application definition." },
+        { "value": "bundleinstallationscript", "label": "Bundle Installation Script", "description": "A script that runs during SuiteBundler installation/update/uninstallation." },
+        { "value": "restlet", "label": "RESTlet Deployment", "description": "A RESTlet script deployment configuration." },
+        { "value": "clientscript", "label": "Client Script Deployment", "description": "A client script deployment configuration." },
+        { "value": "usereventscript", "label": "User Event Script Deployment", "description": "A user event script deployment configuration." },
+        { "value": "scheduledscript", "label": "Scheduled Script Deployment", "description": "A scheduled script deployment configuration." },
+        { "value": "mapreducescript", "label": "Map/Reduce Script Deployment", "description": "A map/reduce script deployment configuration." },
+        { "value": "suitelet", "label": "Suitelet Deployment", "description": "A Suitelet script deployment configuration." },
+        { "value": "portlet", "label": "Portlet Deployment", "description": "A portlet script deployment configuration." },
+        { "value": "massupdatescript", "label": "Mass Update Script Deployment", "description": "A mass update script deployment configuration." },
+        { "value": "workflowactionscript", "label": "Workflow Action Script Deployment", "description": "A workflow action script deployment configuration." }
+    ]
+}

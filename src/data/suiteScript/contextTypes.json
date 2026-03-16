@@ -1,0 +1,552 @@
+{
+    "pageInit": {
+        "name": "ClientScriptContext_pageInit",
+        "description": "Provides the context for the pageInit entry point, which fires when a page completes loading or when a record is initialized.",
+        "properties": [
+            {
+                "name": "currentRecord",
+                "type": "record.Record",
+                "description": "The current record loaded on the page. Use this to read/write field values.",
+                "typeId": "N/record#Record"
+            },
+            {
+                "name": "mode",
+                "type": "string",
+                "description": "The access mode: 'create', 'copy', or 'edit'."
+            }
+        ]
+    },
+    "fieldChanged": {
+        "name": "ClientScriptContext_fieldChanged",
+        "description": "Provides the context for the fieldChanged entry point, which fires when a field is changed by a user or client call.",
+        "properties": [
+            {
+                "name": "currentRecord",
+                "type": "record.Record",
+                "description": "The current record on the page.",
+                "typeId": "N/record#Record"
+            },
+            {
+                "name": "sublistId",
+                "type": "string",
+                "description": "The sublist internal ID (empty string if a body field changed)."
+            },
+            {
+                "name": "fieldId",
+                "type": "string",
+                "description": "The internal ID of the field that changed."
+            },
+            {
+                "name": "line",
+                "type": "number",
+                "description": "The line number (0-based) if the field is on a sublist. -1 for body fields."
+            },
+            {
+                "name": "column",
+                "type": "number",
+                "description": "The column number for matrix sublists. -1 otherwise."
+            }
+        ]
+    },
+    "postSourcing": {
+        "name": "ClientScriptContext_postSourcing",
+        "description": "Provides the context for the postSourcing entry point, which fires when a field finishes sourcing information.",
+        "properties": [
+            {
+                "name": "currentRecord",
+                "type": "record.Record",
+                "description": "The current record on the page.",
+                "typeId": "N/record#Record"
+            },
+            {
+                "name": "sublistId",
+                "type": "string",
+                "description": "The sublist ID (empty string for body fields)."
+            },
+            {
+                "name": "fieldId",
+                "type": "string",
+                "description": "The field whose sourced value was just set."
+            }
+        ]
+    },
+    "lineInit": {
+        "name": "ClientScriptContext_lineInit",
+        "description": "Provides the context for the lineInit entry point, which fires when a user selects an existing line in a sublist to edit, or adds a new line.",
+        "properties": [
+            {
+                "name": "currentRecord",
+                "type": "record.Record",
+                "description": "The current record on the page.",
+                "typeId": "N/record#Record"
+            },
+            {
+                "name": "sublistId",
+                "type": "string",
+                "description": "The sublist that was initialized."
+            }
+        ]
+    },
+    "validateField": {
+        "name": "ClientScriptContext_validateField",
+        "description": "Provides the context for the validateField entry point, which fires when a field value is modified.",
+        "properties": [
+            {
+                "name": "currentRecord",
+                "type": "record.Record",
+                "description": "The current record on the page.",
+                "typeId": "N/record#Record"
+            },
+            {
+                "name": "sublistId",
+                "type": "string",
+                "description": "The sublist ID (empty for body fields)."
+            },
+            {
+                "name": "fieldId",
+                "type": "string",
+                "description": "The field being validated."
+            },
+            {
+                "name": "line",
+                "type": "number",
+                "description": "The line number if on a sublist."
+            },
+            {
+                "name": "column",
+                "type": "number",
+                "description": "The column number for matrix sublists."
+            }
+        ]
+    },
+    "validateLine": {
+        "name": "ClientScriptContext_validateLine",
+        "description": "Provides the context for the validateLine entry point, which fires before a sublist line is committed.",
+        "properties": [
+            {
+                "name": "currentRecord",
+                "type": "record.Record",
+                "description": "The current record on the page.",
+                "typeId": "N/record#Record"
+            },
+            {
+                "name": "sublistId",
+                "type": "string",
+                "description": "The sublist being committed."
+            }
+        ]
+    },
+    "validateInsert": {
+        "name": "ClientScriptContext_validateInsert",
+        "description": "Provides the context for the validateInsert entry point, which fires before a sublist line is inserted.",
+        "properties": [
+            {
+                "name": "currentRecord",
+                "type": "record.Record",
+                "description": "The current record on the page.",
+                "typeId": "N/record#Record"
+            },
+            {
+                "name": "sublistId",
+                "type": "string",
+                "description": "The sublist where the line is being inserted."
+            }
+        ]
+    },
+    "validateDelete": {
+        "name": "ClientScriptContext_validateDelete",
+        "description": "Provides the context for the validateDelete entry point, which fires before a sublist line is deleted.",
+        "properties": [
+            {
+                "name": "currentRecord",
+                "type": "record.Record",
+                "description": "The current record on the page.",
+                "typeId": "N/record#Record"
+            },
+            {
+                "name": "sublistId",
+                "type": "string",
+                "description": "The sublist where the line is being deleted."
+            }
+        ]
+    },
+    "saveRecord": {
+        "name": "ClientScriptContext_saveRecord",
+        "description": "Provides the context for the saveRecord entry point, which fires when the user clicks the Save button.",
+        "properties": [
+            {
+                "name": "currentRecord",
+                "type": "record.Record",
+                "description": "The current record about to be saved.",
+                "typeId": "N/record#Record"
+            }
+        ]
+    },
+    "beforeLoad": {
+        "name": "UserEventContext_beforeLoad",
+        "description": "Provides the context for the beforeLoad entry point, which executes before a record is loaded into the UI.",
+        "properties": [
+            {
+                "name": "newRecord",
+                "type": "record.Record",
+                "description": "The record being loaded. Read-only in beforeLoad.",
+                "typeId": "N/record#Record"
+            },
+            {
+                "name": "type",
+                "type": "string",
+                "description": "The user event type: 'create', 'edit', 'view', 'copy', 'print', 'email', 'quickview'."
+            },
+            {
+                "name": "form",
+                "type": "serverWidget.Form",
+                "description": "The form object (N/ui/serverWidget). Use to add fields, buttons, tabs, and sublists.",
+                "typeId": "N/ui/serverWidget#Form"
+            },
+            {
+                "name": "request",
+                "type": "http.ServerRequest",
+                "description": "The HTTP request that triggered this event (available only in UI context).",
+                "typeId": "N/http#ServerRequest"
+            }
+        ]
+    },
+    "beforeSubmit": {
+        "name": "UserEventContext_beforeSubmit",
+        "description": "Provides the context for the beforeSubmit entry point, which executes before a record goes to the database.",
+        "properties": [
+            {
+                "name": "newRecord",
+                "type": "record.Record",
+                "description": "The record with the new values (about to be saved).",
+                "typeId": "N/record#Record"
+            },
+            {
+                "name": "oldRecord",
+                "type": "record.Record",
+                "description": "The record with the previous values (before the edit). Null on create.",
+                "typeId": "N/record#Record"
+            },
+            {
+                "name": "type",
+                "type": "string",
+                "description": "The user event type: 'create', 'edit', 'delete', 'xedit' (inline edit), 'approve', 'reject', 'cancel', 'pack', 'ship', 'dropship', 'specialorder', 'orderitems', 'paybills'."
+            }
+        ]
+    },
+    "afterSubmit": {
+        "name": "UserEventContext_afterSubmit",
+        "description": "Provides the context for the afterSubmit entry point, which executes immediately after a record is saved to the database.",
+        "properties": [
+            {
+                "name": "newRecord",
+                "type": "record.Record",
+                "description": "The record with the new (saved) values.",
+                "typeId": "N/record#Record"
+            },
+            {
+                "name": "oldRecord",
+                "type": "record.Record",
+                "description": "The record with the previous values. Null on create.",
+                "typeId": "N/record#Record"
+            },
+            {
+                "name": "type",
+                "type": "string",
+                "description": "The user event type: 'create', 'edit', 'delete', 'xedit', 'approve', 'reject', 'cancel', etc."
+            }
+        ]
+    },
+    "execute": {
+        "name": "ScheduledScriptContext_execute",
+        "description": "Provides the context for the execute entry point of a Scheduled Script.",
+        "properties": [
+            {
+                "name": "type",
+                "type": "string",
+                "description": "The invocation type: 'SCHEDULED' (from schedule) or 'ON_DEMAND' (manually triggered)."
+            }
+        ]
+    },
+    "getInputData": {
+        "name": "MapReduceContext_getInputData",
+        "description": "Provides the context for the getInputData stage of a Map/Reduce script.",
+        "properties": [
+            {
+                "name": "isRestarted",
+                "type": "boolean",
+                "description": "True if this is a restarted invocation (a previous attempt failed mid-execution)."
+            }
+        ]
+    },
+    "map": {
+        "name": "MapReduceContext_map",
+        "description": "Provides the context for the map stage of a Map/Reduce script.",
+        "properties": [
+            {
+                "name": "key",
+                "type": "string",
+                "description": "The key of the current item from getInputData."
+            },
+            {
+                "name": "value",
+                "type": "string",
+                "description": "The value of the current item (JSON string — use JSON.parse())."
+            },
+            {
+                "name": "isRestarted",
+                "type": "boolean",
+                "description": "True if this is a restarted invocation."
+            }
+        ],
+        "methods": [
+            {
+                "name": "write",
+                "description": "Writes a key/value pair to pass to the reduce stage.",
+                "params": [
+                    {
+                        "name": "key",
+                        "type": "string",
+                        "description": "The grouping key"
+                    },
+                    {
+                        "name": "value",
+                        "type": "string",
+                        "description": "The value (will be grouped by key in reduce)"
+                    }
+                ],
+                "returns": "void"
+            }
+        ]
+    },
+    "reduce": {
+        "name": "MapReduceContext_reduce",
+        "description": "Provides the context for the reduce stage of a Map/Reduce script.",
+        "properties": [
+            {
+                "name": "key",
+                "type": "string",
+                "description": "The grouping key (from context.write() in the map stage)."
+            },
+            {
+                "name": "values",
+                "type": "string[]",
+                "description": "Array of all values written with this key during the map stage."
+            },
+            {
+                "name": "isRestarted",
+                "type": "boolean",
+                "description": "True if this is a restarted invocation."
+            }
+        ],
+        "methods": [
+            {
+                "name": "write",
+                "description": "Writes a key/value pair to the output (accessible in summarize via context.output).",
+                "params": [
+                    {
+                        "name": "key",
+                        "type": "string",
+                        "description": "Output key"
+                    },
+                    {
+                        "name": "value",
+                        "type": "string",
+                        "description": "Output value"
+                    }
+                ],
+                "returns": "void"
+            }
+        ]
+    },
+    "summarize": {
+        "name": "MapReduceContext_summarize",
+        "description": "Provides the context for the summarize stage of a Map/Reduce script.",
+        "properties": [
+            {
+                "name": "dateCreated",
+                "type": "Date",
+                "description": "The date/time when the Map/Reduce job was created."
+            },
+            {
+                "name": "seconds",
+                "type": "number",
+                "description": "Total seconds the job ran."
+            },
+            {
+                "name": "usage",
+                "type": "number",
+                "description": "Total governance units consumed."
+            },
+            {
+                "name": "concurrency",
+                "type": "number",
+                "description": "Maximum number of queues used concurrently."
+            },
+            {
+                "name": "yields",
+                "type": "number",
+                "description": "Number of times the script yielded."
+            },
+            {
+                "name": "isRestarted",
+                "type": "boolean",
+                "description": "True if this is a restarted invocation."
+            },
+            {
+                "name": "inputSummary",
+                "type": "Object",
+                "description": "Summary of the getInputData stage. Has .error property if it failed."
+            },
+            {
+                "name": "mapSummary",
+                "type": "Object",
+                "description": "Summary of the map stage. Use .errors.iterator() to iterate errors."
+            },
+            {
+                "name": "reduceSummary",
+                "type": "Object",
+                "description": "Summary of the reduce stage. Use .errors.iterator() to iterate errors."
+            },
+            {
+                "name": "output",
+                "type": "Iterator",
+                "description": "Iterator over key/value pairs written in the reduce stage. Use .iterator().each()."
+            }
+        ]
+    },
+    "onRequest": {
+        "name": "SuiteletContext_onRequest",
+        "description": "Provides the context for the onRequest entry point of a Suitelet.",
+        "properties": [
+            {
+                "name": "request",
+                "type": "http.ServerRequest",
+                "description": "The incoming HTTP request. Use .method to check GET vs POST, .parameters for query params, .body for POST body.",
+                "typeId": "N/http#ServerRequest"
+            },
+            {
+                "name": "response",
+                "type": "http.ServerResponse",
+                "description": "The HTTP response object. Use .write() to send HTML, .writePage() to render a serverWidget.Form, .renderPdf() to send PDF.",
+                "typeId": "N/http#ServerResponse"
+            }
+        ]
+    },
+    "render": {
+        "name": "PortletContext_render",
+        "description": "Provides the context for the render entry point of a Portlet.",
+        "properties": [
+            {
+                "name": "portlet",
+                "type": "serverWidget.Portlet",
+                "description": "The portlet object. Use to add fields, rows, and content to the dashboard widget.",
+                "typeId": "N/ui/serverWidget#Portlet"
+            },
+            {
+                "name": "column",
+                "type": "number",
+                "description": "The dashboard column the portlet is placed in (1, 2, or 3)."
+            },
+            {
+                "name": "entityId",
+                "type": "string",
+                "description": "The internal ID of the entity if the portlet is on an entity dashboard."
+            }
+        ]
+    },
+    "get": {
+        "name": "RestletContext_get",
+        "description": "Provides the context for the GET entry point of a RESTlet. The parameter contains the request parameters as key/value pairs.",
+        "properties": [
+            {
+                "name": "requestParams",
+                "type": "Object",
+                "description": "If the RESTlet parameter is named as an object, it contains all query string parameters."
+            }
+        ]
+    },
+    "post": {
+        "name": "RestletContext_post",
+        "description": "Provides the context for the POST entry point of a RESTlet. The parameter contains the parsed request body.",
+        "properties": [
+            {
+                "name": "requestBody",
+                "type": "Object|string",
+                "description": "The parsed request body. If Content-Type is application/json, this is a parsed object."
+            }
+        ]
+    },
+    "put": {
+        "name": "RestletContext_put",
+        "description": "Provides the context for the PUT entry point of a RESTlet. The parameter contains the parsed request body.",
+        "properties": [
+            {
+                "name": "requestBody",
+                "type": "Object|string",
+                "description": "The parsed request body. If Content-Type is application/json, this is a parsed object."
+            }
+        ]
+    },
+    "delete": {
+        "name": "RestletContext_delete",
+        "description": "Provides the context for the DELETE entry point of a RESTlet. The parameter contains the request parameters.",
+        "properties": [
+            {
+                "name": "requestParams",
+                "type": "Object",
+                "description": "The query string parameters as key/value pairs."
+            }
+        ]
+    },
+    "each": {
+        "name": "MassUpdateContext_each",
+        "description": "Provides the context for the each entry point of a Mass Update script.",
+        "properties": [
+            {
+                "name": "type",
+                "type": "string",
+                "description": "The record type of the current record."
+            },
+            {
+                "name": "id",
+                "type": "number",
+                "description": "The internal ID of the current record."
+            }
+        ]
+    },
+    "onAction": {
+        "name": "WorkflowActionContext_onAction",
+        "description": "Provides the context for the onAction entry point of a Workflow Action script.",
+        "properties": [
+            {
+                "name": "newRecord",
+                "type": "record.Record",
+                "description": "The record in its current (new) state.",
+                "typeId": "N/record#Record"
+            },
+            {
+                "name": "oldRecord",
+                "type": "record.Record",
+                "description": "The record in its previous state.",
+                "typeId": "N/record#Record"
+            },
+            {
+                "name": "form",
+                "type": "serverWidget.Form",
+                "description": "The form object (if available).",
+                "typeId": "N/ui/serverWidget#Form"
+            },
+            {
+                "name": "type",
+                "type": "string",
+                "description": "The action type."
+            },
+            {
+                "name": "workflowId",
+                "type": "number",
+                "description": "The internal ID of the workflow that triggered this action."
+            }
+        ]
+    }
+}

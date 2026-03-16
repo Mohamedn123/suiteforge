@@ -1,0 +1,57 @@
+{
+    "module": "N/suiteAppInfo",
+    "description": "Access information about installed SuiteApps and Bundles, check if a specific bundle or SuiteApp is installed.",
+    "supportedIn": ["client", "server"],
+    "methods": [
+        {
+            "name": "isBundleInstalled",
+            "description": "Returns true if the specified bundle is installed in the current account.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.bundleId", "type": "number", "description": "The bundle ID to check" }
+            ],
+            "returns": "boolean"
+        },
+        {
+            "name": "isSuiteAppInstalled",
+            "description": "Returns true if the specified SDF SuiteApp is installed.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.suiteAppId", "type": "string", "description": "The SuiteApp ID to check" }
+            ],
+            "returns": "boolean"
+        },
+        {
+            "name": "listInstalledBundles",
+            "description": "Returns a list of bundles that are installed in the current account.",
+            "params": [],
+            "returns": "Object[]"
+        },
+        {
+            "name": "listInstalledSuiteApps",
+            "description": "Returns a list of SDF SuiteApps that are installed.",
+            "params": [],
+            "returns": "Object[]"
+        },
+        {
+            "name": "listBundlesContainingScripts",
+            "description": "Returns the IDs for bundles that contain the specified scripts.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.scriptIds", "type": "Array", "description": "Array of script IDs to look up" }
+            ],
+            "returns": "Object"
+        },
+        {
+            "name": "listSuiteAppsContainingScripts",
+            "description": "Returns the IDs for SDF SuiteApps that contain the specified scripts.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.scriptIds", "type": "Array", "description": "Array of script IDs to look up" }
+            ],
+            "returns": "Object"
+        }
+    ],
+    "enums": [],
+    "objectTypes": []
+}

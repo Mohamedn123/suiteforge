@@ -1,0 +1,73 @@
+{
+    "module": "N/https/clientCertificate",
+    "description": "Send SSL-secured HTTP requests with a digital certificate for client authentication.",
+    "supportedIn": ["server"],
+    "methods": [
+        {
+            "name": "get",
+            "description": "Sends an SSL-secured GET request to a remote server with a client certificate.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.url", "type": "string", "description": "The URL to send the request to" },
+                { "name": "options.certId", "type": "string", "description": "The script ID of the certificate" },
+                { "name": "options.headers", "type": "Object", "description": "HTTP request headers", "optional": true }
+            ],
+            "returns": "https.ClientResponse",
+            "supportedIn": ["server"]
+        },
+        {
+            "name": "post",
+            "description": "Sends an SSL-secured POST request to a remote server with a client certificate.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.url", "type": "string", "description": "The URL to send the request to" },
+                { "name": "options.certId", "type": "string", "description": "The script ID of the certificate" },
+                { "name": "options.body", "type": "string|Object", "description": "The request body" },
+                { "name": "options.headers", "type": "Object", "description": "HTTP request headers", "optional": true }
+            ],
+            "returns": "https.ClientResponse",
+            "supportedIn": ["server"]
+        },
+        {
+            "name": "put",
+            "description": "Sends an SSL-secured PUT request to a remote server with a client certificate.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.url", "type": "string", "description": "The URL to send the request to" },
+                { "name": "options.certId", "type": "string", "description": "The script ID of the certificate" },
+                { "name": "options.body", "type": "string|Object", "description": "The request body" },
+                { "name": "options.headers", "type": "Object", "description": "HTTP request headers", "optional": true }
+            ],
+            "returns": "https.ClientResponse",
+            "supportedIn": ["server"]
+        },
+        {
+            "name": "delete",
+            "description": "Sends an SSL-secured DELETE request to a remote server with a client certificate.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.url", "type": "string", "description": "The URL to send the request to" },
+                { "name": "options.certId", "type": "string", "description": "The script ID of the certificate" },
+                { "name": "options.headers", "type": "Object", "description": "HTTP request headers", "optional": true }
+            ],
+            "returns": "https.ClientResponse",
+            "supportedIn": ["server"]
+        },
+        {
+            "name": "request",
+            "description": "Sends an SSL-secured HTTP request with a client certificate using a specified method.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.url", "type": "string", "description": "The URL to send the request to" },
+                { "name": "options.certId", "type": "string", "description": "The script ID of the certificate" },
+                { "name": "options.method", "type": "string", "description": "The HTTP method (https.Method.*)" },
+                { "name": "options.body", "type": "string|Object", "description": "The request body", "optional": true },
+                { "name": "options.headers", "type": "Object", "description": "HTTP request headers", "optional": true }
+            ],
+            "returns": "https.ClientResponse",
+            "supportedIn": ["server"]
+        }
+    ],
+    "enums": [],
+    "objectTypes": []
+}

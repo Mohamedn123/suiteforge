@@ -1,0 +1,85 @@
+{
+    "module": "N/dataset",
+    "description": "Create and manage datasets in SuiteAnalytics Workbook. Use with N/workbook to manage datasets and workbooks.",
+    "supportedIn": ["server"],
+    "methods": [
+        {
+            "name": "create",
+            "description": "Creates a new dataset definition.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.type", "type": "string", "description": "The record type for the dataset" },
+                { "name": "options.columns", "type": "Array", "description": "Array of dataset column objects" },
+                { "name": "options.condition", "type": "Object", "description": "The filter condition for the dataset", "optional": true },
+                { "name": "options.name", "type": "string", "description": "The dataset name", "optional": true },
+                { "name": "options.description", "type": "string", "description": "The dataset description", "optional": true }
+            ],
+            "returns": "dataset.Dataset",
+            "returnType": "N/dataset#Dataset",
+            "supportedIn": ["server"]
+        },
+        {
+            "name": "load",
+            "description": "Loads an existing dataset by its ID.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.id", "type": "string", "description": "The dataset ID" }
+            ],
+            "returns": "dataset.Dataset",
+            "returnType": "N/dataset#Dataset",
+            "supportedIn": ["server"]
+        },
+        {
+            "name": "list",
+            "description": "Returns a list of all saved datasets.",
+            "params": [],
+            "returns": "Object[]",
+            "supportedIn": ["server"]
+        },
+        {
+            "name": "createColumn",
+            "description": "Creates a dataset column.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.fieldId", "type": "string", "description": "The field ID for the column" },
+                { "name": "options.alias", "type": "string", "description": "Alias for the column", "optional": true },
+                { "name": "options.label", "type": "string", "description": "Display label for the column", "optional": true },
+                { "name": "options.join", "type": "string", "description": "Join ID for joined records", "optional": true },
+                { "name": "options.formula", "type": "string", "description": "Formula expression", "optional": true }
+            ],
+            "returns": "Object",
+            "supportedIn": ["server"]
+        },
+        {
+            "name": "createCondition",
+            "description": "Creates a condition for filtering dataset records.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.column", "type": "Object", "description": "The column to filter on" },
+                { "name": "options.operator", "type": "string", "description": "The comparison operator" },
+                { "name": "options.values", "type": "Array", "description": "The values to compare against" }
+            ],
+            "returns": "Object",
+            "supportedIn": ["server"]
+        }
+    ],
+    "enums": [],
+    "objectTypes": [
+        {
+            "name": "Dataset",
+            "description": "Represents a SuiteAnalytics Workbook dataset.",
+            "methods": [
+                { "name": "save", "description": "Saves the dataset.", "params": [], "returns": "void" },
+                { "name": "run", "description": "Runs the dataset and returns results.", "params": [], "returns": "Object" }
+            ],
+            "properties": [
+                { "name": "id", "type": "string", "description": "The dataset ID.", "readOnly": true },
+                { "name": "name", "type": "string", "description": "The dataset name." },
+                { "name": "description", "type": "string", "description": "The dataset description." },
+                { "name": "type", "type": "string", "description": "The record type of the dataset.", "readOnly": true },
+                { "name": "columns", "type": "Array", "description": "The columns in the dataset." },
+                { "name": "condition", "type": "Object", "description": "The filter condition." }
+            ]
+        }
+    ]
+}

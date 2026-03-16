@@ -1,0 +1,32 @@
+{
+    "module": "N/auth",
+    "description": "Change the current user's NetSuite login credentials (email address and password).",
+    "supportedIn": ["server"],
+    "methods": [
+        {
+            "name": "changeEmail",
+            "description": "Changes the current user's NetSuite email address (user name).",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.newEmail", "type": "string", "description": "The logged in user's NetSuite new email address" },
+                { "name": "options.password", "type": "string", "description": "The logged in user's current NetSuite password" },
+                { "name": "options.onlyThisAccount", "type": "boolean", "description": "If true, the email change applies only to the current account. If false, applies to all accounts. Default is true.", "optional": true }
+            ],
+            "returns": "void",
+            "supportedIn": ["server"]
+        },
+        {
+            "name": "changePassword",
+            "description": "Changes the current user's NetSuite password.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.currentPassword", "type": "string", "description": "The current password" },
+                { "name": "options.newPassword", "type": "string", "description": "The new password" }
+            ],
+            "returns": "void",
+            "supportedIn": ["server"]
+        }
+    ],
+    "enums": [],
+    "objectTypes": []
+}

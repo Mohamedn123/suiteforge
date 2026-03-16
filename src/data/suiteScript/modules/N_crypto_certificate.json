@@ -1,0 +1,99 @@
+{
+    "module": "N/crypto/certificate",
+    "description": "Sign XML documents or strings with digital certificates using asymmetric cryptography. Create signer/verifier objects and verify signed documents.",
+    "supportedIn": ["server"],
+    "methods": [
+        {
+            "name": "createSigner",
+            "description": "Creates a Signer object for signing plain strings with a digital certificate.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.certId", "type": "string", "description": "The script ID of the certificate" },
+                { "name": "options.algorithm", "type": "string", "description": "Hash algorithm (certificate.HashAlg.*)" }
+            ],
+            "returns": "certificate.Signer",
+            "returnType": "N/crypto/certificate#Signer",
+            "supportedIn": ["server"]
+        },
+        {
+            "name": "createVerifier",
+            "description": "Creates a Verifier object for verifying signatures of plain strings.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.certId", "type": "string", "description": "The script ID of the certificate" },
+                { "name": "options.algorithm", "type": "string", "description": "Hash algorithm (certificate.HashAlg.*)" }
+            ],
+            "returns": "certificate.Verifier",
+            "returnType": "N/crypto/certificate#Verifier",
+            "supportedIn": ["server"]
+        },
+        {
+            "name": "signXml",
+            "description": "Signs an XML string using the specified certificate and returns a SignedXml object.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.xmlString", "type": "string", "description": "The XML string to sign" },
+                { "name": "options.certId", "type": "string", "description": "The script ID of the certificate" },
+                { "name": "options.algorithm", "type": "string", "description": "Hash algorithm (certificate.HashAlg.*)" },
+                { "name": "options.rootTag", "type": "string", "description": "The root element tag to sign" }
+            ],
+            "returns": "certificate.SignedXml",
+            "returnType": "N/crypto/certificate#SignedXml",
+            "supportedIn": ["server"]
+        },
+        {
+            "name": "verifyXmlSignature",
+            "description": "Verifies the signature of a signed XML document.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.signedXml", "type": "file.File", "description": "The signed XML file to verify" },
+                { "name": "options.certId", "type": "string", "description": "The script ID of the certificate" },
+                { "name": "options.rootTag", "type": "string", "description": "The root element tag that was signed" }
+            ],
+            "returns": "void",
+            "supportedIn": ["server"]
+        }
+    ],
+    "enums": [
+        {
+            "name": "HashAlg",
+            "description": "Hash algorithm types for signing and verification.",
+            "members": [
+                { "name": "SHA1", "value": "SHA1", "description": "SHA-1 hash algorithm" },
+                { "name": "SHA256", "value": "SHA256", "description": "SHA-256 hash algorithm" },
+                { "name": "SHA384", "value": "SHA384", "description": "SHA-384 hash algorithm" },
+                { "name": "SHA512", "value": "SHA512", "description": "SHA-512 hash algorithm" }
+            ]
+        }
+    ],
+    "objectTypes": [
+        {
+            "name": "Signer",
+            "description": "Signs plain strings using a digital certificate.",
+            "methods": [
+                { "name": "update", "description": "Updates the input string to be signed.", "params": [{ "name": "options", "type": "Object", "description": "Options" }, { "name": "options.input", "type": "string", "description": "The string to sign" }, { "name": "options.inputEncoding", "type": "string", "description": "Encoding of the input (e.g. 'UTF_8', 'BASE_64')", "optional": true }], "returns": "void" },
+                { "name": "sign", "description": "Produces the signature and returns it.", "params": [{ "name": "options", "type": "Object", "description": "Options" }, { "name": "options.outputEncoding", "type": "string", "description": "Encoding of the output signature", "optional": true }], "returns": "string" }
+            ],
+            "properties": []
+        },
+        {
+            "name": "Verifier",
+            "description": "Verifies signatures of plain strings.",
+            "methods": [
+                { "name": "update", "description": "Updates the string to verify against the certificate.", "params": [{ "name": "options", "type": "Object", "description": "Options" }, { "name": "options.input", "type": "string", "description": "The string to verify" }, { "name": "options.inputEncoding", "type": "string", "description": "Encoding of the input", "optional": true }], "returns": "void" },
+                { "name": "verify", "description": "Verifies the string against a provided signature.", "params": [{ "name": "options", "type": "Object", "description": "Options" }, { "name": "options.signature", "type": "string", "description": "The signature to verify against" }, { "name": "options.signatureEncoding", "type": "string", "description": "Encoding of the signature", "optional": true }], "returns": "void" }
+            ],
+            "properties": []
+        },
+        {
+            "name": "SignedXml",
+            "description": "Represents an XML string that has been digitally signed.",
+            "methods": [
+                { "name": "asString", "description": "Returns the signed XML as a string.", "params": [], "returns": "string" },
+                { "name": "asFile", "description": "Returns the signed XML as a file.File object.", "params": [], "returns": "file.File", "returnType": "N/file#File" },
+                { "name": "asXml", "description": "Returns the signed XML as an xml.Document.", "params": [], "returns": "xml.Document" }
+            ],
+            "properties": []
+        }
+    ]
+}

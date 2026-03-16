@@ -1,0 +1,11 @@
+<workflow scriptid="{{SCRIPTID}}">
+    <name></name>
+    <description></description>
+    <recordtype></recordtype>
+    <isinactive>F</isinactive>
+    <releasestatus>NOTINITIATING</releasestatus>
+    <initcondition>
+    </initcondition>
+    <workflowstates>
+    </workflowstates>
+</workflow>

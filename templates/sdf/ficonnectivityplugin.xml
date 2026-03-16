@@ -1,0 +1,6 @@
+<ficonnectivityplugin scriptid="{{SCRIPTID}}">
+    <name></name>
+    <scriptfile></scriptfile>
+    <description></description>
+    <isinactive>F</isinactive>
+</ficonnectivityplugin>

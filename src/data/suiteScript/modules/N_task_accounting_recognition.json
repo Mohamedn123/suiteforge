@@ -1,0 +1,31 @@
+{
+    "module": "N/task/accounting/recognition",
+    "description": "Merge revenue arrangements or revenue elements from multiple sources to represent a single contract for revenue allocation and recognition.",
+    "supportedIn": ["server"],
+    "methods": [
+        {
+            "name": "mergeArrangements",
+            "description": "Merges revenue arrangements from multiple sources into a single contract.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.arrangementIds", "type": "number[]", "description": "Array of revenue arrangement IDs to merge" },
+                { "name": "options.targetArrangementId", "type": "number", "description": "The target arrangement ID", "optional": true }
+            ],
+            "returns": "Object",
+            "supportedIn": ["server"]
+        },
+        {
+            "name": "mergeElements",
+            "description": "Merges revenue elements from multiple sources.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.elementIds", "type": "number[]", "description": "Array of revenue element IDs to merge" },
+                { "name": "options.targetElementId", "type": "number", "description": "The target element ID", "optional": true }
+            ],
+            "returns": "Object",
+            "supportedIn": ["server"]
+        }
+    ],
+    "enums": [],
+    "objectTypes": []
+}

@@ -1,0 +1,107 @@
+{
+    "module": "N/translation",
+    "description": "Interact with NetSuite Translation Collections programmatically to load and use translated strings in scripts.",
+    "supportedIn": ["client", "server"],
+    "methods": [
+        {
+            "name": "get",
+            "description": "Creates a translator function for a key in the specified Translation Collection and locale.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.collection", "type": "string", "description": "The script ID of the Translation Collection (e.g. 'custcollection_my_strings')" },
+                { "name": "options.key", "type": "string", "description": "The key of the translation string" },
+                { "name": "options.locale", "type": "string", "description": "The locale for the translation (translation.Locale.*)", "optional": true }
+            ],
+            "returns": "translation.Translator",
+            "returnType": "N/translation#Translator"
+        },
+        {
+            "name": "load",
+            "description": "Creates a translation.Handle object with translations for the specified Translation Collections and locales.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.collections", "type": "Array", "description": "Array of collection script IDs or objects { alias, collection }" },
+                { "name": "options.locales", "type": "Array", "description": "Array of locale strings to load translations for", "optional": true }
+            ],
+            "returns": "translation.Handle",
+            "returnType": "N/translation#Handle"
+        },
+        {
+            "name": "selectLocale",
+            "description": "Creates a translation.Handle object in the specified locale from an existing Handle.",
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options" },
+                { "name": "options.handle", "type": "translation.Handle", "description": "The existing Handle object" },
+                { "name": "options.locale", "type": "string", "description": "The locale to select (translation.Locale.*)" }
+            ],
+            "returns": "translation.Handle",
+            "returnType": "N/translation#Handle"
+        }
+    ],
+    "enums": [
+        {
+            "name": "Locale",
+            "description": "Supported locales for Translation Collections.",
+            "members": [
+                { "name": "ar_SA", "value": "ar_SA", "description": "Arabic (Saudi Arabia)" },
+                { "name": "cs_CZ", "value": "cs_CZ", "description": "Czech (Czech Republic)" },
+                { "name": "da_DK", "value": "da_DK", "description": "Danish (Denmark)" },
+                { "name": "de_DE", "value": "de_DE", "description": "German (Germany)" },
+                { "name": "el_GR", "value": "el_GR", "description": "Greek (Greece)" },
+                { "name": "en", "value": "en", "description": "English (default)" },
+                { "name": "en_AU", "value": "en_AU", "description": "English (Australia)" },
+                { "name": "en_CA", "value": "en_CA", "description": "English (Canada)" },
+                { "name": "en_GB", "value": "en_GB", "description": "English (United Kingdom)" },
+                { "name": "en_US", "value": "en_US", "description": "English (United States)" },
+                { "name": "es_AR", "value": "es_AR", "description": "Spanish (Argentina)" },
+                { "name": "es_ES", "value": "es_ES", "description": "Spanish (Spain)" },
+                { "name": "fi_FI", "value": "fi_FI", "description": "Finnish (Finland)" },
+                { "name": "fr_CA", "value": "fr_CA", "description": "French (Canada)" },
+                { "name": "fr_FR", "value": "fr_FR", "description": "French (France)" },
+                { "name": "he_IL", "value": "he_IL", "description": "Hebrew (Israel)" },
+                { "name": "hu_HU", "value": "hu_HU", "description": "Hungarian (Hungary)" },
+                { "name": "id_ID", "value": "id_ID", "description": "Indonesian (Indonesia)" },
+                { "name": "it_IT", "value": "it_IT", "description": "Italian (Italy)" },
+                { "name": "ja_JP", "value": "ja_JP", "description": "Japanese (Japan)" },
+                { "name": "ko_KR", "value": "ko_KR", "description": "Korean (Korea)" },
+                { "name": "nl_NL", "value": "nl_NL", "description": "Dutch (Netherlands)" },
+                { "name": "no_NO", "value": "no_NO", "description": "Norwegian (Norway)" },
+                { "name": "pl_PL", "value": "pl_PL", "description": "Polish (Poland)" },
+                { "name": "pt_BR", "value": "pt_BR", "description": "Portuguese (Brazil)" },
+                { "name": "pt_PT", "value": "pt_PT", "description": "Portuguese (Portugal)" },
+                { "name": "ro_RO", "value": "ro_RO", "description": "Romanian (Romania)" },
+                { "name": "ru_RU", "value": "ru_RU", "description": "Russian (Russia)" },
+                { "name": "sv_SE", "value": "sv_SE", "description": "Swedish (Sweden)" },
+                { "name": "th_TH", "value": "th_TH", "description": "Thai (Thailand)" },
+                { "name": "tr_TR", "value": "tr_TR", "description": "Turkish (Turkey)" },
+                { "name": "vi_VN", "value": "vi_VN", "description": "Vietnamese (Vietnam)" },
+                { "name": "zh_CN", "value": "zh_CN", "description": "Chinese (China)" },
+                { "name": "zh_TW", "value": "zh_TW", "description": "Chinese (Taiwan)" }
+            ]
+        }
+    ],
+    "objectTypes": [
+        {
+            "name": "Handle",
+            "description": "Encapsulates a Translation Collection for a locale. Each node is either another Handle or a Translator function.",
+            "methods": [],
+            "properties": []
+        },
+        {
+            "name": "Translator",
+            "description": "Represents a translator function that returns translated strings. Use translation.get(options) to obtain this function. Call with options.params (array of strings) for parametrized translation strings.",
+            "methods": [
+                {
+                    "name": "call",
+                    "description": "Calls the translator function. Pass options.params (array of strings) to inject values into placeholders in the translation string.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options", "optional": true },
+                        { "name": "options.params", "type": "string[]", "description": "Parameter values for parametrized translation strings", "optional": true }
+                    ],
+                    "returns": "string"
+                }
+            ],
+            "properties": []
+        }
+    ]
+}

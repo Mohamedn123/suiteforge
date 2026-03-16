@@ -1,0 +1,2382 @@
+{
+    "module": "N/record",
+    "description": "Use the N/record module to work with NetSuite records. You can use this module to create, delete, copy, load, or make changes to a record. SuiteScript supports working with standard NetSuite records and with instances of custom record types. SuiteScript does not support direct access to the NetSuite UI through the Document Object Model (DOM). The NetSuite UI should only be accessed with SuiteScript APIs.",
+    "supportedIn": [
+        "client",
+        "server"
+    ],
+    "methods": [
+        {
+            "name": "attach",
+            "description": "Attaches a record to another record.",
+            "supportedIn": [
+                "client",
+                "server"
+            ],
+            "params": [
+                {
+                    "name": "options.record",
+                    "type": "Object",
+                    "description": "The record to attach. Provide the type and id properties to identify the record to attach."
+                },
+                {
+                    "name": "options.to",
+                    "type": "Object",
+                    "description": "The record that options.record gets attached to. Provide the type and id properties to identify the destination record."
+                },
+                {
+                    "name": "options.attributes",
+                    "type": "Object",
+                    "description": "The attributes used to attach the record.",
+                    "optional": true
+                }
+            ],
+            "returns": "void"
+        },
+        {
+            "name": "attach.promise",
+            "description": "Attaches a record asynchronously to another record.",
+            "supportedIn": [
+                "client"
+            ],
+            "params": [
+                {
+                    "name": "options.record",
+                    "type": "Object",
+                    "description": "The record to attach. Provide the type and id properties to identify the record to attach."
+                },
+                {
+                    "name": "options.to",
+                    "type": "Object",
+                    "description": "The record that options.record gets attached to. Provide the type and id properties to identify the destination record."
+                },
+                {
+                    "name": "options.attributes",
+                    "type": "Object",
+                    "description": "The attributes used to attach the record.",
+                    "optional": true
+                }
+            ],
+            "returns": "Promise",
+            "returnType": "Promise<void>"
+        },
+        {
+            "name": "copy",
+            "description": "Creates a new record by copying an existing record in NetSuite.",
+            "supportedIn": [
+                "client",
+                "server"
+            ],
+            "params": [
+                {
+                    "name": "options.type",
+                    "type": "string",
+                    "description": "The record type."
+                },
+                {
+                    "name": "options.id",
+                    "type": "number | string",
+                    "description": "The internal ID of the existing record instance in NetSuite."
+                },
+                {
+                    "name": "options.isDynamic",
+                    "type": "boolean",
+                    "description": "Determines whether the new record is created in dynamic mode.",
+                    "optional": true
+                },
+                {
+                    "name": "options.defaultValues",
+                    "type": "Object",
+                    "description": "Name-value pairs containing default values of fields in the new record.",
+                    "optional": true
+                }
+            ],
+            "returns": "record.Record",
+            "returnType": "N/record#Record"
+        },
+        {
+            "name": "copy.promise",
+            "description": "Creates a new record asynchronously by copying an existing record in NetSuite.",
+            "supportedIn": [
+                "client"
+            ],
+            "params": [
+                {
+                    "name": "options.type",
+                    "type": "string",
+                    "description": "The record type."
+                },
+                {
+                    "name": "options.id",
+                    "type": "number | string",
+                    "description": "The internal ID of the existing record instance in NetSuite."
+                },
+                {
+                    "name": "options.isDynamic",
+                    "type": "boolean",
+                    "description": "Determines whether the new record is created in dynamic mode.",
+                    "optional": true
+                },
+                {
+                    "name": "options.defaultValues",
+                    "type": "Object",
+                    "description": "Name-value pairs containing default values of fields in the new record.",
+                    "optional": true
+                }
+            ],
+            "returns": "Promise",
+            "returnType": "Promise<N/record#Record>"
+        },
+        {
+            "name": "create",
+            "description": "Creates a new record.",
+            "supportedIn": [
+                "client",
+                "server"
+            ],
+            "params": [
+                {
+                    "name": "options.type",
+                    "type": "string",
+                    "description": "The record type."
+                },
+                {
+                    "name": "options.isDynamic",
+                    "type": "boolean",
+                    "description": "Determines whether the new record is created in dynamic mode.",
+                    "optional": true
+                },
+                {
+                    "name": "options.defaultValues",
+                    "type": "Object",
+                    "description": "Name-value pairs containing default values of fields in the new record.",
+                    "optional": true
+                }
+            ],
+            "returns": "record.Record",
+            "returnType": "N/record#Record"
+        },
+        {
+            "name": "create.promise",
+            "description": "Creates a new record asynchronously.",
+            "supportedIn": [
+                "client"
+            ],
+            "params": [
+                {
+                    "name": "options.type",
+                    "type": "string",
+                    "description": "The record type."
+                },
+                {
+                    "name": "options.isDynamic",
+                    "type": "boolean",
+                    "description": "Determines whether the new record is created in dynamic mode.",
+                    "optional": true
+                },
+                {
+                    "name": "options.defaultValues",
+                    "type": "Object",
+                    "description": "Name-value pairs containing default values of fields in the new record.",
+                    "optional": true
+                }
+            ],
+            "returns": "Promise",
+            "returnType": "Promise<N/record#Record>"
+        },
+        {
+            "name": "delete",
+            "description": "Deletes a record.",
+            "supportedIn": [
+                "client",
+                "server"
+            ],
+            "params": [
+                {
+                    "name": "options.type",
+                    "type": "string",
+                    "description": "The record type."
+                },
+                {
+                    "name": "options.id",
+                    "type": "number | string",
+                    "description": "The internal ID of the record instance in NetSuite."
+                }
+            ],
+            "returns": "number"
+        },
+        {
+            "name": "delete.promise",
+            "description": "Deletes a record asynchronously.",
+            "supportedIn": [
+                "client"
+            ],
+            "params": [
+                {
+                    "name": "options.type",
+                    "type": "string",
+                    "description": "The record type."
+                },
+                {
+                    "name": "options.id",
+                    "type": "number | string",
+                    "description": "The internal ID of the record instance in NetSuite."
+                }
+            ],
+            "returns": "Promise",
+            "returnType": "Promise<number>"
+        },
+        {
+            "name": "detach",
+            "description": "Detaches a record from another record.",
+            "supportedIn": [
+                "client",
+                "server"
+            ],
+            "params": [
+                {
+                    "name": "options.record",
+                    "type": "Object",
+                    "description": "The record to detach. Provide the type and id properties to identify the record to detach."
+                },
+                {
+                    "name": "options.from",
+                    "type": "Object",
+                    "description": "The record from which options.record gets detached. Provide the type and id properties to identify the source record."
+                },
+                {
+                    "name": "options.attributes",
+                    "type": "Object",
+                    "description": "The attributes used to detach the record.",
+                    "optional": true
+                }
+            ],
+            "returns": "void"
+        },
+        {
+            "name": "detach.promise",
+            "description": "Detaches a record from another record asynchronously.",
+            "supportedIn": [
+                "client"
+            ],
+            "params": [
+                {
+                    "name": "options.record",
+                    "type": "Object",
+                    "description": "The record to detach. Provide the type and id properties to identify the record to detach."
+                },
+                {
+                    "name": "options.from",
+                    "type": "Object",
+                    "description": "The record from which options.record gets detached. Provide the type and id properties to identify the source record."
+                },
+                {
+                    "name": "options.attributes",
+                    "type": "Object",
+                    "description": "The attributes used to detach the record.",
+                    "optional": true
+                }
+            ],
+            "returns": "Promise",
+            "returnType": "Promise<void>"
+        },
+        {
+            "name": "load",
+            "description": "Loads an existing record.",
+            "supportedIn": [
+                "client",
+                "server"
+            ],
+            "params": [
+                {
+                    "name": "options.type",
+                    "type": "string",
+                    "description": "The record type."
+                },
+                {
+                    "name": "options.id",
+                    "type": "number | string",
+                    "description": "The internal ID of the existing record instance in NetSuite."
+                },
+                {
+                    "name": "options.isDynamic",
+                    "type": "boolean",
+                    "description": "Determines whether the record is loaded in dynamic mode.",
+                    "optional": true
+                },
+                {
+                    "name": "options.defaultValues",
+                    "type": "Object",
+                    "description": "Name-value pairs containing default values of fields in the new record.",
+                    "optional": true
+                }
+            ],
+            "returns": "record.Record",
+            "returnType": "N/record#Record"
+        },
+        {
+            "name": "load.promise",
+            "description": "Loads an existing record asynchronously.",
+            "supportedIn": [
+                "client"
+            ],
+            "params": [
+                {
+                    "name": "options.type",
+                    "type": "string",
+                    "description": "The record type."
+                },
+                {
+                    "name": "options.id",
+                    "type": "number | string",
+                    "description": "The internal ID of the existing record instance in NetSuite."
+                },
+                {
+                    "name": "options.isDynamic",
+                    "type": "boolean",
+                    "description": "Determines whether the record is loaded in dynamic mode.",
+                    "optional": true
+                },
+                {
+                    "name": "options.defaultValues",
+                    "type": "Object",
+                    "description": "Name-value pairs containing default values of fields in the new record.",
+                    "optional": true
+                }
+            ],
+            "returns": "Promise",
+            "returnType": "Promise<N/record#Record>"
+        },
+        {
+            "name": "submitFields",
+            "description": "Updates and submits one or more body fields on an existing record in NetSuite, and returns the internal ID of the parent record.",
+            "supportedIn": [
+                "client",
+                "server"
+            ],
+            "params": [
+                {
+                    "name": "options.type",
+                    "type": "string",
+                    "description": "The record type."
+                },
+                {
+                    "name": "options.id",
+                    "type": "number | string",
+                    "description": "The internal ID of the existing record instance in NetSuite."
+                },
+                {
+                    "name": "options.values",
+                    "type": "Object",
+                    "description": "The ID-value pairs for each field you want to edit and submit."
+                },
+                {
+                    "name": "options.options",
+                    "type": "Object",
+                    "description": "Additional options to set for the submitted fields. Set options.options.enableSourcing to true to enable sourcing, and options.options.ignoreMandatoryFields to true to ignore mandatory field validation.",
+                    "optional": true
+                }
+            ],
+            "returns": "number"
+        },
+        {
+            "name": "submitFields.promise",
+            "description": "Updates and submits one or more body fields asynchronously on an existing record in NetSuite, and returns the internal ID of the parent record.",
+            "supportedIn": [
+                "client"
+            ],
+            "params": [
+                {
+                    "name": "options.type",
+                    "type": "string",
+                    "description": "The record type."
+                },
+                {
+                    "name": "options.id",
+                    "type": "number | string",
+                    "description": "The internal ID of the existing record instance in NetSuite."
+                },
+                {
+                    "name": "options.values",
+                    "type": "Object",
+                    "description": "The ID-value pairs for each field you want to edit and submit."
+                },
+                {
+                    "name": "options.options",
+                    "type": "Object",
+                    "description": "Additional options to set for the submitted fields. Set options.options.enableSourcing to true to enable sourcing, and options.options.ignoreMandatoryFields to true to ignore mandatory field validation.",
+                    "optional": true
+                }
+            ],
+            "returns": "Promise",
+            "returnType": "Promise<number>"
+        },
+        {
+            "name": "transform",
+            "description": "Transforms a record from one type into another, using data from an existing record.",
+            "supportedIn": [
+                "client",
+                "server"
+            ],
+            "params": [
+                {
+                    "name": "options.fromType",
+                    "type": "string",
+                    "description": "The record type of the existing record instance being transformed."
+                },
+                {
+                    "name": "options.fromId",
+                    "type": "number | string",
+                    "description": "The internal ID of the existing record instance being transformed."
+                },
+                {
+                    "name": "options.toType",
+                    "type": "string",
+                    "description": "The record type of the record returned when the transformation is complete."
+                },
+                {
+                    "name": "options.isDynamic",
+                    "type": "boolean",
+                    "description": "Determines whether the new record is created in dynamic mode.",
+                    "optional": true
+                },
+                {
+                    "name": "options.defaultValues",
+                    "type": "Object",
+                    "description": "Name-value pairs containing default values of fields in the new record.",
+                    "optional": true
+                }
+            ],
+            "returns": "record.Record",
+            "returnType": "N/record#Record"
+        },
+        {
+            "name": "transform.promise",
+            "description": "Transforms a record from one type into another asynchronously, using data from an existing record.",
+            "supportedIn": [
+                "client"
+            ],
+            "params": [
+                {
+                    "name": "options.fromType",
+                    "type": "string",
+                    "description": "The record type of the existing record instance being transformed."
+                },
+                {
+                    "name": "options.fromId",
+                    "type": "number | string",
+                    "description": "The internal ID of the existing record instance being transformed."
+                },
+                {
+                    "name": "options.toType",
+                    "type": "string",
+                    "description": "The record type of the record returned when the transformation is complete."
+                },
+                {
+                    "name": "options.isDynamic",
+                    "type": "boolean",
+                    "description": "Determines whether the new record is created in dynamic mode.",
+                    "optional": true
+                },
+                {
+                    "name": "options.defaultValues",
+                    "type": "Object",
+                    "description": "Name-value pairs containing default values of fields in the new record.",
+                    "optional": true
+                }
+            ],
+            "returns": "Promise",
+            "returnType": "Promise<N/record#Record>"
+        }
+    ],
+    "enums": [
+        {
+            "name": "Type",
+            "description": "Holds the string values for supported record types. Use this enum to set the value of the Record.type property in cases where you are working with an instance of a standard NetSuite record type.",
+            "supportedIn": [
+                "client",
+                "server"
+            ],
+            "members": [
+                {
+                    "name": "ACCOUNT",
+                    "value": "account",
+                    "description": "Account"
+                },
+                {
+                    "name": "ASSEMBLY_BUILD",
+                    "value": "assemblybuild",
+                    "description": "Assembly Build"
+                },
+                {
+                    "name": "ASSEMBLY_ITEM",
+                    "value": "assemblyitem",
+                    "description": "Assembly Item"
+                },
+                {
+                    "name": "BIN",
+                    "value": "bin",
+                    "description": "Bin"
+                },
+                {
+                    "name": "BLANKET_PURCHASE_ORDER",
+                    "value": "blanketpurchaseorder",
+                    "description": "Blanket Purchase Order"
+                },
+                {
+                    "name": "CASH_REFUND",
+                    "value": "cashrefund",
+                    "description": "Cash Refund"
+                },
+                {
+                    "name": "CASH_SALE",
+                    "value": "cashsale",
+                    "description": "Cash Sale"
+                },
+                {
+                    "name": "CHECK",
+                    "value": "check",
+                    "description": "Check"
+                },
+                {
+                    "name": "CONTACT",
+                    "value": "contact",
+                    "description": "Contact"
+                },
+                {
+                    "name": "CREDIT_MEMO",
+                    "value": "creditmemo",
+                    "description": "Credit Memo"
+                },
+                {
+                    "name": "CURRENCY",
+                    "value": "currency",
+                    "description": "Currency"
+                },
+                {
+                    "name": "CUSTOMER",
+                    "value": "customer",
+                    "description": "Customer"
+                },
+                {
+                    "name": "CUSTOMER_DEPOSIT",
+                    "value": "customerdeposit",
+                    "description": "Customer Deposit"
+                },
+                {
+                    "name": "CUSTOMER_PAYMENT",
+                    "value": "customerpayment",
+                    "description": "Customer Payment"
+                },
+                {
+                    "name": "CUSTOMER_REFUND",
+                    "value": "customerrefund",
+                    "description": "Customer Refund"
+                },
+                {
+                    "name": "DEPARTMENT",
+                    "value": "department",
+                    "description": "Department"
+                },
+                {
+                    "name": "DEPOSIT",
+                    "value": "deposit",
+                    "description": "Deposit"
+                },
+                {
+                    "name": "DEPOSIT_APPLICATION",
+                    "value": "depositapplication",
+                    "description": "Deposit Application"
+                },
+                {
+                    "name": "EMPLOYEE",
+                    "value": "employee",
+                    "description": "Employee"
+                },
+                {
+                    "name": "ESTIMATE",
+                    "value": "estimate",
+                    "description": "Estimate / Quote"
+                },
+                {
+                    "name": "EXPENSE_REPORT",
+                    "value": "expensereport",
+                    "description": "Expense Report"
+                },
+                {
+                    "name": "INTER_COMPANY_JOURNAL_ENTRY",
+                    "value": "intercompanyjournalentry",
+                    "description": "Intercompany Journal Entry"
+                },
+                {
+                    "name": "INVENTORY_ADJUSTMENT",
+                    "value": "inventoryadjustment",
+                    "description": "Inventory Adjustment"
+                },
+                {
+                    "name": "INVENTORY_ITEM",
+                    "value": "inventoryitem",
+                    "description": "Inventory Item"
+                },
+                {
+                    "name": "INVENTORY_TRANSFER",
+                    "value": "inventorytransfer",
+                    "description": "Inventory Transfer"
+                },
+                {
+                    "name": "INVOICE",
+                    "value": "invoice",
+                    "description": "Invoice"
+                },
+                {
+                    "name": "ITEM_FULFILLMENT",
+                    "value": "itemfulfillment",
+                    "description": "Item Fulfillment"
+                },
+                {
+                    "name": "ITEM_RECEIPT",
+                    "value": "itemreceipt",
+                    "description": "Item Receipt"
+                },
+                {
+                    "name": "JOURNAL_ENTRY",
+                    "value": "journalentry",
+                    "description": "Journal Entry"
+                },
+                {
+                    "name": "KIT_ITEM",
+                    "value": "kititem",
+                    "description": "Kit / Package Item"
+                },
+                {
+                    "name": "LEAD",
+                    "value": "lead",
+                    "description": "Lead"
+                },
+                {
+                    "name": "LOCATION",
+                    "value": "location",
+                    "description": "Location"
+                },
+                {
+                    "name": "LOT_NUMBERED_INVENTORY_ITEM",
+                    "value": "lotnumberedinventoryitem",
+                    "description": "Lot Numbered Inventory Item"
+                },
+                {
+                    "name": "NON_INVENTORY_ITEM",
+                    "value": "noninventoryitem",
+                    "description": "Non-Inventory Item"
+                },
+                {
+                    "name": "OPPORTUNITY",
+                    "value": "opportunity",
+                    "description": "Opportunity"
+                },
+                {
+                    "name": "OTHER_CHARGE_ITEM",
+                    "value": "otherchargeitem",
+                    "description": "Other Charge Item"
+                },
+                {
+                    "name": "PARTNER",
+                    "value": "partner",
+                    "description": "Partner"
+                },
+                {
+                    "name": "PAYCHECK_JOURNAL",
+                    "value": "paycheckjournal",
+                    "description": "Paycheck Journal"
+                },
+                {
+                    "name": "PHONE_CALL",
+                    "value": "phonecall",
+                    "description": "Phone Call"
+                },
+                {
+                    "name": "PRICE_LEVEL",
+                    "value": "pricelevel",
+                    "description": "Price Level"
+                },
+                {
+                    "name": "PROJECT_TASK",
+                    "value": "projecttask",
+                    "description": "Project Task"
+                },
+                {
+                    "name": "PURCHASE_ORDER",
+                    "value": "purchaseorder",
+                    "description": "Purchase Order"
+                },
+                {
+                    "name": "PURCHASE_REQUISITION",
+                    "value": "purchaserequisition",
+                    "description": "Purchase Requisition"
+                },
+                {
+                    "name": "RETURN_AUTHORIZATION",
+                    "value": "returnauthorization",
+                    "description": "Return Authorization (RMA)"
+                },
+                {
+                    "name": "SALES_ORDER",
+                    "value": "salesorder",
+                    "description": "Sales Order"
+                },
+                {
+                    "name": "SERIALIZED_INVENTORY_ITEM",
+                    "value": "serializedinventoryitem",
+                    "description": "Serialized Inventory Item"
+                },
+                {
+                    "name": "SERVICE_ITEM",
+                    "value": "serviceitem",
+                    "description": "Service Item"
+                },
+                {
+                    "name": "SUBSIDIARY",
+                    "value": "subsidiary",
+                    "description": "Subsidiary"
+                },
+                {
+                    "name": "SUPPORT_CASE",
+                    "value": "supportcase",
+                    "description": "Support Case"
+                },
+                {
+                    "name": "TASK",
+                    "value": "task",
+                    "description": "Task (CRM Activity)"
+                },
+                {
+                    "name": "TERM",
+                    "value": "term",
+                    "description": "Payment Term"
+                },
+                {
+                    "name": "TIME_BILL",
+                    "value": "timebill",
+                    "description": "Time Entry"
+                },
+                {
+                    "name": "TRANSFER_ORDER",
+                    "value": "transferorder",
+                    "description": "Transfer Order"
+                },
+                {
+                    "name": "VENDOR",
+                    "value": "vendor",
+                    "description": "Vendor"
+                },
+                {
+                    "name": "VENDOR_BILL",
+                    "value": "vendorbill",
+                    "description": "Vendor Bill"
+                },
+                {
+                    "name": "VENDOR_CREDIT",
+                    "value": "vendorcredit",
+                    "description": "Vendor Credit"
+                },
+                {
+                    "name": "VENDOR_PAYMENT",
+                    "value": "vendorpayment",
+                    "description": "Vendor Payment"
+                },
+                {
+                    "name": "VENDOR_RETURN_AUTHORIZATION",
+                    "value": "vendorreturnauthorization",
+                    "description": "Vendor Return Authorization"
+                },
+                {
+                    "name": "WORK_ORDER",
+                    "value": "workorder",
+                    "description": "Work Order"
+                },
+                {
+                    "name": "WORK_ORDER_CLOSE",
+                    "value": "workorderclose",
+                    "description": "Work Order Close"
+                },
+                {
+                    "name": "WORK_ORDER_COMPLETION",
+                    "value": "workordercompletion",
+                    "description": "Work Order Completion"
+                },
+                {
+                    "name": "WORK_ORDER_ISSUE",
+                    "value": "workorderissue",
+                    "description": "Work Order Issue"
+                }
+            ]
+        }
+    ],
+    "objectTypes": [
+        {
+            "name": "Column",
+            "description": "Encapsulates a column of a sublist on a standard or custom record.",
+            "supportedIn": [
+                "client",
+                "server"
+            ],
+            "methods": [],
+            "properties": [
+                {
+                    "name": "id",
+                    "type": "string",
+                    "readOnly": true,
+                    "description": "Returns the internal ID of the column."
+                },
+                {
+                    "name": "isDisabled",
+                    "type": "boolean",
+                    "description": "Indicates whether the column is disabled."
+                },
+                {
+                    "name": "isDisplay",
+                    "type": "boolean",
+                    "readOnly": true,
+                    "description": "Indicates whether the column is displayed."
+                },
+                {
+                    "name": "isMandatory",
+                    "type": "boolean",
+                    "description": "Indicates whether the column is required."
+                },
+                {
+                    "name": "isSortable",
+                    "type": "boolean",
+                    "readOnly": true,
+                    "description": "Indicates whether the column is sortable."
+                },
+                {
+                    "name": "label",
+                    "type": "string",
+                    "readOnly": true,
+                    "description": "Returns the UI label for the column."
+                },
+                {
+                    "name": "sublistId",
+                    "type": "string",
+                    "readOnly": true,
+                    "description": "Returns the internal ID of the standard or custom sublist that contains the column."
+                },
+                {
+                    "name": "type",
+                    "type": "string",
+                    "readOnly": true,
+                    "description": "Returns the column type."
+                }
+            ]
+        },
+        {
+            "name": "Field",
+            "description": "Encapsulates a body or sublist field on a standard or custom record.",
+            "supportedIn": [
+                "client",
+                "server"
+            ],
+            "methods": [
+                {
+                    "name": "getSelectOptions",
+                    "description": "Returns an array of available options on a standard or custom select, multiselect, or radio field as key-value pairs. Only the first 1,000 available options are returned.",
+                    "supportedIn": [
+                        "client",
+                        "server"
+                    ],
+                    "params": [
+                        {
+                            "name": "options.filter",
+                            "type": "string",
+                            "description": "A search string to filter the select options that are returned.",
+                            "optional": true
+                        },
+                        {
+                            "name": "options.operator",
+                            "type": "string",
+                            "description": "Defines how the filter is applied. Use one of the following values: contains, is, startswith.",
+                            "optional": true
+                        }
+                    ],
+                    "returns": "Object[]"
+                }
+            ],
+            "properties": [
+                {
+                    "name": "id",
+                    "type": "string",
+                    "readOnly": true,
+                    "description": "Returns the internal ID of a standard or custom body or sublist field."
+                },
+                {
+                    "name": "isDisabled",
+                    "type": "boolean",
+                    "description": "Indicates whether the field is disabled."
+                },
+                {
+                    "name": "isDisplay",
+                    "type": "boolean",
+                    "description": "Returns true if the field is visible on the record form, or false if it is not. This property is available only when working with a record in dynamic mode."
+                },
+                {
+                    "name": "isMandatory",
+                    "type": "boolean",
+                    "description": "Returns true if the standard or custom field is required on the record form, or false otherwise."
+                },
+                {
+                    "name": "isReadOnly",
+                    "type": "boolean",
+                    "description": "Indicates whether the field is read-only."
+                },
+                {
+                    "name": "isVisible",
+                    "type": "boolean",
+                    "description": "Indicates whether the field is visible on the form."
+                },
+                {
+                    "name": "label",
+                    "type": "string",
+                    "readOnly": true,
+                    "description": "Returns the UI label for a standard or custom field body or sublist field."
+                },
+                {
+                    "name": "sublistId",
+                    "type": "string",
+                    "readOnly": true,
+                    "description": "Returns the ID of the sublist associated with the specified sublist field. This property is available only when working with a record in dynamic mode."
+                },
+                {
+                    "name": "type",
+                    "type": "string",
+                    "readOnly": true,
+                    "description": "Returns the type of a body or sublist field."
+                }
+            ]
+        },
+        {
+            "name": "Macro",
+            "description": "Encapsulates a NetSuite record macro.",
+            "supportedIn": [
+                "client",
+                "server"
+            ],
+            "methods": [
+                {
+                    "name": "execute",
+                    "description": "Performs a macro operation and returns its result in an object.",
+                    "supportedIn": [
+                        "client",
+                        "server"
+                    ],
+                    "params": [
+                        {
+                            "name": "options",
+                            "type": "Object",
+                            "description": "Macro execution parameters.",
+                            "optional": true
+                        }
+                    ],
+                    "returns": "Object"
+                },
+                {
+                    "name": "execute.promise",
+                    "description": "Performs a macro operation asynchronously.",
+                    "supportedIn": [
+                        "client"
+                    ],
+                    "params": [
+                        {
+                            "name": "options",
+                            "type": "Object",
+                            "description": "Macro execution parameters.",
+                            "optional": true
+                        }
+                    ],
+                    "returns": "Promise",
+                    "returnType": "Promise<Object>"
+                }
+            ],
+            "properties": [
+                {
+                    "name": "id",
+                    "type": "string",
+                    "description": "The ID of the macro."
+                },
+                {
+                    "name": "label",
+                    "type": "string",
+                    "description": "The macro label."
+                },
+                {
+                    "name": "description",
+                    "type": "string",
+                    "description": "The macro description."
+                },
+                {
+                    "name": "attributes",
+                    "type": "Object",
+                    "description": "The macro defined attributes."
+                }
+            ]
+        },
+        {
+            "name": "Record",
+            "description": "Encapsulates a NetSuite record.",
+            "supportedIn": [
+                "client",
+                "server"
+            ],
+            "methods": [
+                {
+                    "name": "cancelLine",
+                    "description": "Cancels the currently selected line on a sublist.",
+                    "supportedIn": [
+                        "client",
+                        "server"
+                    ],
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist."
+                        }
+                    ],
+                    "returns": "record.Record",
+                    "returnType": "N/record#Record"
+                },
+                {
+                    "name": "commitLine",
+                    "description": "Commits the currently selected line on a sublist.",
+                    "supportedIn": [
+                        "client",
+                        "server"
+                    ],
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist."
+                        }
+                    ],
+                    "returns": "record.Record",
+                    "returnType": "N/record#Record"
+                },
+                {
+                    "name": "executeMacro",
+                    "description": "Performs macro operation and returns its result in a plain JavaScript object.",
+                    "supportedIn": [
+                        "client",
+                        "server"
+                    ],
+                    "params": [
+                        {
+                            "name": "options.id",
+                            "type": "string",
+                            "description": "The internal ID of the macro."
+                        },
+                        {
+                            "name": "options.params",
+                            "type": "Object",
+                            "description": "The macro parameters.",
+                            "optional": true
+                        }
+                    ],
+                    "returns": "Object"
+                },
+                {
+                    "name": "executeMacro.promise",
+                    "description": "Performs macro operation asynchronously and returns its result in a plain JavaScript object.",
+                    "supportedIn": [
+                        "client"
+                    ],
+                    "params": [
+                        {
+                            "name": "options.id",
+                            "type": "string",
+                            "description": "The internal ID of the macro."
+                        },
+                        {
+                            "name": "options.params",
+                            "type": "Object",
+                            "description": "The macro parameters.",
+                            "optional": true
+                        }
+                    ],
+                    "returns": "Promise",
+                    "returnType": "Promise<Object>"
+                },
+                {
+                    "name": "findMatrixSublistLineWithValue",
+                    "description": "Returns the line number of the first instance where a specified value is found in a specified column of the matrix.",
+                    "supportedIn": [
+                        "client",
+                        "server"
+                    ],
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist that contains the matrix."
+                        },
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the matrix field."
+                        },
+                        {
+                            "name": "options.column",
+                            "type": "number",
+                            "description": "The column number for the matrix field."
+                        },
+                        {
+                            "name": "options.value",
+                            "type": "number | Date | string | array | boolean",
+                            "description": "The value to search for."
+                        }
+                    ],
+                    "returns": "number"
+                },
+                {
+                    "name": "findSublistLineWithValue",
+                    "description": "Returns the line number for the first occurrence of a field value in a sublist.",
+                    "supportedIn": [
+                        "client",
+                        "server"
+                    ],
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist."
+                        },
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the field."
+                        },
+                        {
+                            "name": "options.value",
+                            "type": "number | Date | string | array | boolean",
+                            "description": "The value to search for."
+                        }
+                    ],
+                    "returns": "number"
+                },
+                {
+                    "name": "getCurrentMatrixSublistValue",
+                    "description": "Gets the value for the currently selected line in the matrix.",
+                    "supportedIn": [
+                        "client",
+                        "server"
+                    ],
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist that contains the matrix."
+                        },
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the matrix field."
+                        },
+                        {
+                            "name": "options.column",
+                            "type": "number",
+                            "description": "The column number for the matrix field."
+                        }
+                    ],
+                    "returns": "number | Date | string | array | boolean"
+                },
+                {
+                    "name": "getCurrentSublistField",
+                    "description": "Returns a field object from a sublist.",
+                    "supportedIn": [
+                        "client",
+                        "server"
+                    ],
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist."
+                        },
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the field."
+                        }
+                    ],
+                    "returns": "record.Field",
+                    "returnType": "N/record#Field"
+                },
+                {
+                    "name": "getCurrentSublistIndex",
+                    "description": "Returns the line number of the currently selected line.",
+                    "supportedIn": [
+                        "client",
+                        "server"
+                    ],
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist."
+                        }
+                    ],
+                    "returns": "number"
+                },
+                {
+                    "name": "getCurrentSublistSubrecord",
+                    "description": "Gets the subrecord for the associated sublist field on the current line.",
+                    "supportedIn": [
+                        "client",
+                        "server"
+                    ],
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist."
+                        },
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist field."
+                        }
+                    ],
+                    "returns": "record.Record",
+                    "returnType": "N/record#Record"
+                },
+                {
+                    "name": "getCurrentSublistText",
+                    "description": "Returns a text representation of the field value in the currently selected line.",
+                    "supportedIn": [
+                        "client",
+                        "server"
+                    ],
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist."
+                        },
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the field."
+                        }
+                    ],
+                    "returns": "string"
+                },
+                {
+                    "name": "getCurrentSublistValue",
+                    "description": "Returns the value of a sublist field on the currently selected sublist line.",
+                    "supportedIn": [
+                        "client",
+                        "server"
+                    ],
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist."
+                        },
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the field."
+                        }
+                    ],
+                    "returns": "number | Date | string | array | boolean"
+                },
+                {
+                    "name": "getField",
+                    "description": "Returns a field object from a record.",
+                    "supportedIn": [
+                        "client",
+                        "server"
+                    ],
+                    "params": [
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the field."
+                        }
+                    ],
+                    "returns": "record.Field",
+                    "returnType": "N/record#Field"
+                },
+                {
+                    "name": "getFields",
+                    "description": "Returns the body field names (internal ids) of all the fields in the record, including machine header field and matrix header fields.",
+                    "supportedIn": [
+                        "client",
+                        "server"
+                    ],
+                    "params": [],
+                    "returns": "string[]"
+                },
+                {
+                    "name": "getLineCount",
+                    "description": "Returns the number of lines in a sublist.",
+                    "supportedIn": [
+                        "client",
+                        "server"
+                    ],
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist."
+                        }
+                    ],
+                    "returns": "number"
+                },
+                {
+                    "name": "getMacro",
+                    "description": "Provides a macro to execute.",
+                    "supportedIn": [
+                        "client",
+                        "server"
+                    ],
+                    "params": [
+                        {
+                            "name": "options.id",
+                            "type": "string",
+                            "description": "The internal ID of the macro."
+                        }
+                    ],
+                    "returns": "record.Macro",
+                    "returnType": "N/record#Macro"
+                },
+                {
+                    "name": "getMacros",
+                    "description": "Provides a plain JavaScript object that contains macro objects defined for a record type, indexed by the Macro ID.",
+                    "supportedIn": [
+                        "client",
+                        "server"
+                    ],
+                    "params": [],
+                    "returns": "Object"
+                },
+                {
+                    "name": "getMatrixHeaderCount",
+                    "description": "Returns the number of columns for the specified matrix.",
+                    "supportedIn": [
+                        "client",
+                        "server"
+                    ],
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist that contains the matrix."
+                        },
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the matrix field."
+                        }
+                    ],
+                    "returns": "number"
+                },
+                {
+                    "name": "getMatrixHeaderField",
+                    "description": "Gets the field for the specified header in the matrix.",
+                    "supportedIn": [
+                        "client",
+                        "server"
+                    ],
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist that contains the matrix."
+                        },
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the matrix field."
+                        },
+                        {
+                            "name": "options.column",
+                            "type": "number",
+                            "description": "The column number for the matrix field."
+                        }
+                    ],
+                    "returns": "record.Field",
+                    "returnType": "N/record#Field"
+                },
+                {
+                    "name": "getMatrixHeaderValue",
+                    "description": "Gets the value for the associated header in the matrix.",
+                    "supportedIn": [
+                        "client",
+                        "server"
+                    ],
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist that contains the matrix."
+                        },
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the matrix field."
+                        },
+                        {
+                            "name": "options.column",
+                            "type": "number",
+                            "description": "The column number for the matrix field."
+                        }
+                    ],
+                    "returns": "number | Date | string | array | boolean"
+                },
+                {
+                    "name": "getMatrixSublistField",
+                    "description": "Gets the field for the specified sublist in the matrix.",
+                    "supportedIn": [
+                        "client",
+                        "server"
+                    ],
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist that contains the matrix."
+                        },
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the matrix field."
+                        },
+                        {
+                            "name": "options.line",
+                            "type": "number",
+                            "description": "The line number for the matrix field."
+                        },
+                        {
+                            "name": "options.column",
+                            "type": "number",
+                            "description": "The column number for the matrix field."
+                        }
+                    ],
+                    "returns": "record.Field",
+                    "returnType": "N/record#Field"
+                },
+                {
+                    "name": "getMatrixSublistValue",
+                    "description": "Gets the value for the associated field in the matrix.",
+                    "supportedIn": [
+                        "client",
+                        "server"
+                    ],
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist that contains the matrix."
+                        },
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the matrix field."
+                        },
+                        {
+                            "name": "options.line",
+                            "type": "number",
+                            "description": "The line number for the matrix field."
+                        },
+                        {
+                            "name": "options.column",
+                            "type": "number",
+                            "description": "The column number for the matrix field."
+                        }
+                    ],
+                    "returns": "number | Date | string | array | boolean"
+                },
+                {
+                    "name": "getSublist",
+                    "description": "Returns the specified sublist.",
+                    "supportedIn": [
+                        "client",
+                        "server"
+                    ],
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist."
+                        }
+                    ],
+                    "returns": "record.Sublist",
+                    "returnType": "N/record#Sublist"
+                },
+                {
+                    "name": "getSublists",
+                    "description": "Returns all the names of all the sublists.",
+                    "supportedIn": [
+                        "client",
+                        "server"
+                    ],
+                    "params": [],
+                    "returns": "string[]"
+                },
+                {
+                    "name": "getSublistField",
+                    "description": "Returns a field object from a sublist.",
+                    "supportedIn": [
+                        "client",
+                        "server"
+                    ],
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist."
+                        },
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the field."
+                        },
+                        {
+                            "name": "options.line",
+                            "type": "number",
+                            "description": "The line number."
+                        }
+                    ],
+                    "returns": "record.Field",
+                    "returnType": "N/record#Field"
+                },
+                {
+                    "name": "getSublistFields",
+                    "description": "Returns all the field names in a sublist.",
+                    "supportedIn": [
+                        "client",
+                        "server"
+                    ],
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist."
+                        }
+                    ],
+                    "returns": "string[]"
+                },
+                {
+                    "name": "getSublistSubrecord",
+                    "description": "Gets the subrecord associated with a sublist field. (standard mode only)",
+                    "supportedIn": [
+                        "client",
+                        "server"
+                    ],
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist."
+                        },
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist field."
+                        },
+                        {
+                            "name": "options.line",
+                            "type": "number",
+                            "description": "The line number for the sublist field."
+                        }
+                    ],
+                    "returns": "record.Record",
+                    "returnType": "N/record#Record"
+                },
+                {
+                    "name": "getSublistText",
+                    "description": "Returns the value of a sublist field in a text representation.",
+                    "supportedIn": [
+                        "client",
+                        "server"
+                    ],
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist."
+                        },
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the field."
+                        },
+                        {
+                            "name": "options.line",
+                            "type": "number",
+                            "description": "The line number."
+                        }
+                    ],
+                    "returns": "string"
+                },
+                {
+                    "name": "getSublistValue",
+                    "description": "Returns the value of a sublist field.",
+                    "supportedIn": [
+                        "client",
+                        "server"
+                    ],
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist."
+                        },
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the field."
+                        },
+                        {
+                            "name": "options.line",
+                            "type": "number",
+                            "description": "The line number."
+                        }
+                    ],
+                    "returns": "number | Date | string | array | boolean"
+                },
+                {
+                    "name": "getSubrecord",
+                    "description": "Gets the subrecord for the associated field.",
+                    "supportedIn": [
+                        "client",
+                        "server"
+                    ],
+                    "params": [
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the field."
+                        }
+                    ],
+                    "returns": "record.Record",
+                    "returnType": "N/record#Record"
+                },
+                {
+                    "name": "getText",
+                    "description": "Returns the text representation of a field value.",
+                    "supportedIn": [
+                        "client",
+                        "server"
+                    ],
+                    "params": [
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the field."
+                        }
+                    ],
+                    "returns": "string"
+                },
+                {
+                    "name": "getValue",
+                    "description": "Returns the value of a field. Not to be used on custom password fields. Use crypto.checkPasswordField(options) instead.",
+                    "supportedIn": [
+                        "client",
+                        "server"
+                    ],
+                    "params": [
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the field."
+                        }
+                    ],
+                    "returns": "number | Date | string | array | boolean"
+                },
+                {
+                    "name": "hasCurrentSublistSubrecord",
+                    "description": "Returns a value indicating whether the associated sublist field has a subrecord on the current line.",
+                    "supportedIn": [
+                        "client",
+                        "server"
+                    ],
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist."
+                        },
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist field."
+                        }
+                    ],
+                    "returns": "boolean"
+                },
+                {
+                    "name": "hasSublistSubrecord",
+                    "description": "Returns a value indicating whether the associated sublist field contains a subrecord.",
+                    "supportedIn": [
+                        "client",
+                        "server"
+                    ],
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist."
+                        },
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist field."
+                        },
+                        {
+                            "name": "options.line",
+                            "type": "number",
+                            "description": "The line number."
+                        }
+                    ],
+                    "returns": "boolean"
+                },
+                {
+                    "name": "hasSubrecord",
+                    "description": "Returns a value indicating whether the field contains a subrecord.",
+                    "supportedIn": [
+                        "client",
+                        "server"
+                    ],
+                    "params": [
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the field."
+                        }
+                    ],
+                    "returns": "boolean"
+                },
+                {
+                    "name": "insertLine",
+                    "description": "Inserts a sublist line.",
+                    "supportedIn": [
+                        "client",
+                        "server"
+                    ],
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist."
+                        },
+                        {
+                            "name": "options.line",
+                            "type": "number",
+                            "description": "The line number at which to insert a sublist line."
+                        },
+                        {
+                            "name": "options.ignoreRecalc",
+                            "type": "boolean",
+                            "description": "If set to true, the formula fields are not recalculated after the line is inserted.",
+                            "optional": true
+                        }
+                    ],
+                    "returns": "record.Record",
+                    "returnType": "N/record#Record"
+                },
+                {
+                    "name": "removeCurrentSublistSubrecord",
+                    "description": "Removes the subrecord for the associated sublist field on the current line.",
+                    "supportedIn": [
+                        "client",
+                        "server"
+                    ],
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist."
+                        },
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist field."
+                        }
+                    ],
+                    "returns": "record.Record",
+                    "returnType": "N/record#Record"
+                },
+                {
+                    "name": "removeLine",
+                    "description": "Removes a sublist line.",
+                    "supportedIn": [
+                        "client",
+                        "server"
+                    ],
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist."
+                        },
+                        {
+                            "name": "options.line",
+                            "type": "number",
+                            "description": "The line number to remove."
+                        },
+                        {
+                            "name": "options.ignoreRecalc",
+                            "type": "boolean",
+                            "description": "If set to true, the formula fields are not recalculated after the line is removed.",
+                            "optional": true
+                        }
+                    ],
+                    "returns": "record.Record",
+                    "returnType": "N/record#Record"
+                },
+                {
+                    "name": "removeSublistSubrecord",
+                    "description": "Removes the subrecord for the associated sublist field. (standard mode only)",
+                    "supportedIn": [
+                        "client",
+                        "server"
+                    ],
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist."
+                        },
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist field."
+                        },
+                        {
+                            "name": "options.line",
+                            "type": "number",
+                            "description": "The line number."
+                        }
+                    ],
+                    "returns": "record.Record",
+                    "returnType": "N/record#Record"
+                },
+                {
+                    "name": "removeSubrecord",
+                    "description": "Removes the subrecord for the associated field.",
+                    "supportedIn": [
+                        "client",
+                        "server"
+                    ],
+                    "params": [
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the field."
+                        }
+                    ],
+                    "returns": "record.Record",
+                    "returnType": "N/record#Record"
+                },
+                {
+                    "name": "save",
+                    "description": "Submits a new record or saves edits to an existing record. This method is not available to subrecords.",
+                    "supportedIn": [
+                        "client",
+                        "server"
+                    ],
+                    "params": [
+                        {
+                            "name": "options.enableSourcing",
+                            "type": "boolean",
+                            "description": "If set to true, body and sublist fields with source from will be sourced when the record is saved.",
+                            "optional": true
+                        },
+                        {
+                            "name": "options.ignoreMandatoryFields",
+                            "type": "boolean",
+                            "description": "If set to true, mandatory field validation is ignored when the record is submitted.",
+                            "optional": true
+                        }
+                    ],
+                    "returns": "number"
+                },
+                {
+                    "name": "save.promise",
+                    "description": "Submits a new record asynchronously or saves edits to an existing record asynchronously. This method is not available to subrecords.",
+                    "supportedIn": [
+                        "client"
+                    ],
+                    "params": [
+                        {
+                            "name": "options.enableSourcing",
+                            "type": "boolean",
+                            "description": "If set to true, body and sublist fields with source from will be sourced when the record is saved.",
+                            "optional": true
+                        },
+                        {
+                            "name": "options.ignoreMandatoryFields",
+                            "type": "boolean",
+                            "description": "If set to true, mandatory field validation is ignored when the record is submitted.",
+                            "optional": true
+                        }
+                    ],
+                    "returns": "Promise",
+                    "returnType": "Promise<number>"
+                },
+                {
+                    "name": "selectLine",
+                    "description": "Selects an existing line in a sublist.",
+                    "supportedIn": [
+                        "client",
+                        "server"
+                    ],
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist."
+                        },
+                        {
+                            "name": "options.line",
+                            "type": "number",
+                            "description": "The line number to select."
+                        }
+                    ],
+                    "returns": "record.Record",
+                    "returnType": "N/record#Record"
+                },
+                {
+                    "name": "selectNewLine",
+                    "description": "Selects a new line at the end of a sublist.",
+                    "supportedIn": [
+                        "client",
+                        "server"
+                    ],
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist."
+                        }
+                    ],
+                    "returns": "record.Record",
+                    "returnType": "N/record#Record"
+                },
+                {
+                    "name": "setCurrentMatrixSublistValue",
+                    "description": "Sets the value for the line currently selected in the matrix.",
+                    "supportedIn": [
+                        "client",
+                        "server"
+                    ],
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist that contains the matrix."
+                        },
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the matrix field."
+                        },
+                        {
+                            "name": "options.column",
+                            "type": "number",
+                            "description": "The column number for the matrix field."
+                        },
+                        {
+                            "name": "options.value",
+                            "type": "number | Date | string | array | boolean",
+                            "description": "The value to set."
+                        },
+                        {
+                            "name": "options.ignoreFieldChange",
+                            "type": "boolean",
+                            "description": "If set to true, the field change script is not triggered by this value change.",
+                            "optional": true
+                        }
+                    ],
+                    "returns": "record.Record",
+                    "returnType": "N/record#Record"
+                },
+                {
+                    "name": "setCurrentSublistText",
+                    "description": "Sets the value for the field in the currently selected line by a text representation.",
+                    "supportedIn": [
+                        "client",
+                        "server"
+                    ],
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist."
+                        },
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the field."
+                        },
+                        {
+                            "name": "options.text",
+                            "type": "string",
+                            "description": "The text to change the field value to."
+                        },
+                        {
+                            "name": "options.ignoreFieldChange",
+                            "type": "boolean",
+                            "description": "If set to true, the field change script is not triggered by this value change.",
+                            "optional": true
+                        }
+                    ],
+                    "returns": "record.Record",
+                    "returnType": "N/record#Record"
+                },
+                {
+                    "name": "setCurrentSublistValue",
+                    "description": "Sets the value for the field in the currently selected line.",
+                    "supportedIn": [
+                        "client",
+                        "server"
+                    ],
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist."
+                        },
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the field."
+                        },
+                        {
+                            "name": "options.value",
+                            "type": "number | Date | string | array | boolean",
+                            "description": "The value to set."
+                        },
+                        {
+                            "name": "options.ignoreFieldChange",
+                            "type": "boolean",
+                            "description": "If set to true, the field change script is not triggered by this value change.",
+                            "optional": true
+                        },
+                        {
+                            "name": "options.forceSyncSourcing",
+                            "type": "boolean",
+                            "description": "Indicates whether to perform field sourcing synchronously.",
+                            "optional": true
+                        }
+                    ],
+                    "returns": "record.Record",
+                    "returnType": "N/record#Record"
+                },
+                {
+                    "name": "setMatrixHeaderValue",
+                    "description": "Sets the value for the associated header in the matrix.",
+                    "supportedIn": [
+                        "client",
+                        "server"
+                    ],
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist that contains the matrix."
+                        },
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the matrix field."
+                        },
+                        {
+                            "name": "options.column",
+                            "type": "number",
+                            "description": "The column number for the matrix field."
+                        },
+                        {
+                            "name": "options.value",
+                            "type": "number | Date | string | array | boolean",
+                            "description": "The value to set."
+                        },
+                        {
+                            "name": "options.ignoreFieldChange",
+                            "type": "boolean",
+                            "description": "If set to true, the field change script is not triggered by this value change.",
+                            "optional": true
+                        }
+                    ],
+                    "returns": "record.Record",
+                    "returnType": "N/record#Record"
+                },
+                {
+                    "name": "setMatrixSublistValue",
+                    "description": "Sets the value for the associated field in the matrix.",
+                    "supportedIn": [
+                        "client",
+                        "server"
+                    ],
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist that contains the matrix."
+                        },
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the matrix field."
+                        },
+                        {
+                            "name": "options.line",
+                            "type": "number",
+                            "description": "The line number for the matrix field."
+                        },
+                        {
+                            "name": "options.column",
+                            "type": "number",
+                            "description": "The column number for the matrix field."
+                        },
+                        {
+                            "name": "options.value",
+                            "type": "number | Date | string | array | boolean",
+                            "description": "The value to set."
+                        }
+                    ],
+                    "returns": "record.Record",
+                    "returnType": "N/record#Record"
+                },
+                {
+                    "name": "setSublistText",
+                    "description": "Sets the value of a sublist field by a text representation. (standard mode only)",
+                    "supportedIn": [
+                        "client",
+                        "server"
+                    ],
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist."
+                        },
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the field."
+                        },
+                        {
+                            "name": "options.line",
+                            "type": "number",
+                            "description": "The line number."
+                        },
+                        {
+                            "name": "options.text",
+                            "type": "string",
+                            "description": "The text to set."
+                        }
+                    ],
+                    "returns": "record.Record",
+                    "returnType": "N/record#Record"
+                },
+                {
+                    "name": "setSublistValue",
+                    "description": "Sets the value of a sublist field. (standard mode only)",
+                    "supportedIn": [
+                        "client",
+                        "server"
+                    ],
+                    "params": [
+                        {
+                            "name": "options.sublistId",
+                            "type": "string",
+                            "description": "The internal ID of the sublist."
+                        },
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the field."
+                        },
+                        {
+                            "name": "options.line",
+                            "type": "number",
+                            "description": "The line number."
+                        },
+                        {
+                            "name": "options.value",
+                            "type": "number | Date | string | array | boolean",
+                            "description": "The value to set."
+                        }
+                    ],
+                    "returns": "record.Record",
+                    "returnType": "N/record#Record"
+                },
+                {
+                    "name": "setText",
+                    "description": "Sets the value of the field by a text representation.",
+                    "supportedIn": [
+                        "client",
+                        "server"
+                    ],
+                    "params": [
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the field."
+                        },
+                        {
+                            "name": "options.text",
+                            "type": "string | string[]",
+                            "description": "The text or array of texts to change the field value to."
+                        },
+                        {
+                            "name": "options.ignoreFieldChange",
+                            "type": "boolean",
+                            "description": "If set to true, the field change script is not triggered by this value change.",
+                            "optional": true
+                        }
+                    ],
+                    "returns": "record.Record",
+                    "returnType": "N/record#Record"
+                },
+                {
+                    "name": "setText.promise",
+                    "description": "Sets the value of the field by a text representation asynchronously.",
+                    "supportedIn": [
+                        "client"
+                    ],
+                    "params": [
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the field."
+                        },
+                        {
+                            "name": "options.text",
+                            "type": "string | string[]",
+                            "description": "The text or array of texts to change the field value to."
+                        },
+                        {
+                            "name": "options.ignoreFieldChange",
+                            "type": "boolean",
+                            "description": "If set to true, the field change script is not triggered by this value change.",
+                            "optional": true
+                        }
+                    ],
+                    "returns": "Promise",
+                    "returnType": "Promise<N/record#Record>"
+                },
+                {
+                    "name": "setValue",
+                    "description": "Sets the value of a field.",
+                    "supportedIn": [
+                        "client",
+                        "server"
+                    ],
+                    "params": [
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the field."
+                        },
+                        {
+                            "name": "options.value",
+                            "type": "number | Date | string | array | boolean",
+                            "description": "The value to set."
+                        },
+                        {
+                            "name": "options.ignoreFieldChange",
+                            "type": "boolean",
+                            "description": "If set to true, the field change script is not triggered by this value change.",
+                            "optional": true
+                        },
+                        {
+                            "name": "options.forceSyncSourcing",
+                            "type": "boolean",
+                            "description": "Indicates whether to perform field sourcing synchronously.",
+                            "optional": true
+                        }
+                    ],
+                    "returns": "record.Record",
+                    "returnType": "N/record#Record"
+                }
+            ],
+            "properties": [
+                {
+                    "name": "id",
+                    "type": "number",
+                    "readOnly": true,
+                    "description": "The internal ID of a specific record. This property is not available to subrecords."
+                },
+                {
+                    "name": "isDynamic",
+                    "type": "boolean",
+                    "readOnly": true,
+                    "description": "Indicates whether the record is in dynamic or standard mode."
+                },
+                {
+                    "name": "type",
+                    "type": "string",
+                    "readOnly": true,
+                    "description": "The record type. This property is not available to subrecords."
+                }
+            ]
+        },
+        {
+            "name": "Sublist",
+            "description": "Encapsulates a sublist on a standard or custom record.",
+            "supportedIn": [
+                "client",
+                "server"
+            ],
+            "methods": [
+                {
+                    "name": "getColumn",
+                    "description": "Returns a column in the sublist.",
+                    "supportedIn": [
+                        "client",
+                        "server"
+                    ],
+                    "params": [
+                        {
+                            "name": "options.fieldId",
+                            "type": "string",
+                            "description": "The internal ID of the column field."
+                        }
+                    ],
+                    "returns": "record.Column",
+                    "returnType": "N/record#Column"
+                }
+            ],
+            "properties": [
+                {
+                    "name": "id",
+                    "type": "string",
+                    "readOnly": true,
+                    "description": "Returns the internal ID of the sublist."
+                },
+                {
+                    "name": "isChanged",
+                    "type": "boolean",
+                    "readOnly": true,
+                    "description": "Indicates whether the sublist has changed on the record form."
+                },
+                {
+                    "name": "isDisplay",
+                    "type": "boolean",
+                    "readOnly": true,
+                    "description": "Indicates whether the sublist is displayed on the record form."
+                },
+                {
+                    "name": "type",
+                    "type": "string",
+                    "readOnly": true,
+                    "description": "Returns the sublist type."
+                }
+            ]
+        }
+    ]
+}

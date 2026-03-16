@@ -1,0 +1,6 @@
+<emailtemplate scriptid="{{SCRIPTID}}">
+    <name></name>
+    <description></description>
+    <isinactive>F</isinactive>
+    <subject></subject>
+</emailtemplate>

@@ -1,0 +1,73 @@
+{
+    "module": "N/encode",
+    "description": "Use the N/encode module to convert a string to another type of encoding. This module exposes string encoding and decoding functionality.",
+    "supportedIn": ["server"],
+    "methods": [
+        {
+            "name": "convert",
+            "description": "Converts a string to another type of encoding and returns the re-encoded string.",
+            "params": [
+                {
+                    "name": "options",
+                    "type": "Object",
+                    "description": "Encoding options object."
+                },
+                {
+                    "name": "options.string",
+                    "type": "string",
+                    "description": "The string to encode."
+                },
+                {
+                    "name": "options.inputEncoding",
+                    "type": "string",
+                    "description": "The encoding used for the input string. Use encode.Encoding to set the value."
+                },
+                {
+                    "name": "options.outputEncoding",
+                    "type": "string",
+                    "description": "The encoding to apply to the output string. Use encode.Encoding to set the value."
+                }
+            ],
+            "returns": "string"
+        }
+    ],
+    "enums": [
+        {
+            "name": "Encoding",
+            "description": "Holds the string values for the supported character set encoding. Use this enum to set the inputEncoding and outputEncoding parameter values in N/crypto or N/encode modules.",
+            "members": [
+                {
+                    "name": "UTF_8",
+                    "value": "UTF_8",
+                    "description": "UTF-8 encoding."
+                },
+                {
+                    "name": "BASE_16",
+                    "value": "BASE_16",
+                    "description": "Base 16 encoding."
+                },
+                {
+                    "name": "BASE_32",
+                    "value": "BASE_32",
+                    "description": "Base 32 encoding."
+                },
+                {
+                    "name": "BASE_64",
+                    "value": "BASE_64",
+                    "description": "Base 64 encoding."
+                },
+                {
+                    "name": "BASE_64_URL_SAFE",
+                    "value": "BASE_64_URL_SAFE",
+                    "description": "URL-safe Base 64 encoding. Uses different character set: + replaced with -, / replaced with _. Padding represented by =."
+                },
+                {
+                    "name": "HEX",
+                    "value": "HEX",
+                    "description": "Hexadecimal encoding."
+                }
+            ]
+        }
+    ],
+    "objectTypes": []
+}

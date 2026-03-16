@@ -1,0 +1,183 @@
+[
+    {
+        "id": "clientscript",
+        "label": "Client Script",
+        "xmlTag": "clientscript",
+        "scriptTypeAnnotation": "ClientScript",
+        "description": "Client scripts execute in the user's browser, enhancing the user interface. They can validate data, auto-populate fields, and respond to events like form loading, field value changes, or saving a form.",
+        "entryPoints": [
+            {
+                "id": "pageInit",
+                "description": "Fires when the form fully loads. Use to set default values, hide/show fields, or configure the UI on load."
+            },
+            {
+                "id": "fieldChanged",
+                "description": "Fires whenever a field value changes. Receives the field ID. Use to react to user input and update dependent fields."
+            },
+            {
+                "id": "postSourcing",
+                "description": "Fires after a field that sources its value from another record has been populated. Useful for reacting to sourced data."
+            },
+            {
+                "id": "lineInit",
+                "description": "Fires when a new sublist line is initialized (before the user enters values). Use to set default line values."
+            },
+            {
+                "id": "validateField",
+                "description": "Fires when the user attempts to change a field. Return false to reject the change and revert to the previous value."
+            },
+            {
+                "id": "validateLine",
+                "description": "Fires when the user commits a sublist line. Return false to reject the line and keep it in edit mode."
+            },
+            {
+                "id": "validateInsert",
+                "description": "Fires before a new sublist line is inserted. Return false to prevent the insertion."
+            },
+            {
+                "id": "validateDelete",
+                "description": "Fires before a sublist line is deleted. Return false to prevent the deletion."
+            },
+            {
+                "id": "saveRecord",
+                "description": "Fires when the user clicks Save. Return false to cancel the save and display a validation error to the user."
+            }
+        ]
+    },
+    {
+        "id": "usereventscript",
+        "label": "User Event Script",
+        "xmlTag": "usereventscript",
+        "scriptTypeAnnotation": "UserEventScript",
+        "description": "These server scripts are triggered when specific actions occur on records, such as creation, loading, updating, copying, deleting, or submitting. They are used for customizing workflows, enforcing business rules, and additional processing.",
+        "entryPoints": [
+            {
+                "id": "beforeLoad",
+                "description": "Fires before a record is displayed. Use to modify the form layout, add buttons, set field values, or control form appearance."
+            },
+            {
+                "id": "beforeSubmit",
+                "description": "Fires before a record is saved (before the database write). Use for server-side validation. Throw an error to cancel the save."
+            },
+            {
+                "id": "afterSubmit",
+                "description": "Fires after a record is saved (after the database write). Use for post-save automation: sending emails, creating related records, updating other systems."
+            }
+        ]
+    },
+    {
+        "id": "scheduledscript",
+        "label": "Scheduled Script",
+        "xmlTag": "scheduledscript",
+        "scriptTypeAnnotation": "ScheduledScript",
+        "description": "These server-side scripts are executed at a future time or on a recurring basis. They are suitable for batch processing or long-running background tasks.",
+        "entryPoints": [
+            {
+                "id": "execute",
+                "description": "The single entry point. Called each time the script is triggered. Contains all your batch processing logic."
+            }
+        ]
+    },
+    {
+        "id": "mapreducescript",
+        "label": "Map/Reduce Script",
+        "xmlTag": "mapreducescript",
+        "scriptTypeAnnotation": "MapReduceScript",
+        "description": "Designed for processing large volumes of records or data, these scripts can be scheduled or run on-demand. They provide a structured framework for parallel processing and handle automatic yielding if governance limits are exceeded.",
+        "entryPoints": [
+            {
+                "id": "getInputData",
+                "description": "Stage 1: Returns the dataset to process. Can return a search object, an array of objects, or a plain object. Each item becomes one map() call."
+            },
+            {
+                "id": "map",
+                "description": "Stage 2: Processes each individual item from getInputData. Called once per item. Write key/value pairs using context.write(key, value)."
+            },
+            {
+                "id": "reduce",
+                "description": "Stage 3: Aggregates values grouped by the same key from the map stage. Called once per unique key. Use for consolidation and summary logic."
+            },
+            {
+                "id": "summarize",
+                "description": "Stage 4: Called once after all stages complete. Use to handle errors from all stages, send summary notifications, and log final results."
+            }
+        ]
+    },
+    {
+        "id": "suitelet",
+        "label": "Suitelet",
+        "xmlTag": "suitelet",
+        "scriptTypeAnnotation": "Suitelet",
+        "description": "Suitelets are server-side scripts that enable the creation of custom pages, forms, and user interfaces within NetSuite.",
+        "entryPoints": [
+            {
+                "id": "onRequest",
+                "description": "Handles all incoming HTTP requests. Check context.request.method to distinguish GET (display) from POST (process). Build the response using N/ui/serverWidget or write raw HTML."
+            }
+        ]
+    },
+    {
+        "id": "restlet",
+        "label": "RESTlet",
+        "xmlTag": "restlet",
+        "scriptTypeAnnotation": "Restlet",
+        "description": "RESTlets are server-side scripts that facilitate integration with external applications by responding to HTTP requests.",
+        "entryPoints": [
+            {
+                "id": "get",
+                "description": "Handles HTTP GET requests. Receives the query parameters as an object. Use for reading/fetching data. Return a JSON-serializable object."
+            },
+            {
+                "id": "post",
+                "description": "Handles HTTP POST requests. Receives the request body as an object. Use for creating records or triggering actions."
+            },
+            {
+                "id": "put",
+                "description": "Handles HTTP PUT requests. Receives the request body. Use for updating existing records."
+            },
+            {
+                "id": "delete",
+                "description": "Handles HTTP DELETE requests. Receives the query parameters. Use for deleting records."
+            }
+        ]
+    },
+    {
+        "id": "portlet",
+        "label": "Portlet",
+        "xmlTag": "portlet",
+        "scriptTypeAnnotation": "Portlet",
+        "description": "Portlet scripts are used to create custom dashboard portlets, allowing for dynamic content display.",
+        "entryPoints": [
+            {
+                "id": "render",
+                "description": "Called each time the portlet is loaded or refreshed. Use params.portlet to build the portlet content using N/ui/serverWidget."
+            }
+        ]
+    },
+    {
+        "id": "massupdatescript",
+        "label": "Mass Update Script",
+        "xmlTag": "massupdatescript",
+        "scriptTypeAnnotation": "MassUpdateScript",
+        "description": "These scripts are used for performing bulk updates on records.",
+        "entryPoints": [
+            {
+                "id": "each",
+                "description": "Called once for each record in the selection. Use params.id and params.type to identify and load the record being processed."
+            }
+        ]
+    },
+    {
+        "id": "workflowactionscript",
+        "label": "Workflow Action Script",
+        "xmlTag": "workflowactionscript",
+        "scriptTypeAnnotation": "WorkflowActionScript",
+        "description": "These scripts extend the functionality of NetSuite workflows by executing custom logic at specific points within a workflow.",
+        "entryPoints": [
+            {
+                "id": "onAction",
+                "description": "Executes when the workflow reaches this action. Use context.newRecord to access the current record and context.workflowId to identify the triggering workflow."
+            }
+        ]
+    }
+]

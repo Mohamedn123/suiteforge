@@ -1,0 +1,1174 @@
+{
+    "module": "N/query",
+    "description": "Use the N/query module to create and run queries using the SuiteAnalytics Workbook query process. You can create multilevel joins, conditions using AND/OR/NOT logic, sort results, load and delete saved queries, view paged results, and run arbitrary SuiteQL queries.",
+    "supportedIn": ["client", "server"],
+    "methods": [
+        {
+            "name": "create",
+            "description": "Creates the query definition. This is the first step in creating a query with the N/query module.",
+            "supportedIn": ["client", "server"],
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options object." },
+                { "name": "options.type", "type": "string", "description": "The query type to use. Use values from query.Type." }
+            ],
+            "returns": "query.Query",
+            "returnType": "N/query#Query"
+        },
+        {
+            "name": "createPeriod",
+            "description": "Creates a query.Period object that represents a period of time to use in query conditions.",
+            "supportedIn": ["client", "server"],
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options object." },
+                { "name": "options.code", "type": "string", "description": "The period code. Use values from query.PeriodCode." },
+                { "name": "options.adjustment", "type": "string", "description": "The period adjustment. Use values from query.PeriodAdjustment.", "optional": true },
+                { "name": "options.type", "type": "string", "description": "The period type. Use values from query.PeriodType.", "optional": true }
+            ],
+            "returns": "query.Period",
+            "returnType": "N/query#Period"
+        },
+        {
+            "name": "createRelativeDate",
+            "description": "Creates a query.RelativeDate object that represents a date relative to the current date.",
+            "supportedIn": ["client", "server"],
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options object." },
+                { "name": "options.dateId", "type": "string", "description": "The date ID. Use values from query.DateId." },
+                { "name": "options.value", "type": "number", "description": "The value of the relative date." }
+            ],
+            "returns": "query.RelativeDate",
+            "returnType": "N/query#RelativeDate"
+        },
+        {
+            "name": "delete",
+            "description": "Deletes an existing saved query that was created using the SuiteAnalytics Workbook UI.",
+            "supportedIn": ["client", "server"],
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options object." },
+                { "name": "options.id", "type": "number | string", "description": "The ID of the query to delete." }
+            ],
+            "returns": "void"
+        },
+        {
+            "name": "listTables",
+            "description": "Lists the table view objects that are included in a workbook in SuiteAnalytics Workbook.",
+            "supportedIn": ["client", "server"],
+            "params": [],
+            "returns": "Object[]"
+        },
+        {
+            "name": "load",
+            "description": "Loads an existing saved query that was created using the SuiteAnalytics Workbook UI. The loaded query can be modified, joined, and executed.",
+            "supportedIn": ["client", "server"],
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options object." },
+                { "name": "options.id", "type": "number | string", "description": "The ID of the query to load." }
+            ],
+            "returns": "query.Query",
+            "returnType": "N/query#Query"
+        },
+        {
+            "name": "load.promise",
+            "description": "Asynchronously loads an existing saved query that was created using the SuiteAnalytics Workbook UI.",
+            "supportedIn": ["client", "server"],
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options object." },
+                { "name": "options.id", "type": "number | string", "description": "The ID of the query to load." }
+            ],
+            "returns": "Promise<query.Query>",
+            "returnType": "Promise<N/query#Query>"
+        },
+        {
+            "name": "runSuiteQL",
+            "description": "Runs an arbitrary SuiteQL query and returns the result set.",
+            "supportedIn": ["client", "server"],
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options object." },
+                { "name": "options.query", "type": "string", "description": "The SuiteQL query string to execute." },
+                { "name": "options.params", "type": "Array", "description": "Parameter values for the SuiteQL query.", "optional": true }
+            ],
+            "returns": "query.ResultSet",
+            "returnType": "N/query#ResultSet"
+        },
+        {
+            "name": "runSuiteQL.promise",
+            "description": "Asynchronously runs an arbitrary SuiteQL query.",
+            "supportedIn": ["client", "server"],
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options object." },
+                { "name": "options.query", "type": "string", "description": "The SuiteQL query string to execute." },
+                { "name": "options.params", "type": "Array", "description": "Parameter values for the SuiteQL query.", "optional": true }
+            ],
+            "returns": "Promise<query.ResultSet>",
+            "returnType": "Promise<N/query#ResultSet>"
+        },
+        {
+            "name": "runSuiteQLPaged",
+            "description": "Runs an arbitrary SuiteQL query as a paged query and returns paged results.",
+            "supportedIn": ["client", "server"],
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options object." },
+                { "name": "options.query", "type": "string", "description": "The SuiteQL query string to execute." },
+                { "name": "options.params", "type": "Array", "description": "Parameter values for the SuiteQL query.", "optional": true },
+                { "name": "options.pageSize", "type": "number", "description": "The number of results per page. Default is 50.", "optional": true }
+            ],
+            "returns": "query.PagedData",
+            "returnType": "N/query#PagedData"
+        },
+        {
+            "name": "runSuiteQLPaged.promise",
+            "description": "Asynchronously runs an arbitrary SuiteQL query as a paged query.",
+            "supportedIn": ["client", "server"],
+            "params": [
+                { "name": "options", "type": "Object", "description": "Options object." },
+                { "name": "options.query", "type": "string", "description": "The SuiteQL query string to execute." },
+                { "name": "options.params", "type": "Array", "description": "Parameter values for the SuiteQL query.", "optional": true },
+                { "name": "options.pageSize", "type": "number", "description": "The number of results per page.", "optional": true }
+            ],
+            "returns": "Promise<query.PagedData>",
+            "returnType": "Promise<N/query#PagedData>"
+        }
+    ],
+    "enums": [
+        {
+            "name": "Aggregate",
+            "description": "Holds the string values for aggregate functions supported with the N/query module.",
+            "members": [
+                { "name": "AVERAGE", "value": "AVERAGE", "description": "Calculates the average value." },
+                { "name": "AVERAGE_DISTINCT", "value": "AVERAGE_DISTINCT", "description": "Calculates the average distinct value." },
+                { "name": "COUNT", "value": "COUNT", "description": "Counts the number of results." },
+                { "name": "COUNT_DISTINCT", "value": "COUNT_DISTINCT", "description": "Counts the number of distinct results." },
+                { "name": "MAXIMUM", "value": "MAXIMUM", "description": "Determines the maximum value." },
+                { "name": "MAXIMUM_DISTINCT", "value": "MAXIMUM_DISTINCT", "description": "Determines the maximum distinct value." },
+                { "name": "MEDIAN", "value": "MEDIAN", "description": "Calculates the median value." },
+                { "name": "MINIMUM", "value": "MINIMUM", "description": "Determines the minimum value." },
+                { "name": "MINIMUM_DISTINCT", "value": "MINIMUM_DISTINCT", "description": "Determines the minimum distinct value." },
+                { "name": "SUM", "value": "SUM", "description": "Adds all values." },
+                { "name": "SUM_DISTINCT", "value": "SUM_DISTINCT", "description": "Adds all distinct values." }
+            ]
+        },
+        {
+            "name": "DateId",
+            "description": "Holds the string values for supported date codes in relative dates. Used to pass the dateId argument to query.createRelativeDate(options).",
+            "members": [
+                { "name": "DAYS_AGO", "value": "DAYS_AGO", "description": "Days ago" },
+                { "name": "DAYS_FROM_NOW", "value": "DAYS_FROM_NOW", "description": "Days from now" },
+                { "name": "HOURS_AGO", "value": "HOURS_AGO", "description": "Hours ago" },
+                { "name": "HOURS_FROM_NOW", "value": "HOURS_FROM_NOW", "description": "Hours from now" },
+                { "name": "MINUTES_AGO", "value": "MINUTES_AGO", "description": "Minutes ago" },
+                { "name": "MINUTES_FROM_NOW", "value": "MINUTES_FROM_NOW", "description": "Minutes from now" },
+                { "name": "MONTHS_AGO", "value": "MONTHS_AGO", "description": "Months ago" },
+                { "name": "MONTHS_FROM_NOW", "value": "MONTHS_FROM_NOW", "description": "Months from now" },
+                { "name": "QUARTERS_AGO", "value": "QUARTERS_AGO", "description": "Quarters ago" },
+                { "name": "QUARTERS_FROM_NOW", "value": "QUARTERS_FROM_NOW", "description": "Quarters from now" },
+                { "name": "SECONDS_AGO", "value": "SECONDS_AGO", "description": "Seconds ago" },
+                { "name": "SECONDS_FROM_NOW", "value": "SECONDS_FROM_NOW", "description": "Seconds from now" },
+                { "name": "WEEKS_AGO", "value": "WEEKS_AGO", "description": "Weeks ago" },
+                { "name": "WEEKS_FROM_NOW", "value": "WEEKS_FROM_NOW", "description": "Weeks from now" },
+                { "name": "YEARS_AGO", "value": "YEARS_AGO", "description": "Years ago" },
+                { "name": "YEARS_FROM_NOW", "value": "YEARS_FROM_NOW", "description": "Years from now" }
+            ]
+        },
+        {
+            "name": "FieldContext",
+            "description": "Holds the string values for the field context to use when creating a column. The field context determines how field values are displayed.",
+            "members": [
+                { "name": "CONVERTED", "value": "CONVERTED", "description": "Displays converted currency amounts using the exchange rate in effect on a specific date." },
+                { "name": "CURRENCY_CONSOLIDATED", "value": "CURRENCY_CONSOLIDATED", "description": "Displays consolidated currency amounts in the base currency." },
+                { "name": "DISPLAY", "value": "DISPLAY", "description": "Displays user-friendly field values (e.g. entity name instead of ID)." },
+                { "name": "HIERARCHY", "value": "HIERARCHY", "description": "Displays user-friendly field values for hierarchical fields (e.g. 'Parent Company : SUB CAD')." },
+                { "name": "HIERARCHY_IDENTIFIER", "value": "HIERARCHY_IDENTIFIER", "description": "Displays raw field values for hierarchical fields (e.g. '1 : 5')." },
+                { "name": "RAW", "value": "RAW", "description": "Displays raw field values (e.g. entity ID instead of name)." },
+                { "name": "SIGN_CONSOLIDATED", "value": "SIGN_CONSOLIDATED", "description": "Displays sign-consolidated values." }
+            ]
+        },
+        {
+            "name": "Operator",
+            "description": "Holds the string values for operators supported with the N/query module. Used to pass the operator argument to Query.createCondition(options) and Component.createCondition(options).",
+            "members": [
+                { "name": "AFTER", "value": "AFTER", "description": "After a date/time value." },
+                { "name": "AFTER_NOT", "value": "AFTER_NOT", "description": "Not after a date/time value." },
+                { "name": "ANY_OF", "value": "ANY_OF", "description": "Matches any of the specified values." },
+                { "name": "ANY_OF_NOT", "value": "ANY_OF_NOT", "description": "Does not match any of the specified values." },
+                { "name": "BEFORE", "value": "BEFORE", "description": "Before a date/time value." },
+                { "name": "BEFORE_NOT", "value": "BEFORE_NOT", "description": "Not before a date/time value." },
+                { "name": "BETWEEN", "value": "BETWEEN", "description": "Between two numeric values." },
+                { "name": "BETWEEN_NOT", "value": "BETWEEN_NOT", "description": "Not between two numeric values." },
+                { "name": "CONTAIN", "value": "CONTAIN", "description": "Contains a string." },
+                { "name": "CONTAIN_NOT", "value": "CONTAIN_NOT", "description": "Does not contain a string." },
+                { "name": "EMPTY", "value": "EMPTY", "description": "Is empty." },
+                { "name": "EMPTY_NOT", "value": "EMPTY_NOT", "description": "Is not empty." },
+                { "name": "ENDWITH", "value": "ENDWITH", "description": "Ends with a string." },
+                { "name": "ENDWITH_NOT", "value": "ENDWITH_NOT", "description": "Does not end with a string." },
+                { "name": "EQUAL", "value": "EQUAL", "description": "Equals a numeric value." },
+                { "name": "EQUAL_NOT", "value": "EQUAL_NOT", "description": "Does not equal a numeric value." },
+                { "name": "EXCLUDE_ALL", "value": "MN_EXCLUDE", "description": "Excludes all of the specified multi-select values." },
+                { "name": "EXCLUDE_ANY", "value": "MN_EXCLUDE_ALL", "description": "Excludes any of the specified multi-select values." },
+                { "name": "EXCLUDE_EXACTLY", "value": "MN_EXCLUDE_EXACTLY", "description": "Excludes exactly the specified multi-select values." },
+                { "name": "GREATER", "value": "GREATER", "description": "Greater than a numeric value." },
+                { "name": "GREATER_NOT", "value": "GREATER_NOT", "description": "Not greater than a numeric value." },
+                { "name": "GREATER_OR_EQUAL", "value": "GREATER_OR_EQUAL", "description": "Greater than or equal to a numeric value." },
+                { "name": "GREATER_OR_EQUAL_NOT", "value": "GREATER_OR_EQUAL_NOT", "description": "Not greater than or equal to a numeric value." },
+                { "name": "INCLUDE_ALL", "value": "MN_INCLUDE_ALL", "description": "Includes all of the specified multi-select values." },
+                { "name": "INCLUDE_ANY", "value": "MN_INCLUDE", "description": "Includes any of the specified multi-select values." },
+                { "name": "INCLUDE_EXACTLY", "value": "MN_INCLUDE_EXACTLY", "description": "Includes exactly the specified multi-select values." },
+                { "name": "IS", "value": "IS", "description": "Is a specific value." },
+                { "name": "IS_NOT", "value": "IS_NOT", "description": "Is not a specific value." },
+                { "name": "LESS", "value": "LESS", "description": "Less than a numeric value." },
+                { "name": "LESS_NOT", "value": "LESS_NOT", "description": "Not less than a numeric value." },
+                { "name": "LESS_OR_EQUAL", "value": "LESS_OR_EQUAL", "description": "Less than or equal to a numeric value." },
+                { "name": "LESS_OR_EQUAL_NOT", "value": "LESS_OR_EQUAL_NOT", "description": "Not less than or equal to a numeric value." },
+                { "name": "ON", "value": "ON", "description": "On a specific date." },
+                { "name": "ON_NOT", "value": "ON_NOT", "description": "Not on a specific date." },
+                { "name": "ON_OR_AFTER", "value": "ON_OR_AFTER", "description": "On or after a date." },
+                { "name": "ON_OR_AFTER_NOT", "value": "ON_OR_AFTER_NOT", "description": "Not on or after a date." },
+                { "name": "ON_OR_BEFORE", "value": "ON_OR_BEFORE", "description": "On or before a date." },
+                { "name": "ON_OR_BEFORE_NOT", "value": "ON_OR_BEFORE_NOT", "description": "Not on or before a date." },
+                { "name": "START_WITH", "value": "START_WITH", "description": "Starts with a string." },
+                { "name": "START_WITH_NOT", "value": "START_WITH_NOT", "description": "Does not start with a string." },
+                { "name": "WITHIN", "value": "WITHIN", "description": "Within a date range." },
+                { "name": "WITHIN_NOT", "value": "WITHIN_NOT", "description": "Not within a date range." }
+            ]
+        },
+        {
+            "name": "PeriodAdjustment",
+            "description": "Holds the string values for adjustment types for a period. Used to pass the adjustment argument to query.createPeriod(options).",
+            "members": [
+                { "name": "ALL", "value": "ALL", "description": "All adjustments." },
+                { "name": "NOT_LAST", "value": "NOT_LAST", "description": "Not last adjustment." }
+            ]
+        },
+        {
+            "name": "PeriodCode",
+            "description": "Holds the string values for period codes for a period. Used to pass the code argument to query.createPeriod(options).",
+            "members": [
+                { "name": "FIRST_FISCAL_QUARTER_LAST_FY", "value": "Q1LFY", "description": "First fiscal quarter of last fiscal year." },
+                { "name": "FIRST_FISCAL_QUARTER_THIS_FY", "value": "Q1TFY", "description": "First fiscal quarter of this fiscal year." },
+                { "name": "FISCAL_QUARTER_BEFORE_LAST", "value": "QBL", "description": "Fiscal quarter before last." },
+                { "name": "FISCAL_YEAR_BEFORE_LAST", "value": "FYBL", "description": "Fiscal year before last." },
+                { "name": "FOURTH_FISCAL_QUARTER_LAST_FY", "value": "Q4LFY", "description": "Fourth fiscal quarter of last fiscal year." },
+                { "name": "FOURTH_FISCAL_QUARTER_THIS_FY", "value": "Q4TFY", "description": "Fourth fiscal quarter of this fiscal year." },
+                { "name": "LAST_FISCAL_QUARTER", "value": "LQ", "description": "Last fiscal quarter." },
+                { "name": "LAST_FISCAL_QUARTER_ONE_FISCAL_YEAR_AGO", "value": "LQOLFY", "description": "Last fiscal quarter one fiscal year ago." },
+                { "name": "LAST_FISCAL_QUARTER_TO_PERIOD", "value": "LFQTP", "description": "Last fiscal quarter to period." },
+                { "name": "LAST_FISCAL_YEAR", "value": "LFY", "description": "Last fiscal year." },
+                { "name": "LAST_FISCAL_YEAR_TO_PERIOD", "value": "LFYTP", "description": "Last fiscal year to period." },
+                { "name": "LAST_PERIOD", "value": "LP", "description": "Last period." },
+                { "name": "LAST_PERIOD_ONE_FISCAL_QUARTER_AGO", "value": "LPOLQ", "description": "Last period one fiscal quarter ago." },
+                { "name": "LAST_PERIOD_ONE_FISCAL_YEAR_AGO", "value": "LPOLFY", "description": "Last period one fiscal year ago." },
+                { "name": "LAST_ROLLING_18_PERIODS", "value": "LR18FP", "description": "Last rolling 18 periods." },
+                { "name": "LAST_ROLLING_6_FISCAL_QUARTERS", "value": "LR6FQ", "description": "Last rolling 6 fiscal quarters." },
+                { "name": "PERIOD_BEFORE_LAST", "value": "PBL", "description": "Period before last." },
+                { "name": "SAME_FISCAL_QUARTER_LAST_FY", "value": "TQOLFY", "description": "Same fiscal quarter last fiscal year." },
+                { "name": "SAME_FISCAL_QUARTER_LAST_FY_TO_PERIOD", "value": "TFQOLFYTP", "description": "Same fiscal quarter last fiscal year to period." },
+                { "name": "SAME_PERIOD_LAST_FY", "value": "TPOLFY", "description": "Same period last fiscal year." },
+                { "name": "SAME_PERIOD_LAST_FISCAL_QUARTER", "value": "TPOLQ", "description": "Same period last fiscal quarter." },
+                { "name": "SECOND_FISCAL_QUARTER_LAST_FY", "value": "Q2LFY", "description": "Second fiscal quarter of last fiscal year." },
+                { "name": "SECOND_FISCAL_QUARTER_THIS_FY", "value": "Q2TFY", "description": "Second fiscal quarter of this fiscal year." },
+                { "name": "THIRD_FISCAL_QUARTER_LAST_FY", "value": "Q3LFY", "description": "Third fiscal quarter of last fiscal year." },
+                { "name": "THIRD_FISCAL_QUARTER_THIS_FY", "value": "Q3TFY", "description": "Third fiscal quarter of this fiscal year." },
+                { "name": "THIS_FISCAL_QUARTER", "value": "TQ", "description": "This fiscal quarter." },
+                { "name": "THIS_FISCAL_QUARTER_TO_PERIOD", "value": "TFQTP", "description": "This fiscal quarter to period." },
+                { "name": "THIS_FISCAL_YEAR", "value": "TFY", "description": "This fiscal year." },
+                { "name": "THIS_FISCAL_YEAR_TO_PERIOD", "value": "TFYTP", "description": "This fiscal year to period." },
+                { "name": "THIS_PERIOD", "value": "TP", "description": "This period." }
+            ]
+        },
+        {
+            "name": "PeriodType",
+            "description": "Holds the string values for period types. Used to pass the type argument to query.createPeriod(options).",
+            "members": [
+                { "name": "END", "value": "END", "description": "End of the period." },
+                { "name": "START", "value": "START", "description": "Start of the period." }
+            ]
+        },
+        {
+            "name": "RelativeDateRange",
+            "description": "Holds query.RelativeDate object values for supported date ranges in relative dates. Used to pass the values argument to Query.createCondition(options) and Component.createCondition(options).",
+            "members": [
+                { "name": "FISCAL_HALF_BEFORE_LAST", "value": "FISCAL_HALF_BEFORE_LAST", "description": "Fiscal half before last." },
+                { "name": "FISCAL_HALF_BEFORE_LAST_TO_DATE", "value": "FISCAL_HALF_BEFORE_LAST_TO_DATE", "description": "Fiscal half before last to date." },
+                { "name": "FISCAL_QUARTER_BEFORE_LAST", "value": "FISCAL_QUARTER_BEFORE_LAST", "description": "Fiscal quarter before last." },
+                { "name": "FISCAL_QUARTER_BEFORE_LAST_TO_DATE", "value": "FISCAL_QUARTER_BEFORE_LAST_TO_DATE", "description": "Fiscal quarter before last to date." },
+                { "name": "FISCAL_YEAR_BEFORE_LAST", "value": "FISCAL_YEAR_BEFORE_LAST", "description": "Fiscal year before last." },
+                { "name": "FISCAL_YEAR_BEFORE_LAST_TO_DATE", "value": "FISCAL_YEAR_BEFORE_LAST_TO_DATE", "description": "Fiscal year before last to date." },
+                { "name": "FIVE_DAYS_AGO", "value": "FIVE_DAYS_AGO", "description": "Five days ago." },
+                { "name": "FIVE_DAYS_FROM_NOW", "value": "FIVE_DAYS_FROM_NOW", "description": "Five days from now." },
+                { "name": "FOUR_DAYS_AGO", "value": "FOUR_DAYS_AGO", "description": "Four days ago." },
+                { "name": "FOUR_DAYS_FROM_NOW", "value": "FOUR_DAYS_FROM_NOW", "description": "Four days from now." },
+                { "name": "FOUR_WEEKS_STARTING_THIS_WEEK", "value": "FOUR_WEEKS_STARTING_THIS_WEEK", "description": "Four weeks starting this week." },
+                { "name": "LAST_BUSINESS_WEEK", "value": "LAST_BUSINESS_WEEK", "description": "Last business week." },
+                { "name": "LAST_FISCAL_HALF", "value": "LAST_FISCAL_HALF", "description": "Last fiscal half." },
+                { "name": "LAST_FISCAL_HALF_ONE_FISCAL_YEAR_AGO", "value": "LAST_FISCAL_HALF_ONE_FISCAL_YEAR_AGO", "description": "Last fiscal half one fiscal year ago." },
+                { "name": "LAST_FISCAL_HALF_TO_DATE", "value": "LAST_FISCAL_HALF_TO_DATE", "description": "Last fiscal half to date." },
+                { "name": "LAST_FISCAL_QUARTER", "value": "LAST_FISCAL_QUARTER", "description": "Last fiscal quarter." },
+                { "name": "LAST_FISCAL_QUARTER_ONE_FISCAL_YEAR_AGO", "value": "LAST_FISCAL_QUARTER_ONE_FISCAL_YEAR_AGO", "description": "Last fiscal quarter one fiscal year ago." },
+                { "name": "LAST_FISCAL_QUARTER_TO_DATE", "value": "LAST_FISCAL_QUARTER_TO_DATE", "description": "Last fiscal quarter to date." },
+                { "name": "LAST_FISCAL_QUARTER_TWO_FISCAL_YEARS_AGO", "value": "LAST_FISCAL_QUARTER_TWO_FISCAL_YEARS_AGO", "description": "Last fiscal quarter two fiscal years ago." },
+                { "name": "LAST_FISCAL_YEAR", "value": "LAST_FISCAL_YEAR", "description": "Last fiscal year." },
+                { "name": "LAST_FISCAL_YEAR_TO_DATE", "value": "LAST_FISCAL_YEAR_TO_DATE", "description": "Last fiscal year to date." },
+                { "name": "LAST_MONTH", "value": "LAST_MONTH", "description": "Last month." },
+                { "name": "LAST_MONTH_ONE_FISCAL_QUARTER_AGO", "value": "LAST_MONTH_ONE_FISCAL_QUARTER_AGO", "description": "Last month one fiscal quarter ago." },
+                { "name": "LAST_MONTH_ONE_FISCAL_YEAR_AGO", "value": "LAST_MONTH_ONE_FISCAL_YEAR_AGO", "description": "Last month one fiscal year ago." },
+                { "name": "LAST_MONTH_TO_DATE", "value": "LAST_MONTH_TO_DATE", "description": "Last month to date." },
+                { "name": "LAST_MONTH_TWO_FISCAL_QUARTERS_AGO", "value": "LAST_MONTH_TWO_FISCAL_QUARTERS_AGO", "description": "Last month two fiscal quarters ago." },
+                { "name": "LAST_MONTH_TWO_FISCAL_YEARS_AGO", "value": "LAST_MONTH_TWO_FISCAL_YEARS_AGO", "description": "Last month two fiscal years ago." },
+                { "name": "LAST_ROLLING_HALF", "value": "LAST_ROLLING_HALF", "description": "Last rolling half." },
+                { "name": "LAST_ROLLING_QUARTER", "value": "LAST_ROLLING_QUARTER", "description": "Last rolling quarter." },
+                { "name": "LAST_ROLLING_YEAR", "value": "LAST_ROLLING_YEAR", "description": "Last rolling year." },
+                { "name": "LAST_WEEK", "value": "LAST_WEEK", "description": "Last week." },
+                { "name": "LAST_WEEK_TO_DATE", "value": "LAST_WEEK_TO_DATE", "description": "Last week to date." },
+                { "name": "LAST_YEAR", "value": "LAST_YEAR", "description": "Last year." },
+                { "name": "LAST_YEAR_TO_DATE", "value": "LAST_YEAR_TO_DATE", "description": "Last year to date." },
+                { "name": "MONTH_AFTER_NEXT", "value": "MONTH_AFTER_NEXT", "description": "Month after next." },
+                { "name": "MONTH_AFTER_NEXT_TO_DATE", "value": "MONTH_AFTER_NEXT_TO_DATE", "description": "Month after next to date." },
+                { "name": "MONTH_BEFORE_LAST", "value": "MONTH_BEFORE_LAST", "description": "Month before last." },
+                { "name": "MONTH_BEFORE_LAST_TO_DATE", "value": "MONTH_BEFORE_LAST_TO_DATE", "description": "Month before last to date." },
+                { "name": "NEXT_BUSINESS_WEEK", "value": "NEXT_BUSINESS_WEEK", "description": "Next business week." },
+                { "name": "NEXT_FISCAL_HALF", "value": "NEXT_FISCAL_HALF", "description": "Next fiscal half." },
+                { "name": "NEXT_FISCAL_QUARTER", "value": "NEXT_FISCAL_QUARTER", "description": "Next fiscal quarter." },
+                { "name": "NEXT_FISCAL_YEAR", "value": "NEXT_FISCAL_YEAR", "description": "Next fiscal year." },
+                { "name": "NEXT_FOUR_WEEKS", "value": "NEXT_FOUR_WEEKS", "description": "Next four weeks." },
+                { "name": "NEXT_MONTH", "value": "NEXT_MONTH", "description": "Next month." },
+                { "name": "NEXT_ONE_HALF", "value": "NEXT_ONE_HALF", "description": "Next one half." },
+                { "name": "NEXT_ONE_MONTH", "value": "NEXT_ONE_MONTH", "description": "Next one month." },
+                { "name": "NEXT_ONE_QUARTER", "value": "NEXT_ONE_QUARTER", "description": "Next one quarter." },
+                { "name": "NEXT_ONE_WEEK", "value": "NEXT_ONE_WEEK", "description": "Next one week." },
+                { "name": "NEXT_ONE_YEAR", "value": "NEXT_ONE_YEAR", "description": "Next one year." },
+                { "name": "NEXT_WEEK", "value": "NEXT_WEEK", "description": "Next week." },
+                { "name": "NINETY_DAYS_AGO", "value": "NINETY_DAYS_AGO", "description": "Ninety days ago." },
+                { "name": "NINETY_DAYS_FROM_NOW", "value": "NINETY_DAYS_FROM_NOW", "description": "Ninety days from now." },
+                { "name": "ONE_YEAR_BEFORE_LAST", "value": "ONE_YEAR_BEFORE_LAST", "description": "One year before last." },
+                { "name": "PREVIOUS_FISCAL_QUARTERS_LAST_FISCAL_YEAR", "value": "PREVIOUS_FISCAL_QUARTERS_LAST_FISCAL_YEAR", "description": "Previous fiscal quarters last fiscal year." },
+                { "name": "PREVIOUS_FISCAL_QUARTERS_THIS_FISCAL_YEAR", "value": "PREVIOUS_FISCAL_QUARTERS_THIS_FISCAL_YEAR", "description": "Previous fiscal quarters this fiscal year." },
+                { "name": "PREVIOUS_MONTHS_LAST_FISCAL_HALF", "value": "PREVIOUS_MONTHS_LAST_FISCAL_HALF", "description": "Previous months last fiscal half." },
+                { "name": "PREVIOUS_MONTHS_LAST_FISCAL_QUARTER", "value": "PREVIOUS_MONTHS_LAST_FISCAL_QUARTER", "description": "Previous months last fiscal quarter." },
+                { "name": "PREVIOUS_MONTHS_LAST_FISCAL_YEAR", "value": "PREVIOUS_MONTHS_LAST_FISCAL_YEAR", "description": "Previous months last fiscal year." },
+                { "name": "PREVIOUS_MONTHS_SAME_FISCAL_HALF_LAST_FISCAL_YEAR", "value": "PREVIOUS_MONTHS_SAME_FISCAL_HALF_LAST_FISCAL_YEAR", "description": "Previous months same fiscal half last fiscal year." },
+                { "name": "PREVIOUS_MONTHS_SAME_FISCAL_QUARTER_LAST_FISCAL_YEAR", "value": "PREVIOUS_MONTHS_SAME_FISCAL_QUARTER_LAST_FISCAL_YEAR", "description": "Previous months same fiscal quarter last fiscal year." },
+                { "name": "PREVIOUS_MONTHS_THIS_FISCAL_HALF", "value": "PREVIOUS_MONTHS_THIS_FISCAL_HALF", "description": "Previous months this fiscal half." },
+                { "name": "PREVIOUS_MONTHS_THIS_FISCAL_QUARTER", "value": "PREVIOUS_MONTHS_THIS_FISCAL_QUARTER", "description": "Previous months this fiscal quarter." },
+                { "name": "PREVIOUS_MONTHS_THIS_FISCAL_YEAR", "value": "PREVIOUS_MONTHS_THIS_FISCAL_YEAR", "description": "Previous months this fiscal year." },
+                { "name": "PREVIOUS_ONE_DAY", "value": "PREVIOUS_ONE_DAY", "description": "Previous one day." },
+                { "name": "PREVIOUS_ONE_HALF", "value": "PREVIOUS_ONE_HALF", "description": "Previous one half." },
+                { "name": "PREVIOUS_ONE_MONTH", "value": "PREVIOUS_ONE_MONTH", "description": "Previous one month." },
+                { "name": "PREVIOUS_ONE_QUARTER", "value": "PREVIOUS_ONE_QUARTER", "description": "Previous one quarter." },
+                { "name": "PREVIOUS_ONE_WEEK", "value": "PREVIOUS_ONE_WEEK", "description": "Previous one week." },
+                { "name": "PREVIOUS_ONE_YEAR", "value": "PREVIOUS_ONE_YEAR", "description": "Previous one year." },
+                { "name": "PREVIOUS_ROLLING_HALF", "value": "PREVIOUS_ROLLING_HALF", "description": "Previous rolling half." },
+                { "name": "PREVIOUS_ROLLING_QUARTER", "value": "PREVIOUS_ROLLING_QUARTER", "description": "Previous rolling quarter." },
+                { "name": "PREVIOUS_ROLLING_YEAR", "value": "PREVIOUS_ROLLING_YEAR", "description": "Previous rolling year." },
+                { "name": "SAME_DAY_FISCAL_QUARTER_BEFORE_LAST", "value": "SAME_DAY_FISCAL_QUARTER_BEFORE_LAST", "description": "Same day fiscal quarter before last." },
+                { "name": "SAME_DAY_FISCAL_YEAR_BEFORE_LAST", "value": "SAME_DAY_FISCAL_YEAR_BEFORE_LAST", "description": "Same day fiscal year before last." },
+                { "name": "SAME_DAY_LAST_FISCAL_QUARTER", "value": "SAME_DAY_LAST_FISCAL_QUARTER", "description": "Same day last fiscal quarter." },
+                { "name": "SAME_DAY_LAST_FISCAL_YEAR", "value": "SAME_DAY_LAST_FISCAL_YEAR", "description": "Same day last fiscal year." },
+                { "name": "SAME_DAY_LAST_MONTH", "value": "SAME_DAY_LAST_MONTH", "description": "Same day last month." },
+                { "name": "SAME_DAY_LAST_WEEK", "value": "SAME_DAY_LAST_WEEK", "description": "Same day last week." },
+                { "name": "SAME_DAY_MONTH_BEFORE_LAST", "value": "SAME_DAY_MONTH_BEFORE_LAST", "description": "Same day month before last." },
+                { "name": "SAME_DAY_WEEK_BEFORE_LAST", "value": "SAME_DAY_WEEK_BEFORE_LAST", "description": "Same day week before last." },
+                { "name": "SAME_FISCAL_HALF_LAST_FISCAL_YEAR", "value": "SAME_FISCAL_HALF_LAST_FISCAL_YEAR", "description": "Same fiscal half last fiscal year." },
+                { "name": "SAME_FISCAL_HALF_LAST_FISCAL_YEAR_TO_DATE", "value": "SAME_FISCAL_HALF_LAST_FISCAL_YEAR_TO_DATE", "description": "Same fiscal half last fiscal year to date." },
+                { "name": "SAME_FISCAL_QUARTER_FISCAL_YEAR_BEFORE_LAST", "value": "SAME_FISCAL_QUARTER_FISCAL_YEAR_BEFORE_LAST", "description": "Same fiscal quarter fiscal year before last." },
+                { "name": "SAME_FISCAL_QUARTER_LAST_FISCAL_YEAR", "value": "SAME_FISCAL_QUARTER_LAST_FISCAL_YEAR", "description": "Same fiscal quarter last fiscal year." },
+                { "name": "SAME_FISCAL_QUARTER_LAST_FISCAL_YEAR_TO_DATE", "value": "SAME_FISCAL_QUARTER_LAST_FISCAL_YEAR_TO_DATE", "description": "Same fiscal quarter last fiscal year to date." },
+                { "name": "SAME_MONTH_FISCAL_QUARTER_BEFORE_LAST", "value": "SAME_MONTH_FISCAL_QUARTER_BEFORE_LAST", "description": "Same month fiscal quarter before last." },
+                { "name": "SAME_MONTH_FISCAL_YEAR_BEFORE_LAST", "value": "SAME_MONTH_FISCAL_YEAR_BEFORE_LAST", "description": "Same month fiscal year before last." },
+                { "name": "SAME_MONTH_LAST_FISCAL_QUARTER", "value": "SAME_MONTH_LAST_FISCAL_QUARTER", "description": "Same month last fiscal quarter." },
+                { "name": "SAME_MONTH_LAST_FISCAL_QUARTER_TO_DATE", "value": "SAME_MONTH_LAST_FISCAL_QUARTER_TO_DATE", "description": "Same month last fiscal quarter to date." },
+                { "name": "SAME_MONTH_LAST_FISCAL_YEAR", "value": "SAME_MONTH_LAST_FISCAL_YEAR", "description": "Same month last fiscal year." },
+                { "name": "SAME_MONTH_LAST_FISCAL_YEAR_TO_DATE", "value": "SAME_MONTH_LAST_FISCAL_YEAR_TO_DATE", "description": "Same month last fiscal year to date." },
+                { "name": "SAME_WEEK_FISCAL_YEAR_BEFORE_LAST", "value": "SAME_WEEK_FISCAL_YEAR_BEFORE_LAST", "description": "Same week fiscal year before last." },
+                { "name": "SAME_WEEK_LAST_FISCAL_YEAR", "value": "SAME_WEEK_LAST_FISCAL_YEAR", "description": "Same week last fiscal year." },
+                { "name": "SIXTY_DAYS_AGO", "value": "SIXTY_DAYS_AGO", "description": "Sixty days ago." },
+                { "name": "SIXTY_DAYS_FROM_NOW", "value": "SIXTY_DAYS_FROM_NOW", "description": "Sixty days from now." },
+                { "name": "TEN_DAYS_AGO", "value": "TEN_DAYS_AGO", "description": "Ten days ago." },
+                { "name": "TEN_DAYS_FROM_NOW", "value": "TEN_DAYS_FROM_NOW", "description": "Ten days from now." },
+                { "name": "THIRTY_DAYS_AGO", "value": "THIRTY_DAYS_AGO", "description": "Thirty days ago." },
+                { "name": "THIRTY_DAYS_FROM_NOW", "value": "THIRTY_DAYS_FROM_NOW", "description": "Thirty days from now." },
+                { "name": "THIS_BUSINESS_WEEK", "value": "THIS_BUSINESS_WEEK", "description": "This business week." },
+                { "name": "THIS_FISCAL_HALF", "value": "THIS_FISCAL_HALF", "description": "This fiscal half." },
+                { "name": "THIS_FISCAL_HALF_TO_DATE", "value": "THIS_FISCAL_HALF_TO_DATE", "description": "This fiscal half to date." },
+                { "name": "THIS_FISCAL_QUARTER", "value": "THIS_FISCAL_QUARTER", "description": "This fiscal quarter." },
+                { "name": "THIS_FISCAL_QUARTER_TO_DATE", "value": "THIS_FISCAL_QUARTER_TO_DATE", "description": "This fiscal quarter to date." },
+                { "name": "THIS_FISCAL_YEAR", "value": "THIS_FISCAL_YEAR", "description": "This fiscal year." },
+                { "name": "THIS_FISCAL_YEAR_TO_DATE", "value": "THIS_FISCAL_YEAR_TO_DATE", "description": "This fiscal year to date." },
+                { "name": "THIS_MONTH", "value": "THIS_MONTH", "description": "This month." },
+                { "name": "THIS_MONTH_TO_DATE", "value": "THIS_MONTH_TO_DATE", "description": "This month to date." },
+                { "name": "THIS_ROLLING_HALF", "value": "THIS_ROLLING_HALF", "description": "This rolling half." },
+                { "name": "THIS_ROLLING_QUARTER", "value": "THIS_ROLLING_QUARTER", "description": "This rolling quarter." },
+                { "name": "THIS_ROLLING_YEAR", "value": "THIS_ROLLING_YEAR", "description": "This rolling year." },
+                { "name": "THIS_WEEK", "value": "THIS_WEEK", "description": "This week." },
+                { "name": "THIS_WEEK_TO_DATE", "value": "THIS_WEEK_TO_DATE", "description": "This week to date." },
+                { "name": "THIS_YEAR", "value": "THIS_YEAR", "description": "This year." },
+                { "name": "THIS_YEAR_TO_DATE", "value": "THIS_YEAR_TO_DATE", "description": "This year to date." },
+                { "name": "THREE_DAYS_AGO", "value": "THREE_DAYS_AGO", "description": "Three days ago." },
+                { "name": "THREE_DAYS_FROM_NOW", "value": "THREE_DAYS_FROM_NOW", "description": "Three days from now." },
+                { "name": "THREE_FISCAL_QUARTERS_AGO", "value": "THREE_FISCAL_QUARTERS_AGO", "description": "Three fiscal quarters ago." },
+                { "name": "THREE_FISCAL_QUARTERS_AGO_TO_DATE", "value": "THREE_FISCAL_QUARTERS_AGO_TO_DATE", "description": "Three fiscal quarters ago to date." },
+                { "name": "THREE_FISCAL_YEARS_AGO", "value": "THREE_FISCAL_YEARS_AGO", "description": "Three fiscal years ago." },
+                { "name": "THREE_FISCAL_YEARS_AGO_TO_DATE", "value": "THREE_FISCAL_YEARS_AGO_TO_DATE", "description": "Three fiscal years ago to date." },
+                { "name": "THREE_MONTHS_AGO", "value": "THREE_MONTHS_AGO", "description": "Three months ago." },
+                { "name": "THREE_MONTHS_AGO_TO_DATE", "value": "THREE_MONTHS_AGO_TO_DATE", "description": "Three months ago to date." },
+                { "name": "TODAY", "value": "TODAY", "description": "Today." },
+                { "name": "TODAY_TO_END_OF_THIS_MONTH", "value": "TODAY_TO_END_OF_THIS_MONTH", "description": "Today to end of this month." },
+                { "name": "TOMORROW", "value": "TOMORROW", "description": "Tomorrow." },
+                { "name": "TWO_DAYS_AGO", "value": "TWO_DAYS_AGO", "description": "Two days ago." },
+                { "name": "TWO_DAYS_FROM_NOW", "value": "TWO_DAYS_FROM_NOW", "description": "Two days from now." },
+                { "name": "WEEK_AFTER_NEXT", "value": "WEEK_AFTER_NEXT", "description": "Week after next." },
+                { "name": "WEEK_AFTER_NEXT_TO_DATE", "value": "WEEK_AFTER_NEXT_TO_DATE", "description": "Week after next to date." },
+                { "name": "WEEK_BEFORE_LAST", "value": "WEEK_BEFORE_LAST", "description": "Week before last." },
+                { "name": "WEEK_BEFORE_LAST_TO_DATE", "value": "WEEK_BEFORE_LAST_TO_DATE", "description": "Week before last to date." },
+                { "name": "YESTERDAY", "value": "YESTERDAY", "description": "Yesterday." }
+            ]
+        },
+        {
+            "name": "ReturnType",
+            "description": "Holds the string values for formula return types supported with the N/query module.",
+            "members": [
+                { "name": "ANY", "value": "ANY", "description": "Any return type." },
+                { "name": "BOOLEAN", "value": "BOOLEAN", "description": "Boolean return type." },
+                { "name": "CLOBTEXT", "value": "CLOBTEXT", "description": "CLOB text return type." },
+                { "name": "CURRENCY", "value": "CURRENCY", "description": "Currency return type." },
+                { "name": "DATE", "value": "DATE", "description": "Date return type." },
+                { "name": "DATETIME", "value": "DATETIME", "description": "Date/time return type." },
+                { "name": "DURATION", "value": "DURATION", "description": "Duration return type." },
+                { "name": "FLOAT", "value": "FLOAT", "description": "Float return type." },
+                { "name": "INTEGER", "value": "INTEGER", "description": "Integer return type." },
+                { "name": "KEY", "value": "KEY", "description": "Key return type." },
+                { "name": "PERCENT", "value": "PERCENT", "description": "Percent return type." },
+                { "name": "RELATIONSHIP", "value": "RELATIONSHIP", "description": "Relationship return type." },
+                { "name": "STRING", "value": "STRING", "description": "String return type." },
+                { "name": "UNKNOWN", "value": "UNKNOWN", "description": "Unknown return type." }
+            ]
+        },
+        {
+            "name": "SortLocale",
+            "description": "Holds the string values for sort locales supported with the N/query module. Used to pass the locale argument to Query.createSort(options) and Component.createSort(options).",
+            "members": [
+                { "name": "ARABIC", "value": "ARABIC" },
+                { "name": "ARABIC_ABJ_MATCH", "value": "ARABIC_ABJ_MATCH" },
+                { "name": "ARABIC_ABJ_MATCH_CI", "value": "ARABIC_ABJ_MATCH_CI" },
+                { "name": "ARABIC_ABJ_SORT", "value": "ARABIC_ABJ_SORT" },
+                { "name": "ARABIC_ABJ_SORT_CI", "value": "ARABIC_ABJ_SORT_CI" },
+                { "name": "ARABIC_CI", "value": "ARABIC_CI" },
+                { "name": "ARABIC_MATCH", "value": "ARABIC_MATCH" },
+                { "name": "ARABIC_MATCH_CI", "value": "ARABIC_MATCH_CI" },
+                { "name": "ASCII7", "value": "ASCII7" },
+                { "name": "ASCII7_CI", "value": "ASCII7_CI" },
+                { "name": "AZERBAIJANI", "value": "AZERBAIJANI" },
+                { "name": "AZERBAIJANI_CI", "value": "AZERBAIJANI_CI" },
+                { "name": "BENGALI", "value": "BENGALI" },
+                { "name": "BENGALI_CI", "value": "BENGALI_CI" },
+                { "name": "BIG5", "value": "BIG5" },
+                { "name": "BIG5_CI", "value": "BIG5_CI" },
+                { "name": "BINARY", "value": "BINARY" },
+                { "name": "BINARY_CI", "value": "BINARY_CI" },
+                { "name": "BULGARIAN", "value": "BULGARIAN" },
+                { "name": "BULGARIAN_CI", "value": "BULGARIAN_CI" },
+                { "name": "CANADIAN_M", "value": "CANADIAN_M" },
+                { "name": "CATALAN", "value": "CATALAN" },
+                { "name": "CATALAN_CI", "value": "CATALAN_CI" },
+                { "name": "CROATIAN", "value": "CROATIAN" },
+                { "name": "CROATIAN_CI", "value": "CROATIAN_CI" },
+                { "name": "CS_CZ", "value": "CS_CZ" },
+                { "name": "CZECH", "value": "CZECH" },
+                { "name": "CZECH_CI", "value": "CZECH_CI" },
+                { "name": "CZECH_PUNCTUATION", "value": "CZECH_PUNCTUATION" },
+                { "name": "CZECH_PUNCTUATION_CI", "value": "CZECH_PUNCTUATION_CI" },
+                { "name": "DANISH", "value": "DANISH" },
+                { "name": "DANISH_CI", "value": "DANISH_CI" },
+                { "name": "DANISH_M", "value": "DANISH_M" },
+                { "name": "DA_DK", "value": "DA_DK" },
+                { "name": "DE_DE", "value": "DE_DE" },
+                { "name": "DUTCH", "value": "DUTCH" },
+                { "name": "DUTCH_CI", "value": "DUTCH_CI" },
+                { "name": "EBCDIC", "value": "EBCDIC" },
+                { "name": "EBCDIC_CI", "value": "EBCDIC_CI" },
+                { "name": "EEC_EURO", "value": "EEC_EURO" },
+                { "name": "EEC_EUROPA3", "value": "EEC_EUROPA3" },
+                { "name": "EEC_EUROPA3_CI", "value": "EEC_EUROPA3_CI" },
+                { "name": "EEC_EURO_CI", "value": "EEC_EURO_CI" },
+                { "name": "EN", "value": "EN" },
+                { "name": "EN_AU", "value": "EN_AU" },
+                { "name": "EN_CA", "value": "EN_CA" },
+                { "name": "EN_GB", "value": "EN_GB" },
+                { "name": "EN_US", "value": "EN_US" },
+                { "name": "ESTONIAN", "value": "ESTONIAN" },
+                { "name": "ESTONIAN_CI", "value": "ESTONIAN_CI" },
+                { "name": "ES_AR", "value": "ES_AR" },
+                { "name": "ES_ES", "value": "ES_ES" },
+                { "name": "FINNISH", "value": "FINNISH" },
+                { "name": "FINNISH_CI", "value": "FINNISH_CI" },
+                { "name": "FI_FI", "value": "FI_FI" },
+                { "name": "FRENCH", "value": "FRENCH" },
+                { "name": "FRENCH_AI", "value": "FRENCH_AI" },
+                { "name": "FRENCH_CI", "value": "FRENCH_CI" },
+                { "name": "FRENCH_M", "value": "FRENCH_M" },
+                { "name": "FR_CA", "value": "FR_CA" },
+                { "name": "FR_FR", "value": "FR_FR" },
+                { "name": "GBK", "value": "GBK" },
+                { "name": "GBK_AI", "value": "GBK_AI" },
+                { "name": "GBK_CI", "value": "GBK_CI" },
+                { "name": "GENERIC_M", "value": "GENERIC_M" },
+                { "name": "GERMAN", "value": "GERMAN" },
+                { "name": "GERMAN_AI", "value": "GERMAN_AI" },
+                { "name": "GERMAN_CI", "value": "GERMAN_CI" },
+                { "name": "GERMAN_DIN", "value": "GERMAN_DIN" },
+                { "name": "GERMAN_DIN_AI", "value": "GERMAN_DIN_AI" },
+                { "name": "GERMAN_DIN_CI", "value": "GERMAN_DIN_CI" },
+                { "name": "GREEK", "value": "GREEK" },
+                { "name": "GREEK_AI", "value": "GREEK_AI" },
+                { "name": "GREEK_CI", "value": "GREEK_CI" },
+                { "name": "HEBREW", "value": "HEBREW" },
+                { "name": "HEBREW_AI", "value": "HEBREW_AI" },
+                { "name": "HEBREW_CI", "value": "HEBREW_CI" },
+                { "name": "HE_IL", "value": "HE_IL" },
+                { "name": "HKSCS", "value": "HKSCS" },
+                { "name": "HKSCS_AI", "value": "HKSCS_AI" },
+                { "name": "HKSCS_CI", "value": "HKSCS_CI" },
+                { "name": "HUNGARIAN", "value": "HUNGARIAN" },
+                { "name": "HUNGARIAN_AI", "value": "HUNGARIAN_AI" },
+                { "name": "HUNGARIAN_CI", "value": "HUNGARIAN_CI" },
+                { "name": "ICELANDIC", "value": "ICELANDIC" },
+                { "name": "ICELANDIC_AI", "value": "ICELANDIC_AI" },
+                { "name": "ICELANDIC_CI", "value": "ICELANDIC_CI" },
+                { "name": "ID_ID", "value": "ID_ID" },
+                { "name": "INDONESIAN", "value": "INDONESIAN" },
+                { "name": "INDONESIAN_AI", "value": "INDONESIAN_AI" },
+                { "name": "INDONESIAN_CI", "value": "INDONESIAN_CI" },
+                { "name": "ITALIAN", "value": "ITALIAN" },
+                { "name": "ITALIAN_AI", "value": "ITALIAN_AI" },
+                { "name": "ITALIAN_CI", "value": "ITALIAN_CI" },
+                { "name": "IT_IT", "value": "IT_IT" },
+                { "name": "JAPANESE_M", "value": "JAPANESE_M" },
+                { "name": "JA_JP", "value": "JA_JP" },
+                { "name": "KOREAN_M", "value": "KOREAN_M" },
+                { "name": "KO_KR", "value": "KO_KR" },
+                { "name": "LATIN", "value": "LATIN" },
+                { "name": "LATIN_AI", "value": "LATIN_AI" },
+                { "name": "LATIN_CI", "value": "LATIN_CI" },
+                { "name": "LATVIAN", "value": "LATVIAN" },
+                { "name": "LATVIAN_AI", "value": "LATVIAN_AI" },
+                { "name": "LATVIAN_CI", "value": "LATVIAN_CI" },
+                { "name": "LITHUANIAN", "value": "LITHUANIAN" },
+                { "name": "LITHUANIAN_AI", "value": "LITHUANIAN_AI" },
+                { "name": "LITHUANIAN_CI", "value": "LITHUANIAN_CI" },
+                { "name": "MALAY", "value": "MALAY" },
+                { "name": "MALAY_AI", "value": "MALAY_AI" },
+                { "name": "MALAY_CI", "value": "MALAY_CI" },
+                { "name": "NL_NL", "value": "NL_NL" },
+                { "name": "NO_NO", "value": "NO_NO" },
+                { "name": "NORWEGIAN", "value": "NORWEGIAN" },
+                { "name": "NORWEGIAN_AI", "value": "NORWEGIAN_AI" },
+                { "name": "NORWEGIAN_CI", "value": "NORWEGIAN_CI" },
+                { "name": "POLISH", "value": "POLISH" },
+                { "name": "POLISH_AI", "value": "POLISH_AI" },
+                { "name": "POLISH_CI", "value": "POLISH_CI" },
+                { "name": "PT_BR", "value": "PT_BR" },
+                { "name": "PUNCTUATION", "value": "PUNCTUATION" },
+                { "name": "PUNCTUATION_AI", "value": "PUNCTUATION_AI" },
+                { "name": "PUNCTUATION_CI", "value": "PUNCTUATION_CI" },
+                { "name": "ROMANIAN", "value": "ROMANIAN" },
+                { "name": "ROMANIAN_AI", "value": "ROMANIAN_AI" },
+                { "name": "ROMANIAN_CI", "value": "ROMANIAN_CI" },
+                { "name": "RUSSIAN", "value": "RUSSIAN" },
+                { "name": "RUSSIAN_AI", "value": "RUSSIAN_AI" },
+                { "name": "RUSSIAN_CI", "value": "RUSSIAN_CI" },
+                { "name": "RU_RU", "value": "RU_RU" },
+                { "name": "SCHINESE_PINYIN_M", "value": "SCHINESE_PINYIN_M" },
+                { "name": "SCHINESE_RADICAL_M", "value": "SCHINESE_RADICAL_M" },
+                { "name": "SCHINESE_STROKE_M", "value": "SCHINESE_STROKE_M" },
+                { "name": "SLOVAK", "value": "SLOVAK" },
+                { "name": "SLOVAK_AI", "value": "SLOVAK_AI" },
+                { "name": "SLOVAK_CI", "value": "SLOVAK_CI" },
+                { "name": "SLOVENIAN", "value": "SLOVENIAN" },
+                { "name": "SLOVENIAN_AI", "value": "SLOVENIAN_AI" },
+                { "name": "SLOVENIAN_CI", "value": "SLOVENIAN_CI" },
+                { "name": "SPANISH", "value": "SPANISH" },
+                { "name": "SPANISH_AI", "value": "SPANISH_AI" },
+                { "name": "SPANISH_CI", "value": "SPANISH_CI" },
+                { "name": "SPANISH_M", "value": "SPANISH_M" },
+                { "name": "SV_SE", "value": "SV_SE" },
+                { "name": "SWEDISH", "value": "SWEDISH" },
+                { "name": "SWEDISH_AI", "value": "SWEDISH_AI" },
+                { "name": "SWEDISH_CI", "value": "SWEDISH_CI" },
+                { "name": "SWISS", "value": "SWISS" },
+                { "name": "SWISS_AI", "value": "SWISS_AI" },
+                { "name": "SWISS_CI", "value": "SWISS_CI" },
+                { "name": "TCHINESE_RADICAL_M", "value": "TCHINESE_RADICAL_M" },
+                { "name": "TCHINESE_STROKE_M", "value": "TCHINESE_STROKE_M" },
+                { "name": "THAI_M", "value": "THAI_M" },
+                { "name": "TH_TH", "value": "TH_TH" },
+                { "name": "TR_TR", "value": "TR_TR" },
+                { "name": "TURKISH", "value": "TURKISH" },
+                { "name": "TURKISH_AI", "value": "TURKISH_AI" },
+                { "name": "TURKISH_CI", "value": "TURKISH_CI" },
+                { "name": "UKRAINIAN", "value": "UKRAINIAN" },
+                { "name": "UKRAINIAN_AI", "value": "UKRAINIAN_AI" },
+                { "name": "UKRAINIAN_CI", "value": "UKRAINIAN_CI" },
+                { "name": "UNICODE_BINARY", "value": "UNICODE_BINARY" },
+                { "name": "UNICODE_BINARY_AI", "value": "UNICODE_BINARY_AI" },
+                { "name": "UNICODE_BINARY_CI", "value": "UNICODE_BINARY_CI" },
+                { "name": "VIETNAMESE", "value": "VIETNAMESE" },
+                { "name": "VIETNAMESE_AI", "value": "VIETNAMESE_AI" },
+                { "name": "VIETNAMESE_CI", "value": "VIETNAMESE_CI" },
+                { "name": "VI_VN", "value": "VI_VN" },
+                { "name": "WEST_EUROPEAN", "value": "WEST_EUROPEAN" },
+                { "name": "WEST_EUROPEAN_AI", "value": "WEST_EUROPEAN_AI" },
+                { "name": "WEST_EUROPEAN_CI", "value": "WEST_EUROPEAN_CI" },
+                { "name": "ZH_CN", "value": "ZH_CN" },
+                { "name": "ZH_TW", "value": "ZH_TW" }
+            ]
+        },
+        {
+            "name": "Type",
+            "description": "Holds the string values for supported query types used in the query definition. Used to pass the initial query type argument to query.create(options). Use the Records Catalog to find available record types and field IDs.",
+            "members": [
+                { "name": "ACCOUNT", "value": "account", "description": "Account" },
+                { "name": "ACCOUNTING_BOOK", "value": "accountingbook", "description": "Accounting Book" },
+                { "name": "ACCOUNTING_PERIOD", "value": "accountingperiod", "description": "Accounting Period" },
+                { "name": "BILLING_ACCOUNT", "value": "billingaccount", "description": "Billing Account" },
+                { "name": "BIN", "value": "bin", "description": "Bin" },
+                { "name": "BOM", "value": "bom", "description": "Bill of Materials" },
+                { "name": "BOM_REVISION", "value": "bomrevision", "description": "BOM Revision" },
+                { "name": "BUDGET", "value": "budget", "description": "Budget" },
+                { "name": "CALENDAR_EVENT", "value": "calendarevent", "description": "Calendar Event" },
+                { "name": "CAMPAIGN", "value": "campaign", "description": "Campaign" },
+                { "name": "CHARGE", "value": "charge", "description": "Charge" },
+                { "name": "CLASS", "value": "classification", "description": "Class" },
+                { "name": "COMMERCE_CATEGORY", "value": "commercecategory", "description": "Commerce Category" },
+                { "name": "CONSOLIDATED_EXCHANGE_RATE", "value": "consolidatedexchangerate", "description": "Consolidated Exchange Rate" },
+                { "name": "CONTACT", "value": "contact", "description": "Contact" },
+                { "name": "CURRENCY", "value": "currency", "description": "Currency" },
+                { "name": "CUSTOMER", "value": "customer", "description": "Customer" },
+                { "name": "CUSTOMER_CATEGORY", "value": "customercategory", "description": "Customer Category" },
+                { "name": "CUSTOMER_MESSAGE", "value": "customermessage", "description": "Customer Message" },
+                { "name": "DEPARTMENT", "value": "department", "description": "Department" },
+                { "name": "EMPLOYEE", "value": "employee", "description": "Employee" },
+                { "name": "ENTITY", "value": "entity", "description": "Entity" },
+                { "name": "ENTITY_GROUP", "value": "entitygroup", "description": "Entity Group" },
+                { "name": "EXPENSE_CATEGORY", "value": "expensecategory", "description": "Expense Category" },
+                { "name": "FILE", "value": "file", "description": "File" },
+                { "name": "FOLDER", "value": "folder", "description": "Folder" },
+                { "name": "GIFT_CERTIFICATE", "value": "giftcertificate", "description": "Gift Certificate" },
+                { "name": "GLOBAL_ACCOUNT_MAPPING", "value": "globalaccountmapping", "description": "Global Account Mapping" },
+                { "name": "INBOUND_SHIPMENT", "value": "inboundshipment", "description": "Inbound Shipment" },
+                { "name": "INVENTORY_NUMBER", "value": "inventorynumber", "description": "Inventory Number" },
+                { "name": "ITEM", "value": "item", "description": "Item" },
+                { "name": "ITEM_ACCOUNT_MAPPING", "value": "itemaccountmapping", "description": "Item Account Mapping" },
+                { "name": "ITEM_REVISION", "value": "itemrevision", "description": "Item Revision" },
+                { "name": "JOB", "value": "job", "description": "Job" },
+                { "name": "LOCATION", "value": "location", "description": "Location" },
+                { "name": "MANUFACTURING_OPERATION_TASK", "value": "manufacturingoperationtask", "description": "Manufacturing Operation Task" },
+                { "name": "MANUFACTURING_ROUTING", "value": "manufacturingrouting", "description": "Manufacturing Routing" },
+                { "name": "MESSAGE", "value": "message", "description": "Message" },
+                { "name": "NEXUS", "value": "nexus", "description": "Nexus" },
+                { "name": "NOTE", "value": "note", "description": "Note" },
+                { "name": "OPPORTUNITY", "value": "opportunity", "description": "Opportunity" },
+                { "name": "OTHER_NAME", "value": "othername", "description": "Other Name" },
+                { "name": "PARTNER", "value": "partner", "description": "Partner" },
+                { "name": "PAYMENT_METHOD", "value": "paymentmethod", "description": "Payment Method" },
+                { "name": "PAYROLL_ITEM", "value": "payrollitem", "description": "Payroll Item" },
+                { "name": "PHONE_CALL", "value": "phonecall", "description": "Phone Call" },
+                { "name": "PRICE_LEVEL", "value": "pricelevel", "description": "Price Level" },
+                { "name": "PRICING_GROUP", "value": "pricinggroup", "description": "Pricing Group" },
+                { "name": "PROJECT_TASK", "value": "projecttask", "description": "Project Task" },
+                { "name": "PROMOTION_CODE", "value": "promotioncode", "description": "Promotion Code" },
+                { "name": "RESOURCE_ALLOCATION", "value": "resourceallocation", "description": "Resource Allocation" },
+                { "name": "REVENUE_PLAN", "value": "revenueplan", "description": "Revenue Plan" },
+                { "name": "REVENUE_RECOGNITION_RULE", "value": "revenuerecognitionrule", "description": "Revenue Recognition Rule" },
+                { "name": "ROLE", "value": "role", "description": "Role" },
+                { "name": "SALES_TAX_ITEM", "value": "salestaxitem", "description": "Sales Tax Item" },
+                { "name": "SUBSIDIARY", "value": "subsidiary", "description": "Subsidiary" },
+                { "name": "SUPPORT_CASE", "value": "supportcase", "description": "Support Case" },
+                { "name": "TASK", "value": "task", "description": "Task" },
+                { "name": "TAX_GROUP", "value": "taxgroup", "description": "Tax Group" },
+                { "name": "TAX_PERIOD", "value": "taxperiod", "description": "Tax Period" },
+                { "name": "TAX_TYPE", "value": "taxtype", "description": "Tax Type" },
+                { "name": "TERM", "value": "term", "description": "Term" },
+                { "name": "TIME_BILL", "value": "timebill", "description": "Time Bill" },
+                { "name": "TOPIC", "value": "topic", "description": "Topic" },
+                { "name": "TRANSACTION", "value": "transaction", "description": "Transaction" },
+                { "name": "UNITS_TYPE", "value": "unitstype", "description": "Units Type" },
+                { "name": "USAGE", "value": "usage", "description": "Usage" },
+                { "name": "VENDOR", "value": "vendor", "description": "Vendor" },
+                { "name": "VENDOR_CATEGORY", "value": "vendorcategory", "description": "Vendor Category" },
+                { "name": "WORK_ORDER", "value": "workorder", "description": "Work Order" }
+            ]
+        }
+    ],
+    "objectTypes": [
+        {
+            "name": "Query",
+            "description": "The query definition. Use query.create(options) or query.load(options) to create this object.",
+            "methods": [
+                {
+                    "name": "and",
+                    "description": "Creates a new condition that corresponds to a logical conjunction (AND) of the arguments. Arguments must be query.Condition objects.",
+                    "params": [
+                        { "name": "conditions", "type": "query.Condition[]", "description": "One or more query.Condition objects." }
+                    ],
+                    "returns": "query.Condition",
+                    "returnType": "N/query#Condition"
+                },
+                {
+                    "name": "autoJoin",
+                    "description": "Creates a join relationship. Selects the correct join type automatically based on the record types being joined.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options object." },
+                        { "name": "options.fieldId", "type": "string", "description": "The column type (field ID) that represents the join." }
+                    ],
+                    "returns": "query.Component",
+                    "returnType": "N/query#Component"
+                },
+                {
+                    "name": "createColumn",
+                    "description": "Creates a query result column based on the query.Query object.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options object." },
+                        { "name": "options.fieldId", "type": "string", "description": "The field ID for the column.", "optional": true },
+                        { "name": "options.formula", "type": "string", "description": "A formula to use for the column.", "optional": true },
+                        { "name": "options.type", "type": "string", "description": "The return type of the formula. Use values from query.ReturnType.", "optional": true },
+                        { "name": "options.aggregate", "type": "string", "description": "The aggregate function. Use values from query.Aggregate.", "optional": true },
+                        { "name": "options.groupBy", "type": "boolean", "description": "Whether to group by this column.", "optional": true },
+                        { "name": "options.context", "type": "Object", "description": "The field context. Use values from query.FieldContext.", "optional": true },
+                        { "name": "options.alias", "type": "string", "description": "An alias for the column used in mapped results.", "optional": true }
+                    ],
+                    "returns": "query.Column",
+                    "returnType": "N/query#Column"
+                },
+                {
+                    "name": "createCondition",
+                    "description": "Creates a condition (filter) based on the query.Query object.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options object." },
+                        { "name": "options.fieldId", "type": "string", "description": "The field ID for the condition.", "optional": true },
+                        { "name": "options.operator", "type": "string", "description": "The operator. Use values from query.Operator.", "optional": true },
+                        { "name": "options.values", "type": "string | number | boolean | Array", "description": "Values to filter by.", "optional": true },
+                        { "name": "options.formula", "type": "string", "description": "A formula for the condition.", "optional": true },
+                        { "name": "options.type", "type": "string", "description": "The return type of the formula. Use values from query.ReturnType.", "optional": true },
+                        { "name": "options.aggregate", "type": "string", "description": "The aggregate function. Use values from query.Aggregate.", "optional": true },
+                        { "name": "options.children", "type": "query.Condition[]", "description": "Child conditions for compound conditions.", "optional": true }
+                    ],
+                    "returns": "query.Condition",
+                    "returnType": "N/query#Condition"
+                },
+                {
+                    "name": "createSort",
+                    "description": "Creates a sort based on the query.Query object.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options object." },
+                        { "name": "options.column", "type": "query.Column", "description": "The column to sort by." },
+                        { "name": "options.ascending", "type": "boolean", "description": "Whether the sort direction is ascending.", "optional": true },
+                        { "name": "options.caseSensitive", "type": "boolean", "description": "Whether the sort is case sensitive.", "optional": true },
+                        { "name": "options.locale", "type": "string", "description": "The locale for the sort. Use values from query.SortLocale.", "optional": true },
+                        { "name": "options.nullsLast", "type": "boolean", "description": "Whether nulls are listed last.", "optional": true }
+                    ],
+                    "returns": "query.Sort",
+                    "returnType": "N/query#Sort"
+                },
+                {
+                    "name": "join",
+                    "description": "Creates a join relationship. Alias for Query.autoJoin(options).",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options object." },
+                        { "name": "options.fieldId", "type": "string", "description": "The column type (field ID) that represents the join." }
+                    ],
+                    "returns": "query.Component",
+                    "returnType": "N/query#Component"
+                },
+                {
+                    "name": "joinFrom",
+                    "description": "Creates an explicit directional join from another component to the root component (inverse join).",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options object." },
+                        { "name": "options.fieldId", "type": "string", "description": "The column type (field ID) that represents the join." },
+                        { "name": "options.source", "type": "string", "description": "The query type of the source component." }
+                    ],
+                    "returns": "query.Component",
+                    "returnType": "N/query#Component"
+                },
+                {
+                    "name": "joinTo",
+                    "description": "Creates an explicit directional join to another component from this component (forward join).",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options object." },
+                        { "name": "options.fieldId", "type": "string", "description": "The column type (field ID) that represents the join." },
+                        { "name": "options.target", "type": "string", "description": "The query type of the target component." }
+                    ],
+                    "returns": "query.Component",
+                    "returnType": "N/query#Component"
+                },
+                {
+                    "name": "not",
+                    "description": "Creates a new condition that corresponds to a logical negation (NOT) of the argument.",
+                    "params": [
+                        { "name": "condition", "type": "query.Condition", "description": "The condition to negate." }
+                    ],
+                    "returns": "query.Condition",
+                    "returnType": "N/query#Condition"
+                },
+                {
+                    "name": "or",
+                    "description": "Creates a new condition that corresponds to a logical disjunction (OR) of the arguments.",
+                    "params": [
+                        { "name": "conditions", "type": "query.Condition[]", "description": "One or more query.Condition objects." }
+                    ],
+                    "returns": "query.Condition",
+                    "returnType": "N/query#Condition"
+                },
+                {
+                    "name": "run",
+                    "description": "Executes the query and returns the query result set.",
+                    "params": [],
+                    "returns": "query.ResultSet",
+                    "returnType": "N/query#ResultSet"
+                },
+                {
+                    "name": "run.promise",
+                    "description": "Executes the query asynchronously and returns the query result set.",
+                    "params": [],
+                    "returns": "Promise<query.ResultSet>",
+                    "returnType": "Promise<N/query#ResultSet>"
+                },
+                {
+                    "name": "runPaged",
+                    "description": "Executes the query and returns a set of paged results.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options object.", "optional": true },
+                        { "name": "options.pageSize", "type": "number", "description": "The number of results per page.", "optional": true }
+                    ],
+                    "returns": "query.PagedData",
+                    "returnType": "N/query#PagedData"
+                },
+                {
+                    "name": "runPaged.promise",
+                    "description": "Executes the query asynchronously and returns a set of paged results.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options object.", "optional": true },
+                        { "name": "options.pageSize", "type": "number", "description": "The number of results per page.", "optional": true }
+                    ],
+                    "returns": "Promise<query.PagedData>",
+                    "returnType": "Promise<N/query#PagedData>"
+                },
+                {
+                    "name": "toSuiteQL",
+                    "description": "Converts this query.Query object to its corresponding SuiteQL representation.",
+                    "params": [],
+                    "returns": "query.SuiteQL",
+                    "returnType": "N/query#SuiteQL"
+                }
+            ],
+            "properties": [
+                { "name": "child", "type": "Object", "description": "A reference to children of the root component. Object of key-value pairs where keys are child component names.", "readOnly": true },
+                { "name": "columns", "type": "query.Column[]", "description": "An array of query result columns returned from the query." },
+                { "name": "condition", "type": "query.Condition", "description": "The parent condition that narrows the query results." },
+                { "name": "id", "type": "number", "description": "The ID of the query definition. Only set for loaded queries.", "readOnly": true },
+                { "name": "name", "type": "string", "description": "The name of the query definition. Only set for loaded queries.", "readOnly": true },
+                { "name": "root", "type": "query.Component", "description": "The root component of the query definition.", "readOnly": true },
+                { "name": "sort", "type": "query.Sort[]", "description": "An array of sort objects used for sorting query results." },
+                { "name": "type", "type": "string", "description": "The query type of the initial query definition.", "readOnly": true }
+            ]
+        },
+        {
+            "name": "Component",
+            "description": "One component of the query definition. Encapsulates a record type in the query. The root component is created automatically; join components are created via autoJoin/join.",
+            "methods": [
+                {
+                    "name": "autoJoin",
+                    "description": "Creates a join relationship from this component. Selects the correct join type automatically.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options object." },
+                        { "name": "options.fieldId", "type": "string", "description": "The column type (field ID) that represents the join." }
+                    ],
+                    "returns": "query.Component",
+                    "returnType": "N/query#Component"
+                },
+                {
+                    "name": "createColumn",
+                    "description": "Creates a query result column based on this component.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options object." },
+                        { "name": "options.fieldId", "type": "string", "description": "The field ID for the column.", "optional": true },
+                        { "name": "options.formula", "type": "string", "description": "A formula to use for the column.", "optional": true },
+                        { "name": "options.type", "type": "string", "description": "The return type of the formula.", "optional": true },
+                        { "name": "options.aggregate", "type": "string", "description": "The aggregate function.", "optional": true },
+                        { "name": "options.groupBy", "type": "boolean", "description": "Whether to group by this column.", "optional": true },
+                        { "name": "options.context", "type": "Object", "description": "The field context.", "optional": true },
+                        { "name": "options.alias", "type": "string", "description": "An alias for the column.", "optional": true }
+                    ],
+                    "returns": "query.Column",
+                    "returnType": "N/query#Column"
+                },
+                {
+                    "name": "createCondition",
+                    "description": "Creates a condition (filter) based on this component.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options object." },
+                        { "name": "options.fieldId", "type": "string", "description": "The field ID for the condition.", "optional": true },
+                        { "name": "options.operator", "type": "string", "description": "The operator.", "optional": true },
+                        { "name": "options.values", "type": "string | number | boolean | Array", "description": "Values to filter by.", "optional": true },
+                        { "name": "options.formula", "type": "string", "description": "A formula for the condition.", "optional": true },
+                        { "name": "options.type", "type": "string", "description": "The return type of the formula.", "optional": true },
+                        { "name": "options.aggregate", "type": "string", "description": "The aggregate function.", "optional": true }
+                    ],
+                    "returns": "query.Condition",
+                    "returnType": "N/query#Condition"
+                },
+                {
+                    "name": "createSort",
+                    "description": "Creates a sort based on this component.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options object." },
+                        { "name": "options.column", "type": "query.Column", "description": "The column to sort by." },
+                        { "name": "options.ascending", "type": "boolean", "description": "Whether the sort direction is ascending.", "optional": true },
+                        { "name": "options.caseSensitive", "type": "boolean", "description": "Whether the sort is case sensitive.", "optional": true },
+                        { "name": "options.locale", "type": "string", "description": "The locale for the sort.", "optional": true },
+                        { "name": "options.nullsLast", "type": "boolean", "description": "Whether nulls are listed last.", "optional": true }
+                    ],
+                    "returns": "query.Sort",
+                    "returnType": "N/query#Sort"
+                },
+                {
+                    "name": "join",
+                    "description": "Creates a join relationship. Alias for Component.autoJoin(options).",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options object." },
+                        { "name": "options.fieldId", "type": "string", "description": "The column type (field ID) that represents the join." }
+                    ],
+                    "returns": "query.Component",
+                    "returnType": "N/query#Component"
+                },
+                {
+                    "name": "joinFrom",
+                    "description": "Creates an explicit directional join from another component to this component (inverse join).",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options object." },
+                        { "name": "options.fieldId", "type": "string", "description": "The column type (field ID) that represents the join." },
+                        { "name": "options.source", "type": "string", "description": "The query type of the source component." }
+                    ],
+                    "returns": "query.Component",
+                    "returnType": "N/query#Component"
+                },
+                {
+                    "name": "joinTo",
+                    "description": "Creates an explicit directional join to another component from this component (forward join).",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options object." },
+                        { "name": "options.fieldId", "type": "string", "description": "The column type (field ID) that represents the join." },
+                        { "name": "options.target", "type": "string", "description": "The query type of the target component." }
+                    ],
+                    "returns": "query.Component",
+                    "returnType": "N/query#Component"
+                }
+            ],
+            "properties": [
+                { "name": "child", "type": "Object", "description": "The child components. Object of key-value pairs where keys are child component names.", "readOnly": true },
+                { "name": "parent", "type": "query.Component", "description": "The parent component.", "readOnly": true },
+                { "name": "source", "type": "string", "description": "The source query type (set by joinFrom).", "readOnly": true },
+                { "name": "target", "type": "string", "description": "The target query type (set by joinTo).", "readOnly": true },
+                { "name": "type", "type": "string", "description": "The query type of this component.", "readOnly": true }
+            ]
+        },
+        {
+            "name": "Column",
+            "description": "A query result column. Use Query.createColumn(options) or Component.createColumn(options) to create.",
+            "methods": [],
+            "properties": [
+                { "name": "aggregate", "type": "string", "description": "An aggregate function performed on the column values.", "readOnly": true },
+                { "name": "alias", "type": "string", "description": "An alias for the column used in mapped results.", "readOnly": true },
+                { "name": "component", "type": "query.Component", "description": "Reference to the component this column belongs to.", "readOnly": true },
+                { "name": "context", "type": "Object", "description": "The field context for values in this column.", "readOnly": true },
+                { "name": "fieldId", "type": "string", "description": "The field ID of this column.", "readOnly": true },
+                { "name": "formula", "type": "string", "description": "The formula used to create this column.", "readOnly": true },
+                { "name": "groupBy", "type": "boolean", "description": "Whether query results are grouped by this column.", "readOnly": true },
+                { "name": "label", "type": "string", "description": "The label for the column.", "readOnly": true },
+                { "name": "type", "type": "string", "description": "The return type of the formula used for this column.", "readOnly": true }
+            ]
+        },
+        {
+            "name": "Condition",
+            "description": "A condition that narrows query results. Use Query.createCondition(options) or Component.createCondition(options) to create.",
+            "methods": [],
+            "properties": [
+                { "name": "aggregate", "type": "string", "description": "An aggregate function performed on the condition.", "readOnly": true },
+                { "name": "children", "type": "query.Condition[]", "description": "Array of child conditions used to create this parent condition.", "readOnly": true },
+                { "name": "component", "type": "query.Component", "description": "Reference to the component this condition belongs to.", "readOnly": true },
+                { "name": "fieldId", "type": "string", "description": "The field ID used in the condition.", "readOnly": true },
+                { "name": "formula", "type": "string", "description": "The formula used to create the condition.", "readOnly": true },
+                { "name": "operator", "type": "string", "description": "The operator used to create the condition.", "readOnly": true },
+                { "name": "type", "type": "string", "description": "The return type of the formula used in the condition.", "readOnly": true },
+                { "name": "values", "type": "string | number | Array", "description": "Value or array of values used by the operator.", "readOnly": true }
+            ]
+        },
+        {
+            "name": "Sort",
+            "description": "A sort placed on a query result column. Use Query.createSort(options) or Component.createSort(options) to create.",
+            "methods": [],
+            "properties": [
+                { "name": "ascending", "type": "boolean", "description": "Whether the sort direction is ascending." },
+                { "name": "caseSensitive", "type": "boolean", "description": "Whether the sort is case sensitive." },
+                { "name": "column", "type": "query.Column", "description": "The column that results are sorted by.", "readOnly": true },
+                { "name": "locale", "type": "string", "description": "The locale used for the sort." },
+                { "name": "nullsLast", "type": "boolean", "description": "Whether null values are listed last." }
+            ]
+        },
+        {
+            "name": "ResultSet",
+            "description": "The set of results returned by the query.",
+            "methods": [
+                {
+                    "name": "asMappedResults",
+                    "description": "Returns the query result set as an array of mapped results (objects with column names as keys).",
+                    "params": [],
+                    "returns": "Object[]"
+                },
+                {
+                    "name": "iterator",
+                    "description": "Returns a standard SuiteScript 2.x iterator for iterating through results.",
+                    "params": [],
+                    "returns": "Iterator"
+                }
+            ],
+            "properties": [
+                { "name": "columns", "type": "query.Column[]", "description": "An array of query result column references.", "readOnly": true },
+                { "name": "results", "type": "query.Result[]", "description": "An array of query.Result objects.", "readOnly": true },
+                { "name": "types", "type": "string[]", "description": "An array of the return types for the results.", "readOnly": true }
+            ]
+        },
+        {
+            "name": "Result",
+            "description": "A single row of the query result set.",
+            "methods": [
+                {
+                    "name": "asMap",
+                    "description": "Returns the query result as an object with columns mapped to result values.",
+                    "params": [],
+                    "returns": "Object"
+                },
+                {
+                    "name": "getValue",
+                    "description": "Gets the value at a given index in Result.values.",
+                    "params": [
+                        { "name": "options", "type": "Object | number", "description": "Options object or column index." },
+                        { "name": "options.index", "type": "number", "description": "The index of the value to return.", "optional": true }
+                    ],
+                    "returns": "boolean | string | number | null"
+                }
+            ],
+            "properties": [
+                { "name": "values", "type": "Array", "description": "The result values for this row.", "readOnly": true }
+            ]
+        },
+        {
+            "name": "PagedData",
+            "description": "A set of paged query results with information about the paged result set.",
+            "methods": [
+                {
+                    "name": "fetch",
+                    "description": "Retrieves a page from the paged query results.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options object." },
+                        { "name": "options.index", "type": "number", "description": "The index of the page to fetch." }
+                    ],
+                    "returns": "query.Page",
+                    "returnType": "N/query#Page"
+                },
+                {
+                    "name": "fetch.promise",
+                    "description": "Asynchronously retrieves a page from the paged query results.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options object." },
+                        { "name": "options.index", "type": "number", "description": "The index of the page to fetch." }
+                    ],
+                    "returns": "Promise<query.Page>",
+                    "returnType": "Promise<N/query#Page>"
+                },
+                {
+                    "name": "iterator",
+                    "description": "Returns a standard SuiteScript 2.x iterator for iterating through pages.",
+                    "params": [],
+                    "returns": "Iterator"
+                }
+            ],
+            "properties": [
+                { "name": "count", "type": "number", "description": "The total number of paged query results.", "readOnly": true },
+                { "name": "pageRanges", "type": "query.PageRange[]", "description": "An array of page ranges for the paged results.", "readOnly": true },
+                { "name": "pageSize", "type": "number", "description": "The number of query result rows per page.", "readOnly": true }
+            ]
+        },
+        {
+            "name": "Page",
+            "description": "One page of the paged query results.",
+            "methods": [],
+            "properties": [
+                { "name": "data", "type": "query.ResultSet", "description": "The query results contained in this page.", "readOnly": true },
+                { "name": "isFirst", "type": "boolean", "description": "Whether this is the first page.", "readOnly": true },
+                { "name": "isLast", "type": "boolean", "description": "Whether this is the last page.", "readOnly": true },
+                { "name": "pagedData", "type": "query.PagedData", "description": "The set of paged results this page is from.", "readOnly": true },
+                { "name": "pageRange", "type": "query.PageRange", "description": "The range of results for this page.", "readOnly": true }
+            ]
+        },
+        {
+            "name": "PageRange",
+            "description": "A range of pages from the paged query results.",
+            "methods": [],
+            "properties": [
+                { "name": "index", "type": "number", "description": "The index for this page range.", "readOnly": true },
+                { "name": "size", "type": "number", "description": "The number of query result rows in this page range.", "readOnly": true }
+            ]
+        },
+        {
+            "name": "Period",
+            "description": "A period of time to use in query conditions. Use query.createPeriod(options) to create.",
+            "methods": [],
+            "properties": [
+                { "name": "adjustment", "type": "string", "description": "The adjustment of the period. Uses values from query.PeriodAdjustment.", "readOnly": true },
+                { "name": "code", "type": "string", "description": "The code of the period. Uses values from query.PeriodCode.", "readOnly": true },
+                { "name": "type", "type": "string", "description": "The type of the period. Uses values from query.PeriodType.", "readOnly": true }
+            ]
+        },
+        {
+            "name": "RelativeDate",
+            "description": "A relative date to use in query conditions. Use query.createRelativeDate(options) to create.",
+            "methods": [],
+            "properties": [
+                { "name": "dateId", "type": "string", "description": "The ID of the relative date.", "readOnly": true },
+                { "name": "end", "type": "Object", "description": "The end point of the relative date.", "readOnly": true },
+                { "name": "interval", "type": "Object", "description": "The interval of the relative date (from start to end).", "readOnly": true },
+                { "name": "isRange", "type": "boolean", "description": "Whether the relative date represents a range or a specific moment.", "readOnly": true },
+                { "name": "start", "type": "Object", "description": "The start point of the relative date.", "readOnly": true },
+                { "name": "value", "type": "number", "description": "The value of the relative date.", "readOnly": true }
+            ]
+        },
+        {
+            "name": "SuiteQL",
+            "description": "A SuiteQL query. Use Query.toSuiteQL() to create.",
+            "methods": [
+                {
+                    "name": "run",
+                    "description": "Runs the SuiteQL query and returns the results.",
+                    "params": [],
+                    "returns": "query.ResultSet",
+                    "returnType": "N/query#ResultSet"
+                },
+                {
+                    "name": "runPaged",
+                    "description": "Runs the SuiteQL query as a paged query and returns paged results.",
+                    "params": [
+                        { "name": "options", "type": "Object", "description": "Options object.", "optional": true },
+                        { "name": "options.pageSize", "type": "number", "description": "The number of results per page.", "optional": true }
+                    ],
+                    "returns": "query.PagedData",
+                    "returnType": "N/query#PagedData"
+                }
+            ],
+            "properties": [
+                { "name": "columns", "type": "query.Column[]", "description": "Describes the result columns to be returned from the query." },
+                { "name": "params", "type": "Array", "description": "Contains the parameters for the query.", "readOnly": true },
+                { "name": "query", "type": "string", "description": "Holds the string representation of the query.", "readOnly": true },
+                { "name": "type", "type": "string", "description": "Describes the type of the query. Uses values from query.Type.", "readOnly": true }
+            ]
+        }
+    ]
+}

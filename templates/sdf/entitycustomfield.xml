@@ -1,0 +1,12 @@
+<entitycustomfield scriptid="{{SCRIPTID}}">
+    <label></label>
+    <description></description>
+    <fieldtype>TEXT</fieldtype>
+    <isinactive>F</isinactive>
+    <ismandatory>F</ismandatory>
+    <displaytype>NORMAL</displaytype>
+    <appliestocustomer>F</appliestocustomer>
+    <appliestovendor>F</appliestovendor>
+    <appliestoemployee>F</appliestoemployee>
+    <appliestocontact>F</appliestocontact>
+</entitycustomfield>
