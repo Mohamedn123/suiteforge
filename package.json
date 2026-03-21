@@ -1,6 +1,8 @@
 {
   "name": "suiteforge",
   "displayName": "SuiteForge",
+  "publisher": "MohamedNashaat00",
+  "icon": "assets/logo.png",
   "description": "Professional scaffolding and productivity tools for NetSuite SDF.",
   "version": "0.0.1",
   "engines": {
