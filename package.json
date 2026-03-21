@@ -4,7 +4,11 @@
   "publisher": "MohamedNashaat00",
   "icon": "assets/logo.png",
   "description": "Professional scaffolding and productivity tools for NetSuite SDF.",
-  "version": "0.0.1",
+  "version": "1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Mohamedn123/suiteforge"
+  },
   "engines": {
     "vscode": "^1.110.0"
   },
@@ -113,5 +117,28 @@
     "vscode-languageclient": "^9.0.1",
     "vscode-languageserver": "^9.0.1",
     "vscode-languageserver-textdocument": "^1.0.12"
-  }
+  },
+  "keywords": [
+    "netsuite",
+    "sdf",
+    "suitecloud",
+    "vscode-extension",
+    "productivity",
+    "xml",
+    "javascript",
+    "developer-tools",
+    "code-generation",
+    "templates",
+    "language-server",
+    "suiteforge",
+    "scaffolding",
+    "automation",
+    "customization",
+    "netsuite-scripts",
+    "suiteapp",
+    "suiteql",
+    "suitelet",
+    "restlet",
+    "netsuite-development"
+  ]
 }
