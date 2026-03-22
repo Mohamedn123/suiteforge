@@ -22,6 +22,7 @@ export interface CliRunEvent {
  */
 export class SdfCliRunner extends EventEmitter {
     private process: ChildProcess | null = null;
+    private outputBuffer: string = '';
 
     get isRunning(): boolean {
         return this.process !== null;
@@ -46,6 +47,8 @@ export class SdfCliRunner extends EventEmitter {
         const isWindows = process.platform === 'win32';
         const executable = isWindows ? 'suitecloud.cmd' : 'suitecloud';
 
+        this.outputBuffer = '';
+
         this.emit('output', {
             type: 'stdout',
             data: `> suitecloud ${commandId}\n`,
@@ -58,16 +61,20 @@ export class SdfCliRunner extends EventEmitter {
         });
 
         this.process.stdout?.on('data', (chunk: Buffer) => {
+            const data = chunk.toString();
+            this.outputBuffer += data;
             this.emit('output', {
                 type: 'stdout',
-                data: chunk.toString(),
+                data,
             } satisfies CliRunEvent);
         });
 
         this.process.stderr?.on('data', (chunk: Buffer) => {
+            const data = chunk.toString();
+            this.outputBuffer += data;
             this.emit('output', {
                 type: 'stderr',
-                data: chunk.toString(),
+                data,
             } satisfies CliRunEvent);
         });
 
@@ -77,6 +84,12 @@ export class SdfCliRunner extends EventEmitter {
                 data: `Failed to start: ${err.message}\n\nMake sure @oracle/suitecloud-cli is installed globally:\n  npm install -g @oracle/suitecloud-cli\n`,
             } satisfies CliRunEvent);
             this.process = null;
+            
+            vscode.window.showErrorMessage('SuiteForge: Failed to start SuiteCloud CLI. Is it installed?', 'Learn More').then(res => {
+                if (res === 'Learn More') {
+                    vscode.env.openExternal(vscode.Uri.parse('https://docs.oracle.com/en/cloud/saas/netsuite/ns-go-live/article_1562577413.html'));
+                }
+            });
         });
 
         this.process.on('close', (code: number | null) => {
@@ -86,7 +99,33 @@ export class SdfCliRunner extends EventEmitter {
                 code: code ?? 1,
             } satisfies CliRunEvent);
             this.process = null;
+            
+            this.analyzeOutputForErrors();
         });
+    }
+
+    private analyzeOutputForErrors(): void {
+        const lowerOutput = this.outputBuffer.toLowerCase();
+        
+        if (lowerOutput.includes('not authenticated') || lowerOutput.includes('no valid auth id') || lowerOutput.includes('run suitecloud account:setup')) {
+            vscode.window.showErrorMessage(
+                'SuiteCloud CLI: You are not authenticated.', 
+                'Run account:setup'
+            ).then(selection => {
+                if (selection === 'Run account:setup') {
+                    this.run('account:setup');
+                }
+            });
+        } else if (lowerOutput.includes('project not set up') || lowerOutput.includes('not a suitecloud project') || lowerOutput.includes('run suitecloud project:create')) {
+             vscode.window.showErrorMessage(
+                'SuiteCloud CLI: This directory is not a SuiteCloud project.', 
+                'Run project:create'
+            ).then(selection => {
+                if (selection === 'Run project:create') {
+                    this.run('project:create');
+                }
+            });
+        }
     }
 
     cancel(): void {

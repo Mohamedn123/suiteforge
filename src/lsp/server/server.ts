@@ -5,19 +5,21 @@ import {
     InitializeResult,
     TextDocumentSyncKind,
     CompletionParams,
+    CompletionList,
     HoverParams,
     Diagnostic,
     DiagnosticSeverity,
 } from 'vscode-languageserver/node';
 import { TextDocument } from 'vscode-languageserver-textdocument';
 import { analyzeDocument, AnalysisResult } from './analyzer';
-import { getCompletions, getHoverInfo, normalizeScriptType } from './completions';
+import { getCompletions, getHoverInfo } from './completions';
 import { getModule } from './moduleData';
 
 const connection = createConnection(ProposedFeatures.all);
 const documents = new TextDocuments(TextDocument);
 
 const analysisCache = new Map<string, AnalysisResult>();
+const validationDelays: Record<string, NodeJS.Timeout> = {};
 
 connection.onInitialize((): InitializeResult => {
     return {
@@ -32,11 +34,11 @@ connection.onInitialize((): InitializeResult => {
     };
 });
 
-documents.onDidChangeContent(change => {
+function validateTextDocument(document: TextDocument): void {
     try {
-        const text = change.document.getText();
+        const text = document.getText();
         const analysis = analyzeDocument(text);
-        analysisCache.set(change.document.uri, analysis);
+        analysisCache.set(document.uri, analysis);
 
         const diagnostics: Diagnostic[] = [];
 
@@ -47,8 +49,9 @@ documents.onDidChangeContent(change => {
                 seen.add(modId);
 
                 const mod = getModule(modId);
-                const normalizedSt = normalizeScriptType(analysis.scriptType);
-                if (mod?.supportedIn && normalizedSt && !mod.supportedIn.includes(normalizedSt)) {
+                // moduleData.ts expands 'server' into specific script types
+                // so we just check if the actual script type is supported.
+                if (mod?.supportedIn && !mod.supportedIn.includes(analysis.scriptType)) {
                     const pattern = new RegExp(`['"]${modId.replace(/\//g, '\\/')}['"]`);
                     const match = pattern.exec(text);
                     const importIndex = match ? match.index + 1 : text.indexOf(modId);
@@ -56,8 +59,8 @@ documents.onDidChangeContent(change => {
                         diagnostics.push({
                             severity: DiagnosticSeverity.Warning,
                             range: {
-                                start: change.document.positionAt(importIndex),
-                                end: change.document.positionAt(importIndex + modId.length),
+                                start: document.positionAt(importIndex),
+                                end: document.positionAt(importIndex + modId.length),
                             },
                             message: `"${modId}" is not supported in ${analysis.scriptType}. Supported in: ${mod.supportedIn.join(', ')}.`,
                             source: 'SuiteForge',
@@ -68,25 +71,42 @@ documents.onDidChangeContent(change => {
         }
 
         connection.sendDiagnostics({
-            uri: change.document.uri,
+            uri: document.uri,
             diagnostics,
         });
-    } catch (_e) {
+    } catch (e) {
+        console.error('Validation error:', e);
         connection.sendDiagnostics({
-            uri: change.document.uri,
+            uri: document.uri,
             diagnostics: [],
         });
     }
+}
+
+documents.onDidChangeContent(change => {
+    // Debounce validation to prevent thrashing while user types
+    const uri = change.document.uri;
+    if (validationDelays[uri]) {
+        clearTimeout(validationDelays[uri]);
+    }
+    validationDelays[uri] = setTimeout(() => {
+        validateTextDocument(change.document);
+        delete validationDelays[uri];
+    }, 300);
 });
 
 documents.onDidClose(e => {
     analysisCache.delete(e.document.uri);
+    if (validationDelays[e.document.uri]) {
+        clearTimeout(validationDelays[e.document.uri]);
+        delete validationDelays[e.document.uri];
+    }
 });
 
-connection.onCompletion((params: CompletionParams) => {
+connection.onCompletion((params: CompletionParams): CompletionList => {
     try {
         const doc = documents.get(params.textDocument.uri);
-        if (!doc) { return []; }
+        if (!doc) { return { isIncomplete: false, items: [] }; }
 
         let analysis = analysisCache.get(doc.uri);
         if (!analysis) {
@@ -97,9 +117,11 @@ connection.onCompletion((params: CompletionParams) => {
         const offset = doc.offsetAt(params.position);
         const textBeforeCursor = doc.getText().substring(0, offset);
 
-        return getCompletions(textBeforeCursor, analysis);
-    } catch (_e) {
-        return [];
+        const items = getCompletions(textBeforeCursor, analysis) || [];
+        return { isIncomplete: false, items };
+    } catch (e) {
+        console.error('Completion error:', e);
+        return { isIncomplete: false, items: [] };
     }
 });
 
@@ -127,7 +149,8 @@ connection.onHover((params: HoverParams) => {
         const textBeforeWord = text.substring(0, wordStart);
 
         return getHoverInfo(word, textBeforeWord, analysis);
-    } catch (_e) {
+    } catch (e) {
+        console.error('Hover error:', e);
         return null;
     }
 });

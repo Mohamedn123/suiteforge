@@ -145,9 +145,9 @@ function isSupportedInScript(
     scriptType: string | null,
 ): boolean {
     if (!supportedIn || !scriptType) { return true; }
-    const normalized = normalizeScriptType(scriptType);
-    if (!normalized) { return true; }
-    return supportedIn.includes(normalized);
+    // moduleData.ts already expands 'server' into 'UserEventScript', 'Suitelet', etc.
+    // So we just check if the actual script type is in the array.
+    return supportedIn.includes(scriptType);
 }
 
 function getCompletionsForVariable(
