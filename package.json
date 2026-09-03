@@ -4,7 +4,7 @@
   "publisher": "MohamedNashaat00",
   "icon": "assets/logo.png",
   "description": "Professional scaffolding and productivity tools for NetSuite SDF.",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/Mohamedn123/suiteforge"
@@ -113,6 +113,18 @@
         "title": "Refresh",
         "category": "SuiteForge",
         "icon": "$(refresh)"
+      },
+      {
+        "command": "suiteforge.checkSuiteCloudCliUpdates",
+        "title": "Check for SuiteCloud CLI Updates",
+        "category": "SuiteForge",
+        "icon": "$(versions)"
+      },
+      {
+        "command": "suiteforge.updateSuiteCloudCli",
+        "title": "Update SuiteCloud CLI...",
+        "category": "SuiteForge",
+        "icon": "$(cloud-download)"
       }
     ],
     "submenus": [
@@ -242,6 +254,28 @@
           "default": true,
           "scope": "resource",
           "description": "Require a modal confirmation before deploying to a production or unverified NetSuite account."
+        },
+        "suiteforge.suiteCloudCli.updateChecks": {
+          "type": "string",
+          "enum": [
+            "daily",
+            "weekly",
+            "never"
+          ],
+          "enumDescriptions": [
+            "Check the npm registry at most once every 24 hours.",
+            "Check the npm registry at most once every seven days.",
+            "Do not check the npm registry automatically. Manual checks remain available."
+          ],
+          "default": "daily",
+          "scope": "window",
+          "description": "Controls automatic SuiteCloud CLI update checks. SuiteForge never installs an update without confirmation."
+        },
+        "suiteforge.suiteCloudCli.showStatusBar": {
+          "type": "boolean",
+          "default": true,
+          "scope": "window",
+          "description": "Show the installed SuiteCloud CLI version and update availability in the status bar."
         }
       }
     },

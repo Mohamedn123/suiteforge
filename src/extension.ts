@@ -4,12 +4,14 @@ import { registerGeneratorCommands } from './generators/index';
 import { registerProviders } from './providers/index';
 import { registerViews } from './views/index';
 import { startLanguageServer, stopLanguageServer } from './lsp/client';
+import { registerSuiteCloudCliManager } from './views/suiteCloudCliManager';
 
 export function activate(context: vscode.ExtensionContext): void {
     registerReferenceCommands(context);
     registerGeneratorCommands(context);
     registerProviders(context);
     registerViews(context);
+    registerSuiteCloudCliManager(context);
     startLanguageServer(context);
 }
 

@@ -87,4 +87,34 @@ suite('Validate Output Parser Test Suite', () => {
         const issues = parseValidateOutput(`${outside}:2: Outside project`, root);
         assert.strictEqual(issues.length, 0);
     });
+
+    test('Parses legacy Errors for file and Line No output', () => {
+        const projectPath = vscode.Uri.joinPath(root, 'src', 'Objects', 'legacy.xml').fsPath;
+        const output = [
+            `Errors for file ${projectPath}.`,
+            '    - Line No. 17 - Error Message: Missing required field',
+        ].join('\n');
+        const issues = parseValidateOutput(output, root);
+        assert.strictEqual(issues.length, 1);
+        assert.strictEqual(issues[0].line, 16);
+        assert.strictEqual(issues[0].message, 'Missing required field');
+    });
+
+    test('Parses ANSI-colored 4.x prefixed summaries', () => {
+        const output = '\u001b[31m[ERROR]\u001b[0m src/Objects/new-output.xml (line 12, column 4): Invalid field value';
+        const issues = parseValidateOutput(output, root);
+        assert.strictEqual(issues.length, 1);
+        assert.strictEqual(issues[0].line, 11);
+        assert.strictEqual(issues[0].column, 3);
+        assert.strictEqual(issues[0].severity, 'error');
+    });
+
+    test('Parses 4.x table summaries and removes exact duplicates', () => {
+        const row = '│ WARNING │ src/Objects/table-output.xml │ 8:2 │ Deprecated field │';
+        const issues = parseValidateOutput(`${row}\n${row}`, root);
+        assert.strictEqual(issues.length, 1);
+        assert.strictEqual(issues[0].line, 7);
+        assert.strictEqual(issues[0].column, 1);
+        assert.strictEqual(issues[0].severity, 'warning');
+    });
 });

@@ -45,35 +45,126 @@ export function parseValidateOutput(
     projectRoot: vscode.Uri,
 ): ParsedValidationIssue[] {
     const issues: ParsedValidationIssue[] = [];
-    const lines = output.split(/\r?\n/);
+    const lines = stripAnsi(output).split(/\r?\n/);
 
     let currentFile: string | null = null;
+    let currentLine = 0;
+    let currentColumn = 0;
+    let currentSeverity: ParsedValidationIssue['severity'] = 'error';
+
+    const addIssue = (
+        file: string,
+        message: string,
+        sourceLine: string,
+        line = 0,
+        column = 0,
+        severity: ParsedValidationIssue['severity'] = /warning/i.test(message) ? 'warning' : 'error',
+    ): void => {
+        const resolved = resolveFile(file, projectRoot);
+        if (!resolved) { return; }
+        issues.push({
+            file: resolved,
+            line: Math.max(0, line),
+            column: Math.max(0, column),
+            message: message.trim(),
+            severity,
+            sourceLine,
+        });
+    };
 
     for (const rawLine of lines) {
         const line = rawLine.trim();
+
+        // Legacy and 4.x contextual header:
+        // "Errors for file C:\project\src\Objects\bad.xml."
+        const fileHeader = /^(Errors?|Warnings?)\s+for\s+file\s+(.+?\.(?:xml|js|ts|json|html|tpl))\.?$/i.exec(line);
+        if (fileHeader) {
+            currentFile = fileHeader[2].trim();
+            currentLine = 0;
+            currentColumn = 0;
+            currentSeverity = /^Warning/i.test(fileHeader[1]) ? 'warning' : 'error';
+            continue;
+        }
 
         // Block form: "File: src/Objects/foo.xml"
         const fileMatch = /^File:\s*(.+)$/i.exec(line);
         if (fileMatch) {
             currentFile = fileMatch[1].trim();
+            currentLine = 0;
+            currentColumn = 0;
+            currentSeverity = /warning/i.test(line) ? 'warning' : 'error';
+            continue;
+        }
+
+        // Contextual location emitted separately from the message.
+        const locationMatch = /^Line(?:\s+No\.)?\s*:\s*(\d+)(?:\s*[,;]\s*Column\s*:\s*(\d+))?$/i.exec(line);
+        if (locationMatch && currentFile) {
+            currentLine = Math.max(0, Number.parseInt(locationMatch[1], 10) - 1);
+            currentColumn = Math.max(0, Number.parseInt(locationMatch[2] ?? '1', 10) - 1);
+            continue;
+        }
+
+        // Legacy indented detail:
+        // "- Line No. 90 - Error Message: Invalid field"
+        const legacyDetail = /^-?\s*Line\s+No\.\s*(\d+)(?:\s*[,;]\s*Column\s*(?:No\.)?\s*(\d+))?\s*-\s*(Error|Warning)\s+Message:\s*(.*)$/i.exec(line);
+        if (legacyDetail && currentFile) {
+            addIssue(
+                currentFile,
+                legacyDetail[4],
+                line,
+                Number.parseInt(legacyDetail[1], 10) - 1,
+                Number.parseInt(legacyDetail[2] ?? '1', 10) - 1,
+                /^Warning/i.test(legacyDetail[3]) ? 'warning' : 'error',
+            );
             continue;
         }
 
         // Details line for the block form
         const detailsMatch = /^Details:\s*(.*)$/i.exec(line);
         if (detailsMatch && currentFile) {
-            const resolved = resolveFile(currentFile, projectRoot);
-            if (resolved) {
-                issues.push({
-                    file: resolved,
-                    line: 0,
-                    column: 0,
-                    message: detailsMatch[1].trim(),
-                    severity: /warning/i.test(detailsMatch[1]) ? 'warning' : 'error',
-                    sourceLine: line,
-                });
-            }
+            const severity = /warning/i.test(detailsMatch[1]) ? 'warning' : currentSeverity;
+            addIssue(currentFile, detailsMatch[1], line, currentLine, currentColumn, severity);
             currentFile = null;
+            continue;
+        }
+
+        const messageMatch = /^(?:(Error|Warning)\s+)?Message:\s*(.*)$/i.exec(line);
+        if (messageMatch && currentFile) {
+            const severity = messageMatch[1]
+                ? (/^Warning/i.test(messageMatch[1]) ? 'warning' : 'error')
+                : currentSeverity;
+            addIssue(currentFile, messageMatch[2], line, currentLine, currentColumn, severity);
+            currentFile = null;
+            continue;
+        }
+
+        // 4.x summary/table row:
+        // "│ ERROR │ src/Objects/bad.xml │ 12:4 │ Invalid field │"
+        const tableRow = /^[│|]\s*(ERROR|WARNING)\s*[│|]\s*(.+?\.(?:xml|js|ts|json|html|tpl))\s*[│|]\s*(?:(\d+)(?::(\d+))?)?\s*[│|]\s*(.*?)\s*[│|]?$/i.exec(line);
+        if (tableRow) {
+            addIssue(
+                tableRow[2],
+                tableRow[5],
+                line,
+                Number.parseInt(tableRow[3] ?? '1', 10) - 1,
+                Number.parseInt(tableRow[4] ?? '1', 10) - 1,
+                /^WARNING$/i.test(tableRow[1]) ? 'warning' : 'error',
+            );
+            continue;
+        }
+
+        // 4.x prefixed summary:
+        // "[ERROR] src/Objects/bad.xml (line 12, column 4): Invalid field"
+        const prefixed = /^\[?(ERROR|WARNING)\]?\s+(?:in\s+)?(.+?\.(?:xml|js|ts|json|html|tpl))(?:\s+\(\s*line\s+(\d+)(?:\s*,\s*column\s+(\d+))?\s*\))?\s*[:—-]\s*(.*)$/i.exec(line);
+        if (prefixed) {
+            addIssue(
+                prefixed[2],
+                prefixed[5],
+                line,
+                Number.parseInt(prefixed[3] ?? '1', 10) - 1,
+                Number.parseInt(prefixed[4] ?? '1', 10) - 1,
+                /^WARNING$/i.test(prefixed[1]) ? 'warning' : 'error',
+            );
             continue;
         }
 
@@ -81,37 +172,33 @@ export function parseValidateOutput(
         // e.g. "src/SuiteScripts/foo.js:34:1 Unexpected token }"
         const inline = /^(.+?\.(?:xml|js|ts|json|html|tpl)):(\d+)(?::(\d+))?\s*:?\s*(.*)$/.exec(line);
         if (inline) {
-            const resolved = resolveFile(inline[1], projectRoot);
-            if (resolved) {
-                issues.push({
-                    file: resolved,
-                    line: Math.max(0, (parseInt(inline[2], 10) || 1) - 1),
-                    column: Math.max(0, (parseInt(inline[3] || '1', 10) || 1) - 1),
-                    message: inline[4].trim(),
-                    severity: /warning/i.test(inline[4]) ? 'warning' : 'error',
-                    sourceLine: line,
-                });
-            }
+            addIssue(
+                inline[1],
+                inline[4],
+                line,
+                (Number.parseInt(inline[2], 10) || 1) - 1,
+                (Number.parseInt(inline[3] || '1', 10) || 1) - 1,
+            );
             continue;
         }
 
         const inlineNoLine = /^(.+?\.(?:xml|js|ts|json|html|tpl))\s+(:?\[?(?:ERROR|WARNING)\]?\s*.*)$/i.exec(line);
         if (inlineNoLine) {
-            const resolved = resolveFile(inlineNoLine[1], projectRoot);
-            if (resolved) {
-                issues.push({
-                    file: resolved,
-                    line: 0,
-                    column: 0,
-                    message: inlineNoLine[2].replace(/^:\s*/, '').trim(),
-                    severity: /warning/i.test(inlineNoLine[2]) ? 'warning' : 'error',
-                    sourceLine: line,
-                });
-            }
+            addIssue(inlineNoLine[1], inlineNoLine[2].replace(/^:\s*/, ''), line);
         }
     }
 
-    return issues;
+    const unique = new Map<string, ParsedValidationIssue>();
+    for (const issue of issues) {
+        const key = [issue.file.toString(), issue.line, issue.column, issue.severity, issue.message].join('\0');
+        if (!unique.has(key)) { unique.set(key, issue); }
+    }
+    return [...unique.values()];
+}
+
+function stripAnsi(value: string): string {
+    // ANSI CSI sequences used by both the legacy and 4.x CLI renderers.
+    return value.replace(/\u001b\[[0-?]*[ -/]*[@-~]/g, '');
 }
 
 function resolveFile(relPath: string, root: vscode.Uri): vscode.Uri | null {

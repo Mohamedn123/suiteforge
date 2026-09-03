@@ -20,6 +20,7 @@ SuiteForge is a powerful Visual Studio Code extension designed to enhance produc
 - **SuiteScript Snippets**: 16 built-in snippets for common patterns — define skeletons for every script type, record/search/query operations, Suitelet forms, and more. Type `ss` to browse them.
 - **Deploy Active File**: Upload the open file straight to the File Cabinet via a status-bar button, editor context menu, or `Alt+Shift+U`.
 - **Deployment Account Picker**: Before project deploys and file uploads, choose a saved SuiteCloud authentication ID from a native VS Code picker. SuiteForge highlights the current account, switches through the official CLI, and requires confirmation for production or unverified environments.
+- **SuiteCloud CLI Manager**: See the installed CLI version and update availability in the status bar, check the official npm package on demand or on a daily/weekly schedule, skip individual releases, and launch an explicitly confirmed update in a visible terminal.
 - **SDF Command Runner**: Run and manage SDF commands directly from VS Code.
   - Commands that require prompts open in an integrated terminal; non-interactive commands use the visual output panel.
   - Multi-root workspaces execute against the active file's project, or ask you to select one.
@@ -62,6 +63,8 @@ Access the following commands via the Command Palette (`Ctrl+Shift+P` or `Cmd+Sh
 - **SuiteForge: Select Deployment Account...**: Change the SuiteCloud authentication ID used by the current project.
 - **SuiteForge: Add NetSuite Account...**: Open the official interactive SuiteCloud account setup flow.
 - **SuiteForge: Manage Saved NetSuite Accounts...**: List, rename, or remove saved authentication IDs through the SuiteCloud CLI.
+- **SuiteForge: Check for SuiteCloud CLI Updates**: Compare the installed CLI against the official npm package.
+- **SuiteForge: Update SuiteCloud CLI...**: Review prerequisites and launch an explicitly confirmed global npm update in an integrated terminal.
 - **SuiteForge: Refresh**: Refresh the SDF Commands View.
 
 ### IntelliSense
@@ -85,6 +88,7 @@ SuiteForge's Language Server provides IntelliSense for SuiteScript 2.x files aut
 
 - Visual Studio Code v1.105.0 or later.
 - Node.js and npm installed on your system.
+- Oracle JDK 17 or 21 for SuiteCloud CLI operations.
 - SuiteCloud CLI for Node.js installed and available as `suitecloud`.
 - A valid NetSuite SDF project.
 
@@ -93,6 +97,12 @@ SuiteForge's Language Server provides IntelliSense for SuiteScript 2.x files aut
 SuiteForge discovers saved accounts with `suitecloud account:manageauth --list`. Selecting an account runs `suitecloud account:setup:ci --select <authId>`, the SuiteCloud CLI's supported mechanism for updating the project's `project.json` `defaultAuthId`. SuiteForge stores only recent authentication-ID aliases for ordering; credentials, tokens, certificates, and private keys remain managed by the SuiteCloud CLI.
 
 The account picker is shown before every deployment by default. Change **SuiteForge › Deploy: Account Picker** to show it only when multiple profiles exist or to use the project's current account without a picker. **SuiteForge › Deploy: Confirm Production** controls the additional production confirmation and is enabled by default.
+
+### SuiteCloud CLI Updates
+
+SuiteForge reads the installed version with `suitecloud --version` and checks the public `@oracle/suitecloud-cli` version through your configured npm client. Automatic checks are cached and can run daily, weekly, or never through **SuiteForge › Suite Cloud CLI: Update Checks**. Manual checks remain available when automatic checks are disabled.
+
+Updates are never installed automatically. Choosing **Update** first displays the exact pinned `npm install -g @oracle/suitecloud-cli@<version>` command, explains that the operation changes global developer tooling, links to Oracle's terms and prerequisites, and requires explicit confirmation. The command then runs visibly in an integrated terminal. SuiteForge validates npm, Node.js, and Java first and verifies the resulting CLI version when terminal shell integration is available.
 
 ## Contributing
 
@@ -108,6 +118,16 @@ We welcome contributions! To contribute:
 - The Language Server's regex fallback (used during active typing) does not support all patterns that the primary AST parser handles.
 
 ## Release Notes
+
+### 2.1.0 — SuiteCloud CLI Manager
+
+- Detects the installed SuiteCloud CLI version and shows it in the status bar.
+- Checks the official npm package using cached daily or weekly schedules, with a setting to disable automatic checks.
+- Provides low-noise new-version alerts, manual checks, release notes, and per-version skipping.
+- Updates the global CLI only after showing the exact pinned command, Oracle licensing notice, prerequisite results, and an explicit confirmation.
+- Runs installs visibly in the integrated terminal and verifies successful updates when shell integration is available.
+- Blocks unsafe version arguments and unsupported future CLI major versions.
+- Expands validation diagnostics for legacy and SuiteCloud CLI 4.x output styles.
 
 ### 2.0.1 — Progress Experience Update
 

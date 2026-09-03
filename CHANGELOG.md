@@ -4,6 +4,27 @@ All notable changes to the "suiteforge" extension will be documented in this fil
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [2.1.0] - 2026-09-03
+
+### 🚀 New Features
+
+- Added a SuiteCloud CLI Manager that detects the installed CLI version, checks the official npm package for newer releases, and shows update availability in the VS Code status bar.
+- Added **Check for SuiteCloud CLI Updates** and **Update SuiteCloud CLI** commands.
+- Added configurable automatic checks (`daily`, `weekly`, or `never`), a 24-hour/seven-day cache policy, one-time version alerts, manual checks, and **Skip This Version** support.
+- Added an explicit terminal-based installer/updater for the global `@oracle/suitecloud-cli` package. SuiteForge shows the exact pinned npm command and Oracle licensing notice before making any change.
+- Added prerequisite checks for npm, Node.js, and Java plus automatic post-update verification when VS Code terminal shell integration is available.
+
+### 🛡️ Compatibility and Safety
+
+- Added SuiteCloud CLI major-version compatibility gating so SuiteForge does not offer to install an unsupported future major release.
+- Hardened version/package arguments against control characters and Windows shell metacharacters, added bounded output capture and timeouts, and retained visible terminal execution for all installs.
+- Automatic checks never install software, do not run when disabled, and send only the public npm package name to the configured npm registry.
+- Expanded validation parsing for ANSI-colored output, legacy `Errors for file` blocks, contextual line/message records, 4.x-style severity summaries, table rows, and duplicate findings.
+
+### 🧪 Tests
+
+- Added coverage for version parsing and comparison, safe update targets, supported-version gating, update schedules, Windows/POSIX process construction, Java detection, and legacy/4.x validation-output formats, bringing the extension-host suite to 100 tests.
+
 ## [2.0.1] - 2026-09-03
 
 ### ✨ UX Enhancements

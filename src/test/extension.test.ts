@@ -30,6 +30,8 @@ suite('Extension Test Suite', () => {
             'suiteforge.addNetSuiteAccount',
             'suiteforge.manageSavedAccounts',
             'suiteforge.refreshSdfCommands',
+            'suiteforge.checkSuiteCloudCliUpdates',
+            'suiteforge.updateSuiteCloudCli',
         ];
         const registered = await vscode.commands.getCommands();
         for (const id of expected) {
@@ -44,5 +46,7 @@ suite('Extension Test Suite', () => {
         const configuration = vscode.workspace.getConfiguration('suiteforge');
         assert.strictEqual(configuration.inspect('deploy.accountPicker')?.defaultValue, 'always');
         assert.strictEqual(configuration.inspect('deploy.confirmProduction')?.defaultValue, true);
+        assert.strictEqual(configuration.inspect('suiteCloudCli.updateChecks')?.defaultValue, 'daily');
+        assert.strictEqual(configuration.inspect('suiteCloudCli.showStatusBar')?.defaultValue, true);
     });
 });
