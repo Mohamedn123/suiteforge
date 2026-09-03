@@ -83,7 +83,9 @@ export function registerViews(context: vscode.ExtensionContext): void {
                     return;
                 }
                 const panel = SdfWebviewPanel.getOrCreate(context.extensionUri);
-                panel.runCommand(targetedCommand, undefined, folder.uri);
+                panel.runCommand(targetedCommand, undefined, folder.uri, {
+                    accountAuthId: account?.authId,
+                });
             },
         ),
         { dispose: disposeValidationDiagnostics },

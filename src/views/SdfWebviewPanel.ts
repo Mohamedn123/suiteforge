@@ -7,6 +7,18 @@ import {
     clearValidationDiagnostics,
 } from './validationParser';
 
+export type SdfOperationKind = 'validation' | 'deployment' | 'generic';
+
+export interface SdfRunPresentation {
+    accountAuthId?: string;
+}
+
+export function operationKindForCommand(commandId: string): SdfOperationKind {
+    if (commandId === 'project:validate') { return 'validation'; }
+    if (commandId === 'project:deploy' || commandId === 'file:upload') { return 'deployment'; }
+    return 'generic';
+}
+
 export class SdfWebviewPanel {
     private static instance: SdfWebviewPanel | undefined;
     private panel: vscode.WebviewPanel;
@@ -17,6 +29,7 @@ export class SdfWebviewPanel {
     private validateBuffer = '';
     private activeWorkspaceRoot: vscode.Uri | undefined;
     private starting = false;
+    private pendingStart: ReturnType<typeof setTimeout> | undefined;
     private static readonly MAX_VALIDATE_OUTPUT = 5 * 1024 * 1024;
 
     private constructor(private readonly extensionUri: vscode.Uri) {
@@ -32,11 +45,16 @@ export class SdfWebviewPanel {
         this.panel.webview.html = buildHtml(this.panel.webview, extensionUri);
 
         this.panel.webview.onDidReceiveMessage((msg: { type: string }) => {
-            if (msg.type === 'cancel') { this.runner.cancel(); }
+            if (msg.type === 'cancel') { this.cancelCurrentCommand(); }
         });
 
         this.panel.onDidDispose(() => {
             this.disposed = true;
+            if (this.pendingStart) {
+                clearTimeout(this.pendingStart);
+                this.pendingStart = undefined;
+            }
+            this.starting = false;
             this.runner.cancel();
             this.runner.removeAllListeners('output');
             SdfWebviewPanel.instance = undefined;
@@ -45,7 +63,7 @@ export class SdfWebviewPanel {
         this.runner.on('output', (event: CliRunEvent) => {
             if (this.disposed) { return; }
 
-            if (event.type === 'stdout' || event.type === 'stderr') {
+            if (this.validating && (event.type === 'stdout' || event.type === 'stderr')) {
                 this.validateBuffer += event.data;
                 if (this.validateBuffer.length > SdfWebviewPanel.MAX_VALIDATE_OUTPUT) {
                     this.validateBuffer = this.validateBuffer.slice(-SdfWebviewPanel.MAX_VALIDATE_OUTPUT);
@@ -64,7 +82,13 @@ export class SdfWebviewPanel {
                 }
                 const elapsed = Date.now() - this.startTime;
                 const code = event.type === 'error' ? 1 : (event.code ?? 1);
-                this.panel.webview.postMessage({ type: 'finish', code, elapsed, data: event.data });
+                this.panel.webview.postMessage({
+                    type: 'finish',
+                    code,
+                    elapsed,
+                    data: event.data,
+                    cancelled: event.cancelled === true,
+                });
             } else {
                 this.panel.webview.postMessage({ type: 'log', logType: event.type, data: event.data });
             }
@@ -84,7 +108,12 @@ export class SdfWebviewPanel {
         return Boolean(SdfWebviewPanel.instance?.starting || SdfWebviewPanel.instance?.runner.isRunning);
     }
 
-    runCommand(command: SdfCommand, args?: string[], workspaceRoot?: vscode.Uri): void {
+    runCommand(
+        command: SdfCommand,
+        args?: string[],
+        workspaceRoot?: vscode.Uri,
+        presentation: SdfRunPresentation = {},
+    ): void {
         if (this.starting || this.runner.isRunning) {
             vscode.window.showWarningMessage('SuiteForge: A command is already running. Cancel it before starting another.');
             return;
@@ -109,13 +138,40 @@ export class SdfWebviewPanel {
             label: command.label,
             description: command.description,
             flow: command.flow,
+            operation: operationKindForCommand(command.id),
+            projectName: workspaceRoot
+                ? (vscode.workspace.getWorkspaceFolder(workspaceRoot)?.name ?? workspaceRoot.path.split('/').pop())
+                : undefined,
+            accountAuthId: presentation.accountAuthId,
         });
         this.panel.title = `SDF: ${command.label}`;
-        setTimeout(() => {
+        this.pendingStart = setTimeout(() => {
+            this.pendingStart = undefined;
             if (this.disposed) { return; }
             this.starting = false;
             this.runner.run(command.id, args, workspaceRoot);
         }, 0);
+    }
+
+    private cancelCurrentCommand(): void {
+        if (!this.starting) {
+            this.runner.cancel();
+            return;
+        }
+
+        if (this.pendingStart) {
+            clearTimeout(this.pendingStart);
+            this.pendingStart = undefined;
+        }
+        this.starting = false;
+        this.validating = false;
+        this.panel.webview.postMessage({
+            type: 'finish',
+            code: 1,
+            elapsed: Date.now() - this.startTime,
+            data: 'Command cancelled.\n',
+            cancelled: true,
+        });
     }
 
     private publishValidationResults(event: CliRunEvent): void {
@@ -142,7 +198,7 @@ export class SdfWebviewPanel {
     }
 }
 
-function buildHtml(webview: vscode.Webview, extensionUri: vscode.Uri): string {
+export function buildHtml(webview: vscode.Webview, extensionUri: vscode.Uri): string {
     const nonce = getNonce();
     // Serve the codicon font from the extension so the webview can render icons.
     const codiconsUri = webview.asWebviewUri(
@@ -211,6 +267,81 @@ body{
 
 /* Animated dots are SVG circles with <animateMotion> — no CSS needed */
 
+/* Validation document scanner */
+.validation-scene{
+    width:300px;height:124px;position:relative;
+    display:flex;align-items:center;justify-content:center;
+}
+.validation-document{
+    width:92px;height:112px;position:relative;border:1px solid var(--border);
+    border-radius:6px;background:var(--vscode-editorWidget-background,var(--bg));
+    box-shadow:0 8px 24px rgba(0,0,0,.18);z-index:1;
+}
+.validation-document::before,.validation-document::after{
+    content:"";position:absolute;width:82px;height:102px;
+    border:1px solid var(--border);border-radius:6px;
+    background:var(--vscode-editorWidget-background,var(--bg));z-index:-1;
+}
+.validation-document::before{left:-13px;top:8px;transform:rotate(-5deg)}
+.validation-document::after{right:-13px;top:8px;transform:rotate(5deg)}
+.document-fold{
+    position:absolute;right:0;top:0;width:20px;height:20px;
+    background:linear-gradient(225deg,var(--bg) 49%,var(--border) 50%,transparent 54%);
+}
+.code-lines{position:absolute;inset:22px 14px 12px;display:flex;flex-direction:column;gap:8px}
+.code-line{height:3px;border-radius:2px;background:var(--muted);opacity:.42}
+.code-line:nth-child(2){width:72%}.code-line:nth-child(3){width:88%}.code-line:nth-child(4){width:58%}
+.scan-beam{
+    position:absolute;left:8px;right:8px;top:18px;height:2px;
+    background:var(--accent);box-shadow:0 0 9px var(--accent),0 7px 18px color-mix(in srgb,var(--accent) 28%,transparent);
+    animation:scanDocument 2.2s ease-in-out infinite;
+}
+.scan-badge{
+    position:absolute;right:71px;bottom:13px;width:30px;height:30px;
+    display:grid;place-items:center;border-radius:50%;
+    color:var(--vscode-button-foreground);background:var(--accent);
+    box-shadow:0 0 0 5px color-mix(in srgb,var(--accent) 18%,transparent);
+    animation:badgePulse 1.6s ease-in-out infinite;
+}
+@keyframes scanDocument{0%,100%{transform:translateY(0);opacity:.5}50%{transform:translateY(72px);opacity:1}}
+@keyframes badgePulse{0%,100%{transform:scale(.94)}50%{transform:scale(1.06)}}
+
+/* Deployment package flight */
+.deployment-scene{
+    width:360px;height:124px;position:relative;
+    display:flex;align-items:center;justify-content:space-between;
+}
+.deployment-scene .endpoint{position:relative;z-index:2;width:52px;height:52px}
+.deployment-scene .deploy-cloud{animation:cloudBreathe 2s ease-in-out infinite}
+.deploy-route{
+    position:absolute;left:51px;right:51px;top:61px;height:2px;
+    border-top:2px dashed var(--muted);opacity:.5;
+}
+.deploy-packet{
+    position:absolute;left:52px;top:53px;z-index:3;width:25px;height:25px;
+    display:grid;place-items:center;border:1px solid color-mix(in srgb,var(--accent) 70%,var(--border));
+    border-radius:5px;color:var(--vscode-button-foreground);background:var(--accent);
+    box-shadow:0 5px 16px rgba(0,0,0,.2);
+    animation:deployPacket 2.4s cubic-bezier(.4,0,.2,1) infinite;
+}
+.deploy-packet.packet-two{animation-delay:.8s}
+.deploy-packet.packet-three{animation-delay:1.6s}
+@keyframes deployPacket{
+    0%{left:52px;top:53px;opacity:0;transform:scale(.75) rotate(-8deg)}
+    12%{opacity:1}
+    50%{top:23px;transform:scale(1) rotate(2deg)}
+    88%{opacity:1}
+    100%{left:284px;top:53px;opacity:0;transform:scale(.75) rotate(8deg)}
+}
+@keyframes cloudBreathe{0%,100%{transform:scale(.96);opacity:.8}50%{transform:scale(1.05);opacity:1}}
+
+.operation-context{
+    min-height:18px;margin-top:8px;display:flex;align-items:center;
+    justify-content:center;gap:12px;flex-wrap:wrap;color:var(--muted);font-size:11px;
+}
+.operation-context span:empty{display:none}
+.operation-context span+span{padding-left:12px;border-left:1px solid var(--border)}
+
 /* Pulsing ring for local commands */
 @keyframes pulse{0%{transform:scale(1);opacity:.6}100%{transform:scale(1.8);opacity:0}}
 .pulse-ring{
@@ -241,6 +372,8 @@ body{
     animation:shimmer 1.2s ease-in-out infinite;
 }
 @keyframes shimmer{0%{left:-50%}100%{left:100%}}
+
+.live-duration{margin-top:6px;font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
 
 /* ── Result icon ────────────────────────────── */
 .result-icon{margin-top:8px;width:48px;height:48px}
@@ -317,6 +450,15 @@ body{
 }
 .idle-state svg{width:48px;height:48px;opacity:.3}
 .idle-state span{font-size:13px}
+
+@media (prefers-reduced-motion: reduce){
+    .pulse-ring,.scan-beam,.scan-badge,.deploy-cloud,.deploy-packet,.progress-bar .shimmer,
+    .status-text.animate,.check-path,.x-path,.shake,.particle{animation:none!important}
+    .motion-dot{display:none}
+    .scan-beam{transform:translateY(36px);opacity:.8}
+    .deploy-packet{display:none}
+    .progress-bar .shimmer{left:0;width:100%;opacity:.65}
+}
 </style>
 </head>
 <body>
@@ -353,10 +495,19 @@ const logContent = document.getElementById('logContent');
 const titleEl = document.getElementById('toolbarTitle');
 const btnCancel = document.getElementById('btnCancel');
 
-btnCancel.addEventListener('click', () => vscode.postMessage({ type: 'cancel' }));
+btnCancel.addEventListener('click', () => {
+    btnCancel.disabled = true;
+    setRunningStatus('Cancelling command...');
+    vscode.postMessage({ type: 'cancel' });
+});
 logToggle.addEventListener('click', () => toggleLog());
 
 let logOpen = false;
+let currentFlow = 'local';
+let currentOperation = 'generic';
+let receivedOutput = false;
+let runningStartedAt = 0;
+let elapsedTimer;
 
 function toggleLog(){
     logOpen = !logOpen;
@@ -378,6 +529,34 @@ function fmtDuration(ms){
     return Math.floor(s/60) + 'm ' + (s%60) + 's';
 }
 
+function setRunningStatus(text){
+    const status = animArea.querySelector('.status-text');
+    if(!status) return;
+    status.textContent = text;
+    status.classList.remove('animate');
+    void status.offsetWidth;
+    status.classList.add('animate');
+}
+
+function updateElapsed(){
+    const elapsed = animArea.querySelector('.live-duration');
+    if(elapsed) elapsed.textContent = 'Elapsed ' + fmtDuration(Date.now() - runningStartedAt);
+}
+
+function startElapsedTimer(){
+    if(elapsedTimer) clearInterval(elapsedTimer);
+    runningStartedAt = Date.now();
+    updateElapsed();
+    elapsedTimer = setInterval(updateElapsed, 1000);
+}
+
+function stopElapsedTimer(){
+    if(elapsedTimer){
+        clearInterval(elapsedTimer);
+        elapsedTimer = undefined;
+    }
+}
+
 /* ── SVG builders ───────────────────────────── */
 const deviceSvg = '<svg viewBox="0 0 48 48" width="48" height="48"><rect class="device-icon" x="8" y="8" width="32" height="24" rx="3" opacity=".15"/><rect x="8" y="8" width="32" height="24" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><line x1="18" y1="36" x2="30" y2="36" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="24" y1="32" x2="24" y2="36" stroke="currentColor" stroke-width="2"/></svg>';
 
@@ -390,7 +569,7 @@ function svgDots(pathD, count, dur){
     let out = '';
     for(let i = 0; i < count; i++){
         const delay = (dur / count * i).toFixed(2);
-        out += '<circle r="3.5" fill="var(--accent)" opacity=".85">' +
+        out += '<circle class="motion-dot" r="3.5" fill="var(--accent)" opacity=".85">' +
             '<animateMotion dur="' + dur + 's" repeatCount="indefinite" begin="' + delay + 's">' +
             '<mpath href="#dotPath"/>' +
             '</animateMotion></circle>';
@@ -415,6 +594,69 @@ function buildScene(flow){
         '</svg>' +
         '<div>' + cloudSvg + '</div>' +
         '</div>';
+}
+
+function buildValidationScene(running){
+    return '<div class="validation-scene' + (running ? '' : ' settled') + '" aria-hidden="true">' +
+        '<div class="validation-document">' +
+        '<div class="document-fold"></div>' +
+        '<div class="code-lines"><div class="code-line"></div><div class="code-line"></div>' +
+        '<div class="code-line"></div><div class="code-line"></div></div>' +
+        (running ? '<div class="scan-beam"></div>' : '') +
+        '</div>' +
+        (running ? '<div class="scan-badge"><span class="codicon codicon-search"></span></div>' : '') +
+        '</div>';
+}
+
+function buildDeploymentScene(running){
+    return '<div class="deployment-scene" aria-hidden="true">' +
+        '<div class="endpoint">' + deviceSvg + '</div>' +
+        '<div class="deploy-route"></div>' +
+        (running
+            ? '<div class="deploy-packet packet-one"><span class="codicon codicon-package"></span></div>' +
+              '<div class="deploy-packet packet-two"><span class="codicon codicon-package"></span></div>' +
+              '<div class="deploy-packet packet-three"><span class="codicon codicon-package"></span></div>'
+            : '') +
+        '<div class="endpoint' + (running ? ' deploy-cloud' : '') + '">' + cloudSvg + '</div>' +
+        '</div>';
+}
+
+function buildOperationScene(operation, flow, running){
+    if(operation === 'validation') return buildValidationScene(running);
+    if(operation === 'deployment') return buildDeploymentScene(running);
+    return buildScene(flow);
+}
+
+function runningLabel(operation, hasOutput){
+    if(operation === 'validation') return hasOutput ? 'Validating SuiteCloud project...' : 'Preparing validation...';
+    if(operation === 'deployment') return hasOutput ? 'Deploying to NetSuite...' : 'Preparing deployment...';
+    return hasOutput ? 'Command in progress...' : 'Preparing command...';
+}
+
+function resultLabel(operation, ok, cancelled){
+    if(cancelled){
+        if(operation === 'validation') return 'Validation cancelled';
+        if(operation === 'deployment') return 'Deployment cancelled';
+        return 'Command cancelled';
+    }
+    if(operation === 'validation') return ok ? 'Validation completed' : 'Validation failed';
+    if(operation === 'deployment') return ok ? 'Deployment completed' : 'Deployment failed';
+    return ok ? 'Completed successfully' : 'Command failed';
+}
+
+function buildRunningMarkup(operation, flow){
+    return buildOperationScene(operation, flow, true) +
+        '<div class="operation-context"><span id="projectContext"></span><span id="accountContext"></span></div>' +
+        '<div class="status-text animate" role="status" aria-live="polite"></div>' +
+        '<div class="progress-bar" aria-hidden="true"><div class="shimmer"></div></div>' +
+        '<div class="live-duration">Elapsed 0s</div>';
+}
+
+function setOperationContext(projectName, accountAuthId){
+    const project = animArea.querySelector('#projectContext');
+    const account = animArea.querySelector('#accountContext');
+    if(project) project.textContent = projectName ? 'Project: ' + projectName : '';
+    if(account) account.textContent = accountAuthId ? 'Account: ' + accountAuthId : '';
 }
 
 function showSuccess(){
@@ -449,46 +691,65 @@ function spawnParticles(color){
 }
 
 /* ── Message handler ────────────────────────── */
-let currentFlow = 'local';
-
 window.addEventListener('message', (event) => {
     const msg = event.data;
 
     switch(msg.type){
         case 'start': {
             currentFlow = msg.flow || 'local';
+            currentOperation = msg.operation || 'generic';
+            receivedOutput = false;
             titleEl.textContent = msg.label;
             idle.style.display = 'none';
             logSection.style.display = 'flex';
             logContent.innerHTML = '';
             btnCancel.style.display = '';
+            btnCancel.disabled = false;
 
             animArea.classList.remove('hidden');
-            animArea.innerHTML = buildScene(currentFlow) +
-                '<div class="status-text animate"></div>' +
-                '<div class="progress-bar"><div class="shimmer"></div></div>';
-            animArea.querySelector('.status-text').textContent = msg.label + '...';
+            animArea.innerHTML = buildRunningMarkup(currentOperation, currentFlow);
+            setOperationContext(msg.projectName, msg.accountAuthId);
+            setRunningStatus(runningLabel(currentOperation, false));
+            startElapsedTimer();
             break;
         }
 
         case 'log': {
             appendLog(msg.data, 'line-' + msg.logType);
+            if(!receivedOutput){
+                receivedOutput = true;
+                setRunningStatus(runningLabel(currentOperation, true));
+            }
             break;
         }
 
         case 'finish': {
+            stopElapsedTimer();
             btnCancel.style.display = 'none';
             const ok = msg.code === 0;
+            const cancelled = msg.cancelled === true;
+            const statusColor = cancelled ? 'var(--muted)' : (ok ? 'var(--success)' : 'var(--error)');
+            const finalScene = buildOperationScene(currentOperation, currentFlow, false);
+            const finalLabel = resultLabel(currentOperation, ok, cancelled);
+            const resultGraphic = cancelled ? '' : (ok ? showSuccess() : showError());
 
-            if(currentFlow === 'local'){
+            if(currentOperation === 'validation' || currentOperation === 'deployment'){
+                animArea.innerHTML = finalScene +
+                    resultGraphic +
+                    '<div class="status-text animate" style="color:' + statusColor + '"></div>' +
+                    '<div class="duration">' + fmtDuration(msg.elapsed) + '</div>';
+                animArea.querySelector('.status-text').textContent = finalLabel;
+            } else if(currentFlow === 'local'){
                 animArea.innerHTML =
                     '<div style="position:relative;display:inline-block">' + deviceSvg + '</div>' +
-                    (ok ? showSuccess() : showError()) +
-                    '<div class="status-text animate" style="color:' + (ok ? 'var(--success)' : 'var(--error)') + '">' +
-                    (ok ? 'Completed Successfully' : 'Failed') + '</div>' +
+                    resultGraphic +
+                    '<div class="status-text animate" style="color:' + statusColor + '"></div>' +
                     '<div class="duration">' + fmtDuration(msg.elapsed) + '</div>';
+                animArea.querySelector('.status-text').textContent = finalLabel;
             } else {
-                const solidLine = ok
+                const solidLine = cancelled
+                    ? '<path d="M 80 60 C 130 20, 210 20, 260 60" fill="none" stroke="var(--muted)" stroke-width="2" stroke-dasharray="6 4"/>'
+                    : ok
                     ? '<path d="M 80 60 C 130 20, 210 20, 260 60" fill="none" stroke="var(--success)" stroke-width="2.5"/>'
                     : '<path d="M 80 60 C 130 20, 170 20, 170 40" fill="none" stroke="var(--error)" stroke-width="2.5"/>' +
                       '<path d="M 170 40 C 170 20, 210 20, 260 60" fill="none" stroke="var(--error)" stroke-width="2.5" stroke-dasharray="4 4"/>';
@@ -500,13 +761,15 @@ window.addEventListener('message', (event) => {
                     solidLine + '</svg>' +
                     '<div>' + cloudSvg + '</div>' +
                     '</div>' +
-                    (ok ? showSuccess() : showError()) +
-                    '<div class="status-text animate" style="color:' + (ok ? 'var(--success)' : 'var(--error)') + '">' +
-                    (ok ? 'Completed Successfully' : 'Failed') + '</div>' +
+                    resultGraphic +
+                    '<div class="status-text animate" style="color:' + statusColor + '"></div>' +
                     '<div class="duration">' + fmtDuration(msg.elapsed) + '</div>';
+                animArea.querySelector('.status-text').textContent = finalLabel;
             }
 
-            if(ok) spawnParticles('var(--success)');
+            if(ok && !cancelled && !window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+                spawnParticles('var(--success)');
+            }
             appendLog(msg.data, ok ? 'line-stdout' : 'line-error');
             break;
         }

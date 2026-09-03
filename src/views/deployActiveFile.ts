@@ -118,6 +118,7 @@ export function registerDeployActiveFile(
             },
             ['--paths', cabinetPath],
             folder.uri,
+            { accountAuthId: account.authId },
         );
     });
     context.subscriptions.push(command);

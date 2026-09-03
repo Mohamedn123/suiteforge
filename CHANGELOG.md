@@ -4,6 +4,19 @@ All notable changes to the "suiteforge" extension will be documented in this fil
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [2.0.1] - 2026-09-03
+
+### ✨ UX Enhancements
+
+- Added a dedicated document-scanning animation for project validation and a package-to-cloud animation for project deployments and active-file uploads.
+- Added live elapsed time plus the active project and deployment account to the running-command view.
+- Added operation-specific preparing, running, completed, failed, cancelling, and cancelled states without displaying artificial percentage progress.
+- Added reduced-motion behavior that preserves progress feedback while disabling decorative movement and success particles.
+
+### 🧪 Tests
+
+- Added progress-presentation, accessibility-markup, and embedded-script checks, bringing the extension-host suite to 91 tests.
+
 ## [2.0.0] - 2026-09-02
 
 ### 🚀 New Features

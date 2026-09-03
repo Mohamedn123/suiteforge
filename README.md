@@ -23,6 +23,7 @@ SuiteForge is a powerful Visual Studio Code extension designed to enhance produc
 - **SDF Command Runner**: Run and manage SDF commands directly from VS Code.
   - Commands that require prompts open in an integrated terminal; non-interactive commands use the visual output panel.
   - Multi-root workspaces execute against the active file's project, or ask you to select one.
+- **Animated Command Progress**: Validation uses a document-scanning scene, while deployments use a package-to-cloud scene with live elapsed time, project/account context, cancellation feedback, and reduced-motion support.
 - **Validate → Problems Panel**: `project:validate` output is parsed into Problems-panel diagnostics with file and line locations.
 - **Custom Views**:
   - SDF Commands View: Manage and execute SDF commands from a dedicated panel.
@@ -107,6 +108,14 @@ We welcome contributions! To contribute:
 - The Language Server's regex fallback (used during active typing) does not support all patterns that the primary AST parser handles.
 
 ## Release Notes
+
+### 2.0.1 — Progress Experience Update
+
+- Added a dedicated document-scanning animation while SuiteCloud project validation is running.
+- Added a package-to-cloud animation for project deployments and active-file uploads.
+- Added live elapsed time and active project/account context to the output panel.
+- Added clear preparing, running, completed, failed, cancelling, and cancelled states.
+- Added reduced-motion support without relying on artificial completion percentages.
 
 ### 2.0.0 — Productivity and Deployment Safety Release
 
