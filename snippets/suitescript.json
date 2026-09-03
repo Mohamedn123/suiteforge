@@ -1,0 +1,301 @@
+{
+    "SuiteScript 2.1 Define Skeleton": {
+        "prefix": "ssdefine",
+        "scope": "javascript",
+        "body": [
+            "/**",
+            " * @NApiVersion 2.1",
+            " * @NScriptType ${1|UserEventScript,ClientScript,Suitelet,RESTlet,ScheduledScript,MapReduceScript,MassUpdateScript,Portlet,BundleInstallationScript,WorkflowActionScript|}",
+            " * @description ${2:Description}",
+            " */",
+            "define(${3|['N/record','N/search','N/log'],[],['N/currentRecord'],[\"N/record\",'N/search']|}, (${4:context}) => {",
+            "\t${0:// entry points}",
+            "\treturn {",
+            "\t\t",
+            "\t};",
+            "});"
+        ],
+        "description": "SuiteScript 2.x AMD define skeleton with JSDoc annotations"
+    },
+    "Record Load": {
+        "prefix": "ssrecordload",
+        "scope": "javascript",
+        "body": [
+            "const ${1:rec} = record.load({",
+            "\ttype: record.Type.${2|SALES_ORDER,CUSTOMER,ITEM,INVOICE,PURCHASE_ORDER,EMPLOYEE,CONTACT|},",
+            "\tid: ${3:id},",
+            "\tisDynamic: ${4|false,true|},",
+            "});",
+            "${0:const value = rec.getValue({ fieldId: '${5:field}' });}"
+        ],
+        "description": "Load an existing record with N/record"
+    },
+    "Record Create": {
+        "prefix": "ssrecordcreate",
+        "scope": "javascript",
+        "body": [
+            "const ${1:rec} = record.create({",
+            "\ttype: record.Type.${2|SALES_ORDER,CUSTOMER,ITEM,INVOICE,PURCHASE_ORDER,EMPLOYEE,CONTACT|},",
+            "\tisDynamic: ${3|true,false|},",
+            "});",
+            "${1:rec}.setValue({ fieldId: '${4:fieldId}', value: ${5:value} });",
+            "${0:const recId = rec.save({ ignoreMandatoryFields: true });}"
+        ],
+        "description": "Create a new record and save it"
+    },
+    "Record Set Sublist Value": {
+        "prefix": "sssublist",
+        "scope": "javascript",
+        "body": [
+            "${1:rec}.setSublistValue({",
+            "\tsublistId: '${2|item,expense,line|}',",
+            "\tline: ${3:line},",
+            "\tfieldId: '${4:fieldId}',",
+            "\tvalue: ${5:value},",
+            "});"
+        ],
+        "description": "Set a value on a record sublist line"
+    },
+    "Saved Search Create": {
+        "prefix": "sssearch",
+        "scope": "javascript",
+        "body": [
+            "const ${1:mySearch} = search.create({",
+            "\ttype: search.Type.${2|SALES_ORDER,CUSTOMER,ITEM,INVOICE,PURCHASE_ORDER,TRANSACTION|},",
+            "\tfilters: [",
+            "\t\t['${3:mainline}', search.Operator.${4|IS,ISNOT,CONTAINS,STARTSWITH|}, '${5:T}']",
+            "\t],",
+            "\tcolumns: [",
+            "\t\t'${6:internalid}'${7:, 'entityname'}",
+            "\t],",
+            "});",
+            "${0:mySearch.run().each((result) => {\n\tconst entity = result.getValue({ name: 'entityname' });\n\treturn true;\n});}"
+        ],
+        "description": "Create and run a search with N/search"
+    },
+    "Search Each Result": {
+        "prefix": "sssearcheach",
+        "scope": "javascript",
+        "body": [
+            "search.create({",
+            "\ttype: '${1:salesorder}',",
+            "\tfilters: ${2:[]},",
+            "\tcolumns: ${3:[]},",
+            "}).run().each((result) => {",
+            "\tconst ${4:value} = result.getValue({ name: '${5:internalid}' });",
+            "\t${6:// ...}",
+            "\treturn true; // continue iterating",
+            "});"
+        ],
+        "description": "Iterate search results with .each()"
+    },
+    "SuiteQL Query": {
+        "prefix": "ssquery",
+        "scope": "javascript",
+        "body": [
+            "const ${1:results} = query.runSuiteQL({",
+            "\tquery: `${2:SELECT id, entityname FROM customer WHERE isinactive = 'F'}`",
+            "}).asMappedResults();",
+            "${0:// each result row is a plain object: results[0].entityname}"
+        ],
+        "description": "Run a SuiteQL query with N/query"
+    },
+    "Suitelet with Form": {
+        "prefix": "sssuitelet",
+        "scope": "javascript",
+        "body": [
+            "/**",
+            " * @NApiVersion 2.1",
+            " * @NScriptType Suitelet",
+            " */",
+            "define(['N/ui/serverWidget', 'N/log'], (serverWidget, log) => {",
+            "\tconst onRequest = (context) => {",
+            "\t\tif (context.request.method === 'GET') {",
+            "\t\t\tconst form = serverWidget.createForm({",
+            "\t\t\t\ttitle: '${1:My Form}'",
+            "\t\t\t});",
+            "\t\t\tform.addField({",
+            "\t\t\t\tid: '${2:custpage_field}',",
+            "\t\t\t\ttype: serverWidget.FieldType.${3|TEXT,INTEGER,SELECT,DATE,CHECKBOX|},",
+            "\t\t\t\tlabel: '${4:Field Label}'",
+            "\t\t\t});",
+            "\t\t\tform.addSubmitButton({ label: '${5:Submit}' });",
+            "\t\t\tcontext.response.writePage({ pageObject: form });",
+            "\t\t} else {",
+            "\t\t\tconst posted = context.request.parameters.${2:custpage_field};",
+            "\t\t\tlog.debug({ title: 'POST', details: posted });",
+            "\t\t\tcontext.response.write({ output: '${6:Done}' });",
+            "\t\t}",
+            "\t};",
+            "",
+            "\treturn { onRequest };",
+            "});"
+        ],
+        "description": "Complete Suitelet with a serverWidget form (GET/POST)"
+    },
+    "RESTlet": {
+        "prefix": "ssrestlet",
+        "scope": "javascript",
+        "body": [
+            "/**",
+            " * @NApiVersion 2.1",
+            " * @NScriptType RESTlet",
+            " */",
+            "define(['N/log'], (log) => {",
+            "\tconst get = (context) => {",
+            "\t\tconst { ${1:param} } = context;",
+            "\t\t${0:return { ok: true };}",
+            "\t};",
+            "",
+            "\tconst post = (body) => {",
+            "\t\tlog.debug({ title: 'POST body', details: body });",
+            "\t\treturn { id: body.id };",
+            "\t};",
+            "",
+            "\treturn { get, post };",
+            "});"
+        ],
+        "description": "RESTlet skeleton with get/post entry points"
+    },
+    "Map/Reduce Script": {
+        "prefix": "ssmapreduce",
+        "scope": "javascript",
+        "body": [
+            "/**",
+            " * @NApiVersion 2.1",
+            " * @NScriptType MapReduceScript",
+            " */",
+            "define(['N/log', 'N/search'], (log, search) => {",
+            "\tconst getInputData = () => {",
+            "\t\treturn search.create({",
+            "\t\t\ttype: '${1:salesorder}',",
+            "\t\t\tfilters: ${2:[]},",
+            "\t\t\tcolumns: ${3:[]},",
+            "\t\t});",
+            "\t};",
+            "",
+            "\tconst map = (context) => {",
+            "\t\tconst ${4:result} = JSON.parse(context.value);",
+            "\t\tcontext.write({ key: ${5:result.id}, value: ${6:result} });",
+            "\t};",
+            "",
+            "\tconst reduce = (context) => {",
+            "\t\t${7:// ... process grouped values}",
+            "\t};",
+            "",
+            "\tconst summarize = (summary) => {",
+            "\t\tlog.audit({",
+            "\t\t\ttitle: 'Map/Reduce complete',",
+            "\t\t\tdetails: `Processed: \\${summary.inputSummary}, errors: \\${JSON.stringify(summary.errors)}`,",
+            "\t\t});",
+            "\t};",
+            "",
+            "\treturn { getInputData, map, reduce, summarize };",
+            "});"
+        ],
+        "description": "Map/Reduce script skeleton with all four entry points"
+    },
+    "User Event Script": {
+        "prefix": "ssuserevent",
+        "scope": "javascript",
+        "body": [
+            "/**",
+            " * @NApiVersion 2.1",
+            " * @NScriptType UserEventScript",
+            " */",
+            "define(['N/log'], (log) => {",
+            "\tconst beforeLoad = (context) => {",
+            "\t\t${1:// fires before the record is displayed}",
+            "\t};",
+            "",
+            "\tconst beforeSubmit = (context) => {",
+            "\t\tconst { newRecord } = context;",
+            "\t\t${2:// fires before the record is saved}",
+            "\t};",
+            "",
+            "\tconst afterSubmit = (context) => {",
+            "\t\t${0:// fires after the record is saved}",
+            "\t};",
+            "",
+            "\treturn { beforeLoad, beforeSubmit, afterSubmit };",
+            "});"
+        ],
+        "description": "User Event script skeleton with all entry points"
+    },
+    "Client Script": {
+        "prefix": "ssclientscript",
+        "scope": "javascript",
+        "body": [
+            "/**",
+            " * @NApiVersion 2.1",
+            " * @NScriptType ClientScript",
+            " */",
+            "define(['N/currentRecord'], (currentRecord) => {",
+            "\tconst pageInit = (context) => {",
+            "\t\tconst { mode, currentRecord: rec } = context;",
+            "\t};",
+            "",
+            "\tconst fieldChanged = (context) => {",
+            "\t\tconst { sublistId, fieldId, currentRecord: rec } = context;",
+            "\t\tif (fieldId === '${1:custbody_field}') {",
+            "\t\t\t${0:// react to the change}",
+            "\t\t}",
+            "\t};",
+            "",
+            "\treturn { pageInit, fieldChanged };",
+            "});"
+        ],
+        "description": "Client script skeleton with pageInit/fieldChanged"
+    },
+    "HTTPS Request (Promise)": {
+        "prefix": "sshttps",
+        "scope": "javascript",
+        "body": [
+            "const response = await https.get.promise({",
+            "\turl: '${1:https://api.example.com/resource}',",
+            "\theaders: {",
+            "\t\t'Content-Type': 'application/json',",
+            "\t},",
+            "});",
+            "${0:const body = JSON.parse(response.body);}"
+        ],
+        "description": "Asynchronous HTTPS GET with N/https"
+    },
+    "Try/Catch with Log": {
+        "prefix": "sstry",
+        "scope": "javascript",
+        "body": [
+            "try {",
+            "\t${1:// ...}",
+            "} catch (e) {",
+            "\tlog.error({",
+            "\t\ttitle: '${2:Error in ${TM_FILENAME_BASE}}',",
+            "\t\tdetails: e,",
+            "\t});",
+            "\tthrow e;${0:}",
+            "}"
+        ],
+        "description": "try/catch with log.error (rethrows)"
+    },
+    "Log Audit": {
+        "prefix": "sslog",
+        "scope": "javascript",
+        "body": [
+            "log.${1|audit,debug,error,emergency|}({",
+            "\ttitle: '${2:title}',",
+            "\tdetails: ${3:details},",
+            "});"
+        ],
+        "description": "Log a message with N/log"
+    },
+    "Client Current Record": {
+        "prefix": "sscurrentrecord",
+        "scope": "javascript",
+        "body": [
+            "const rec = currentRecord.get();",
+            "const ${1:value} = rec.getValue({ fieldId: '${2:fieldId}' });",
+            "${0:// ...}"
+        ],
+        "description": "Get the current record in a client script"
+    }
+}

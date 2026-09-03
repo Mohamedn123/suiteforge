@@ -120,7 +120,7 @@
         "id": "restlet",
         "label": "RESTlet",
         "xmlTag": "restlet",
-        "scriptTypeAnnotation": "Restlet",
+        "scriptTypeAnnotation": "RESTlet",
         "description": "RESTlets are server-side scripts that facilitate integration with external applications by responding to HTTP requests.",
         "entryPoints": [
             {

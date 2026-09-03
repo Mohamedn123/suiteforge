@@ -41,7 +41,9 @@ export async function generateScript(folderUri?: vscode.Uri): Promise<void> {
         title: `SuiteForge — New ${selectedType.data.label} (2/3)`,
         prompt: 'Enter the script ID  (the "customscript_" prefix will be added automatically)',
         placeHolder: 'e.g.  my_client_script',
-        validateInput: validateScriptId,
+        validateInput: value => value.startsWith('customscript_')
+            ? 'Enter only the ID portion after "customscript_".'
+            : validateScriptId(value),
     });
     if (id === undefined) { return; }
 
@@ -57,8 +59,10 @@ export async function generateScript(folderUri?: vscode.Uri): Promise<void> {
     const moduleNames = selectedModules.map(m => m.label);
 
     const fileName = `${id}.js`;
-    await writeAndOpen(targetFolder, fileName, buildScriptContent(selectedType.data, id, moduleNames));
-    vscode.window.showInformationMessage(`SuiteForge: Created ${fileName}  (${selectedType.data.label})`);
+    const created = await writeAndOpen(targetFolder, fileName, buildScriptContent(selectedType.data, id, moduleNames));
+    if (created) {
+        vscode.window.showInformationMessage(`SuiteForge: Created ${fileName}  (${selectedType.data.label})`);
+    }
 }
 
 // JS reserved words that cannot be used as variable names.
@@ -76,7 +80,7 @@ function safeVarName(name: string): string {
     return JS_RESERVED.has(name) ? `_${name}` : name;
 }
 
-function buildScriptContent(scriptType: SdfScriptType, scriptId: string, modules: string[]): string {
+export function buildScriptContent(scriptType: SdfScriptType, scriptId: string, modules: string[]): string {
     const booleanReturns = new Set([
         'validateField', 'validateLine', 'validateInsert', 'validateDelete', 'saveRecord',
     ]);

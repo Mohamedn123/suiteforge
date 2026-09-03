@@ -9,16 +9,19 @@ const objectTypeMap = new Map<string, SsObjectType>();
 const CLIENT_SCRIPTS = ['ClientScript'];
 const SERVER_SCRIPTS = [
     'UserEventScript', 'ScheduledScript', 'MapReduceScript',
-    'Suitelet', 'Restlet', 'Portlet', 'MassUpdateScript',
-    'WorkflowActionScript',
+    'RESTlet', 'Portlet', 'MassUpdateScript', 'Suitelet',
+    'WorkflowActionScript', 'BundleInstallationScript', 'SDFInstallationScript',
 ];
+export const ALL_SCRIPT_TYPES = [...CLIENT_SCRIPTS, ...SERVER_SCRIPTS];
 const SCRIPT_GROUPS: Record<string, string[]> = {
     client: CLIENT_SCRIPTS,
     server: SERVER_SCRIPTS,
-    all: [...CLIENT_SCRIPTS, ...SERVER_SCRIPTS],
+    all: ALL_SCRIPT_TYPES,
 };
 function resolveSupportedIn(supportedIn?: string[]): string[] | undefined {
-    if (!supportedIn) return undefined;
+    if (!supportedIn) {
+        return undefined;
+    }
     return supportedIn.flatMap(s => SCRIPT_GROUPS[s] ?? [s]);
 }
 for (const mod of modules) {
@@ -66,6 +69,7 @@ for (const [entryPointName, ctxDef] of Object.entries(contextTypes)) {
             name: p.name,
             type: p.type,
             description: p.description,
+            typeId: p.typeId,
         })),
     };
     objectTypeMap.set(typeId, objType);

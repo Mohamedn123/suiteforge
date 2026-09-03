@@ -36,9 +36,9 @@ async function syncModuleDocs() {
 
         // Example mock logic: Check if module description is missing or generic
         if (!data.description || data.description.includes('TODO:')) {
-            console.log(`[!] Module ${data.id} needs a description update.`);
+            console.log(`[!] Module ${data.module} needs a description update.`);
             // In a real scenario, this would fetch from NetSuite Help Center
-            // data.description = await fetchNetSuiteHelpCenterDoc(data.id);
+            // data.description = await fetchNetSuiteHelpCenterDoc(data.module);
             // updated = true;
         }
 
@@ -46,7 +46,7 @@ async function syncModuleDocs() {
         if (Array.isArray(data.methods)) {
             for (const method of data.methods) {
                 if (!method.description) {
-                    console.log(`[!] Method ${data.id}.${method.name} is missing a description.`);
+                    console.log(`[!] Method ${data.module}.${method.name} is missing a description.`);
                 }
             }
         }

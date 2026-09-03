@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { sdfFieldTypes } from '../data';
 import sdfEnums from '../data/sdf/sdfEnums.json';
-import { getEnclosingTagName } from './xmlUtils';
+import { getEnclosingTagName, isLikelySdfDocument } from './xmlUtils';
 
 // Build O(1) lookup maps for all enum types
 const fieldTypeMap = new Map(sdfFieldTypes.map(ft => [ft.id.toUpperCase(), ft]));
@@ -34,11 +34,25 @@ const TAG_LOOKUP = new Map<string, EnumLookup>([
     ['hierarchytype', hierarchyLookup],
 ]);
 
+const BOOLEAN_TAGS = new Set([
+    'isinactive', 'ismandatory', 'isordered', 'showid',
+    'allowattachments', 'allowinlineediting', 'allowpdfprinting',
+    'allowquickadd', 'allowquicksearch', 'allowuiaccess', 'islocked',
+    'isparent', 'showdisplayentry', 'istranslatable', 'isformula',
+    'defaultchecked', 'isonline', 'ispublic', 'enablemailmerge',
+    'enablesourcing', 'hashtml', 'showhierarchy', 'allowemptysource',
+    'checkspelling', 'istext', 'isrecordtype', 'alllocalizationcontexts',
+    'allrecords', 'allroles', 'isimportant', 'issortable',
+    'allowhyperlinks', 'storevalue', 'showinnewsearchcolumn',
+    'showinnewlistcolumn',
+]);
+
 export class SdfHoverProvider implements vscode.HoverProvider {
     provideHover(
         document: vscode.TextDocument,
         position: vscode.Position,
     ): vscode.Hover | undefined {
+        if (!isLikelySdfDocument(document)) { return undefined; }
         const wordRange = document.getWordRangeAtPosition(position, /[A-Za-z_][A-Za-z0-9_]*/);
         if (!wordRange) { return undefined; }
 
@@ -69,7 +83,7 @@ export class SdfHoverProvider implements vscode.HoverProvider {
         }
 
         // Boolean flag hover
-        if (word === 'T' || word === 'F') {
+        if (BOOLEAN_TAGS.has(tag) && (word === 'T' || word === 'F')) {
             const boolValue = word === 'T';
             const md = new vscode.MarkdownString();
             md.appendMarkdown(`\`${word}\` — **${boolValue ? 'True' : 'False'}**`);

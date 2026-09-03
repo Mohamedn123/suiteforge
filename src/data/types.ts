@@ -32,6 +32,7 @@ export interface SdfCommand {
     description: string;
     flow: 'upload' | 'download' | 'local';
     icon: string;
+    interactive?: boolean;
 }
 
 export interface SdfCommandCategory {

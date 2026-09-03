@@ -42,11 +42,25 @@ export async function resolveTargetFolder(uri?: vscode.Uri): Promise<vscode.Uri 
  * Using vscode.workspace.fs instead of Node's fs ensures this works with
  * remote workspaces (SSH, Dev Containers, WSL, etc.).
  */
-export async function writeAndOpen(folderUri: vscode.Uri, fileName: string, content: string): Promise<void> {
+export async function writeAndOpen(folderUri: vscode.Uri, fileName: string, content: string): Promise<boolean> {
     const fileUri = vscode.Uri.joinPath(folderUri, fileName);
+    try {
+        await vscode.workspace.fs.stat(fileUri);
+        const choice = await vscode.window.showWarningMessage(
+            `SuiteForge: "${fileName}" already exists.`,
+            { modal: true, detail: 'Overwriting it will permanently replace its current contents.' },
+            'Overwrite',
+        );
+        if (choice !== 'Overwrite') { return false; }
+    } catch (error) {
+        if (!(error instanceof vscode.FileSystemError) || error.code !== 'FileNotFound') {
+            throw error;
+        }
+    }
     await vscode.workspace.fs.writeFile(fileUri, new TextEncoder().encode(content));
     const doc = await vscode.workspace.openTextDocument(fileUri);
     await vscode.window.showTextDocument(doc);
+    return true;
 }
 
 /**
@@ -62,12 +76,4 @@ export function validateScriptId(value: string): string | null {
         return 'Use only lowercase letters, numbers, and underscores. Must start with a letter.';
     }
     return null;
-}
-
-/**
- * Converts a raw string into a suggested script ID:
- * spaces → underscores, strip special chars, lowercase.
- */
-export function toScriptId(label: string): string {
-    return label.toLowerCase().replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '');
 }

@@ -1,15 +1,48 @@
 import * as assert from 'assert';
-
-// You can import and use all API from the 'vscode' module
-// as well as import your extension to test it
 import * as vscode from 'vscode';
-// import * as myExtension from '../../extension';
 
 suite('Extension Test Suite', () => {
-	vscode.window.showInformationMessage('Start all tests.');
+    vscode.window.showInformationMessage('Start all tests.');
 
-	test('Sample test', () => {
-		assert.strictEqual(-1, [1, 2, 3].indexOf(5));
-		assert.strictEqual(-1, [1, 2, 3].indexOf(0));
-	});
+    test('Extension should be present and activate', async () => {
+        const published = vscode.extensions.getExtension('MohamedNashaat00.suiteforge');
+        assert.ok(published, 'SuiteForge extension should be installed in the test host');
+        await published.activate();
+        assert.ok(published.isActive, 'SuiteForge extension should activate on demand');
+    });
+
+    test('All contributed commands should be registered', async () => {
+        const expected = [
+            'suiteforge.browseReference',
+            'suiteforge.newScript',
+            'suiteforge.newSdfScript',
+            'suiteforge.newSdfRecord',
+            'suiteforge.newSdfField',
+            'suiteforge.newSdfForm',
+            'suiteforge.newSdfPlugin',
+            'suiteforge.newSdfCenter',
+            'suiteforge.newSdfAnalytics',
+            'suiteforge.newSdfTemplate',
+            'suiteforge.newSdfOther',
+            'suiteforge.runSdfCommand',
+            'suiteforge.deployActiveFile',
+            'suiteforge.selectDeploymentAccount',
+            'suiteforge.addNetSuiteAccount',
+            'suiteforge.manageSavedAccounts',
+            'suiteforge.refreshSdfCommands',
+        ];
+        const registered = await vscode.commands.getCommands();
+        for (const id of expected) {
+            assert.ok(
+                registered.includes(id),
+                `Command "${id}" should be registered`,
+            );
+        }
+    });
+
+    test('Deployment account safeguards have secure defaults', () => {
+        const configuration = vscode.workspace.getConfiguration('suiteforge');
+        assert.strictEqual(configuration.inspect('deploy.accountPicker')?.defaultValue, 'always');
+        assert.strictEqual(configuration.inspect('deploy.confirmProduction')?.defaultValue, true);
+    });
 });

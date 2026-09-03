@@ -15,6 +15,7 @@ import {
     getObjectProperties,
     getContextPropertyTypeId,
     getAllModules,
+    ALL_SCRIPT_TYPES,
 } from './moduleData';
 
 export function getCompletions(
@@ -124,20 +125,6 @@ export function getCompletions(
     }
 
     return [];
-}
-
-const CLIENT_SCRIPT_TYPES = new Set(['ClientScript']);
-const SERVER_SCRIPT_TYPES = new Set([
-    'UserEventScript', 'Suitelet', 'RESTlet', 'ScheduledScript',
-    'MapReduceScript', 'WorkflowActionScript', 'MassUpdateScript',
-    'Portlet', 'BundleInstallationScript',
-]);
-
-export function normalizeScriptType(scriptType: string | null): string | null {
-    if (!scriptType) { return null; }
-    if (CLIENT_SCRIPT_TYPES.has(scriptType)) { return 'client'; }
-    if (SERVER_SCRIPT_TYPES.has(scriptType)) { return 'server'; }
-    return scriptType;
 }
 
 function isSupportedInScript(
@@ -401,16 +388,36 @@ function getMethodParamCompletions(
     if (!method?.params) { return null; }
 
     // Collect options.* params (properties of the options object)
-    const optionParams = method.params.filter(p => p.name.startsWith('options.'));
+    // Only suggest direct properties of the options object. Deeper metadata
+    // such as options.params.recordId describes a nested object and inserting
+    // `params.recordId:` here would generate invalid JavaScript.
+    const optionParams = method.params.filter(p => /^options\.[^.]+$/.test(p.name));
     if (optionParams.length === 0) { return null; }
 
-    // Detect properties already specified in the current object
+    // Detect properties already specified in the current object.
+    // Only top-level `key:` pairs count — keys inside nested objects/arrays or
+    // inside string literals must not suppress outer suggestions.
     const textInObject = textBeforeCursor.substring(bracePos + 1);
     const existingProps = new Set<string>();
-    const propRegex = /(\w+)\s*:/g;
-    let pm: RegExpExecArray | null;
-    while ((pm = propRegex.exec(textInObject)) !== null) {
-        existingProps.add(pm[1]);
+    {
+        // Mask string literals so `key:` inside quotes is ignored.
+        const masked = textInObject
+            .replace(/'(?:[^'\\\n]|\\.)*'/g, match => `'${' '.repeat(match.length - 2)}'`)
+            .replace(/"(?:[^"\\\n]|\\.)*"/g, match => `"${' '.repeat(match.length - 2)}"`);
+        const propRegex = /(\w+)\s*:/g;
+        let pm: RegExpExecArray | null;
+        while ((pm = propRegex.exec(masked)) !== null) {
+            const before = masked.substring(0, pm.index);
+            let depth = 0;
+            for (const ch of before) {
+                if (ch === '{' || ch === '[') { depth++; }
+                else if (ch === '}' || ch === ']') { depth--; }
+            }
+            // depth > 0 means the key sits inside a nested object/array value
+            if (depth === 0) {
+                existingProps.add(pm[1]);
+            }
+        }
     }
 
     const owner = modId ?? objectVar;
@@ -525,7 +532,7 @@ function getContextFallbackCompletions(
  * Like resolvePropertyChain, but for root variables not in the typeMap.
  * Uses context detection to resolve the root, then walks the rest.
  */
-function resolvePropertyChainWithFallback(
+export function resolvePropertyChainWithFallback(
     parts: string[],
     textBeforeCursor: string,
 ): string | undefined {
@@ -568,7 +575,7 @@ function resolvePropertyChainWithFallback(
  * parameter name whose function name is a known entry point. Returns the
  * context typeId (e.g. "context#pageInit") or null.
  */
-function detectEntryPointContext(paramName: string, textBeforeCursor: string): string | null {
+export function detectEntryPointContext(paramName: string, textBeforeCursor: string): string | null {
     const patterns = [
         new RegExp(`(?:const|let|var)\\s+(\\w+)\\s*=\\s*(?:function\\s*)?\\(\\s*${paramName}\\b`, 'g'),
         new RegExp(`function\\s+(\\w+)\\s*\\(\\s*${paramName}\\b`, 'g'),
@@ -593,7 +600,7 @@ function detectEntryPointContext(paramName: string, textBeforeCursor: string): s
  * Walk a property chain like ['context', 'form'] and resolve to a final typeId.
  * Uses context property typeIds for context types.
  */
-function resolvePropertyChain(parts: string[], analysis: AnalysisResult): string | undefined {
+export function resolvePropertyChain(parts: string[], analysis: AnalysisResult): string | undefined {
     if (parts.length === 0) { return undefined; }
 
     let currentType = analysis.typeMap.get(parts[0]);
@@ -612,7 +619,18 @@ function resolvePropertyChain(parts: string[], analysis: AnalysisResult): string
                 continue;
             }
         }
-
+        const objType = getObjectType(currentType);
+        if (!objType) { return undefined; }
+        const prop = (objType.properties ?? []).find(p => p.name === parts[i]);
+        if (prop?.typeId) {
+            currentType = prop.typeId;
+            continue;
+        }
+        const method = (objType.methods ?? []).find(m => m.name === parts[i]);
+        if (method?.returnType) {
+            currentType = method.returnType;
+            continue;
+        }
         return undefined;
     }
 

@@ -53,12 +53,12 @@ export const SDF_OBJECTS: SdfObjectDef[] = [
     { type: 'sublist',            label: 'Sublist',                    prefix: 'custsublist_',       rootTag: 'sublist',                 category: 'records', description: 'Defines a custom sublist that can be added to record types.' },
 
     // ── Fields ───────────────────────────────────────────────────────────
-    { type: 'crmcustomfield',              label: 'CRM Custom Field',                    prefix: 'curcustomfield_',  rootTag: 'crmcustomfield',              category: 'fields', description: 'Defines a custom field for CRM records (events, tasks, phone calls).' },
+    { type: 'crmcustomfield',              label: 'CRM Custom Field',                    prefix: 'custevent_',        rootTag: 'crmcustomfield',              category: 'fields', description: 'Defines a custom field for CRM records (events, tasks, phone calls).' },
     { type: 'entitycustomfield',           label: 'Entity Custom Field',                 prefix: 'custentity_',      rootTag: 'entitycustomfield',           category: 'fields', description: 'Defines a custom field for entity records (customers, vendors, employees, contacts).' },
     { type: 'itemcustomfield',             label: 'Item Custom Field',                   prefix: 'custitem_',        rootTag: 'itemcustomfield',             category: 'fields', description: 'Defines a custom field for item records.' },
     { type: 'itemnumbercustomfield',       label: 'Item Number Custom Field',            prefix: 'custitemnumber_',  rootTag: 'itemnumbercustomfield',       category: 'fields', description: 'Defines a custom field for item number records.' },
     { type: 'itemoptioncustomfield',       label: 'Transaction Item Option Field',       prefix: 'custcol_',         rootTag: 'itemoptioncustomfield',       category: 'fields', description: 'Defines a custom transaction item option (column) field.' },
-    { type: 'othercustomfield',            label: 'Other Record Custom Field',           prefix: 'curecord_',        rootTag: 'othercustomfield',            category: 'fields', description: 'Defines a custom field for other (non-entity, non-item, non-CRM) record types.' },
+    { type: 'othercustomfield',            label: 'Other Record Custom Field',           prefix: 'custrecord_',      rootTag: 'othercustomfield',            category: 'fields', description: 'Defines a custom field for other (non-entity, non-item, non-CRM) record types.' },
     { type: 'transactionbodycustomfield',  label: 'Transaction Body Custom Field',       prefix: 'custbody_',        rootTag: 'transactionbodycustomfield',  category: 'fields', description: 'Defines a custom field on the body (header) of transaction records.' },
     { type: 'transactioncolumncustomfield', label: 'Transaction Column Custom Field',    prefix: 'custcol_',         rootTag: 'transactioncolumncustomfield', category: 'fields', description: 'Defines a custom field on transaction line items.' },
 

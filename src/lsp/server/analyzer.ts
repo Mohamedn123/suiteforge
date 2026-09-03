@@ -1,12 +1,14 @@
 import { parse } from '@babel/parser';
-import _traverse from '@babel/traverse';
-const traverse = (_traverse as any).default || _traverse;
+import babelTraverseImport from '@babel/traverse';
+const traverse = (babelTraverseImport as typeof babelTraverseImport & { default?: typeof babelTraverseImport }).default
+    ?? babelTraverseImport;
 
 import * as t from '@babel/types';
 import {
     getModule,
     getModuleMethods,
     getObjectMethods,
+    getObjectProperties,
     getContextTypeId,
     getContextPropertyTypeId,
 } from './moduleData';
@@ -15,6 +17,16 @@ export interface AnalysisResult {
     moduleMap: Map<string, string>;
     typeMap: Map<string, string>;
     scriptType: string | null;
+    /** Lexical bindings used to narrow name-based results at a request offset. */
+    scopedBindings?: ScopedBinding[];
+}
+
+export interface ScopedBinding {
+    name: string;
+    start: number;
+    end: number;
+    moduleId?: string;
+    typeId?: string;
 }
 
 const KNOWN_ENTRY_POINTS = new Set([
@@ -226,6 +238,8 @@ export function analyzeDocument(text: string): AnalysisResult {
 
                     if (t.isFunctionDeclaration(node) && node.id) {
                         funcName = node.id.name;
+                    } else if (t.isObjectMethod(node) && t.isIdentifier(node.key)) {
+                        funcName = node.key.name;
                     } else if (t.isVariableDeclarator(path.parent) && t.isIdentifier(path.parent.id)) {
                         funcName = path.parent.id.name;
                     } else if (t.isObjectProperty(path.parent) && t.isIdentifier(path.parent.key)) {
@@ -278,12 +292,19 @@ export function analyzeDocument(text: string): AnalysisResult {
                         const targetVar = node.id.name;
                         const sourceVar = node.init.name;
                         
-                        if (moduleMap.has(sourceVar) && !moduleMap.has(targetVar)) {
+                        if (moduleMap.has(sourceVar)) {
                             moduleMap.set(targetVar, moduleMap.get(sourceVar)!);
+                        } else {
+                            moduleMap.delete(targetVar);
                         }
-                        if (typeMap.has(sourceVar) && !typeMap.has(targetVar)) {
+                        if (typeMap.has(sourceVar)) {
                             typeMap.set(targetVar, typeMap.get(sourceVar)!);
+                        } else {
+                            typeMap.delete(targetVar);
                         }
+                    } else if (t.isIdentifier(node.id) && node.init && !t.isCallExpression(node.init)) {
+                        moduleMap.delete(node.id.name);
+                        typeMap.delete(node.id.name);
                     }
                 },
                 
@@ -293,12 +314,19 @@ export function analyzeDocument(text: string): AnalysisResult {
                         const targetVar = node.left.name;
                         const sourceVar = node.right.name;
 
-                        if (moduleMap.has(sourceVar) && !moduleMap.has(targetVar)) {
+                        if (moduleMap.has(sourceVar)) {
                             moduleMap.set(targetVar, moduleMap.get(sourceVar)!);
+                        } else {
+                            moduleMap.delete(targetVar);
                         }
-                        if (typeMap.has(sourceVar) && !typeMap.has(targetVar)) {
+                        if (typeMap.has(sourceVar)) {
                             typeMap.set(targetVar, typeMap.get(sourceVar)!);
+                        } else {
+                            typeMap.delete(targetVar);
                         }
+                    } else if (t.isIdentifier(node.left) && !t.isCallExpression(node.right)) {
+                        moduleMap.delete(node.left.name);
+                        typeMap.delete(node.left.name);
                     }
                 }
             });
@@ -425,14 +453,14 @@ export function analyzeDocument(text: string): AnalysisResult {
             if (modId) {
                 const methods = getModuleMethods(modId);
                 const method = methods.find(m => m.name === methodName);
-                if (method?.returnType) returnedType = method.returnType;
+                if (method?.returnType) { returnedType = method.returnType; }
             }
             if (!returnedType) {
                 const objType = typeMap.get(objectVar);
                 if (objType) {
                     const objMethods = getObjectMethods(objType);
                     const objMethod = objMethods.find(m => m.name === methodName);
-                    if (objMethod?.returnType) returnedType = objMethod.returnType;
+                    if (objMethod?.returnType) { returnedType = objMethod.returnType; }
                 }
             }
             if (returnedType) {
@@ -456,7 +484,7 @@ export function analyzeDocument(text: string): AnalysisResult {
         // Skip if this is a declaration (already handled by Pattern 6)
         const lineStart = text.lastIndexOf('\n', reassignMatch.index) + 1;
         const linePrefix = text.substring(lineStart, reassignMatch.index).trim();
-        if (/^(?:const|let|var)$/.test(linePrefix)) continue;
+        if (/^(?:const|let|var)$/.test(linePrefix)) { continue; }
 
         if (!typeMap.has(resultVar)) {
             let returnedType: string | undefined;
@@ -464,14 +492,14 @@ export function analyzeDocument(text: string): AnalysisResult {
             if (modId) {
                 const methods = getModuleMethods(modId);
                 const method = methods.find(m => m.name === methodName);
-                if (method?.returnType) returnedType = method.returnType;
+                if (method?.returnType) { returnedType = method.returnType; }
             }
             if (!returnedType) {
                 const objType = typeMap.get(objectVar);
                 if (objType) {
                     const objMethods = getObjectMethods(objType);
                     const objMethod = objMethods.find(m => m.name === methodName);
-                    if (objMethod?.returnType) returnedType = objMethod.returnType;
+                    if (objMethod?.returnType) { returnedType = objMethod.returnType; }
                 }
             }
             if (returnedType) {
@@ -498,22 +526,253 @@ export function analyzeDocument(text: string): AnalysisResult {
         }
     }
 
-    return { moduleMap, typeMap, scriptType };
+    const scopedBindings = ast ? buildScopedBindings(ast, text.length) : undefined;
+    if (scopedBindings) {
+        removeConflictingGlobalBindings(scopedBindings, moduleMap, typeMap);
+    }
+    return { moduleMap, typeMap, scriptType, scopedBindings };
+}
+
+function removeConflictingGlobalBindings(
+    bindings: ScopedBinding[],
+    moduleMap: Map<string, string>,
+    typeMap: Map<string, string>,
+): void {
+    const signaturesByName = new Map<string, Set<string>>();
+    for (const binding of bindings) {
+        const signatures = signaturesByName.get(binding.name) ?? new Set<string>();
+        signatures.add(`${binding.moduleId ?? ''}\0${binding.typeId ?? ''}`);
+        signaturesByName.set(binding.name, signatures);
+    }
+    for (const [name, signatures] of signaturesByName) {
+        if (signatures.size > 1) {
+            moduleMap.delete(name);
+            typeMap.delete(name);
+        }
+    }
+}
+
+/**
+ * Returns a copy whose name maps reflect the innermost lexical binding at the
+ * supplied document offset. Unknown inner bindings deliberately hide outer
+ * SuiteScript bindings rather than inheriting their completions.
+ */
+export function narrowAnalysisToOffset(analysis: AnalysisResult, offset: number): AnalysisResult {
+    if (!analysis.scopedBindings) { return analysis; }
+    const moduleMap = new Map(analysis.moduleMap);
+    const typeMap = new Map(analysis.typeMap);
+    const names = new Set(analysis.scopedBindings.map(binding => binding.name));
+
+    for (const name of names) {
+        const candidates = analysis.scopedBindings
+            .filter(binding => binding.name === name && binding.start <= offset && offset <= binding.end)
+            .sort((a, b) => ((a.end - a.start) - (b.end - b.start)) || (b.start - a.start));
+        const binding = candidates[0];
+        moduleMap.delete(name);
+        typeMap.delete(name);
+        if (binding?.moduleId) { moduleMap.set(name, binding.moduleId); }
+        if (binding?.typeId) { typeMap.set(name, binding.typeId); }
+    }
+
+    return { ...analysis, moduleMap, typeMap };
+}
+
+interface BindingInference {
+    moduleId?: string;
+    typeId?: string;
+}
+
+/** Builds a compact symbol table without exposing Babel paths in AnalysisResult. */
+function buildScopedBindings(ast: t.Node, textLength: number): ScopedBinding[] {
+    const results: ScopedBinding[] = [];
+    const seen = new Set<any>();
+    const cache = new Map<any, BindingInference>();
+    const resolving = new Set<any>();
+
+    const functionName = (path: any): string | undefined => {
+        const node = path.node;
+        if (t.isFunctionDeclaration(node) && node.id) { return node.id.name; }
+        if (t.isObjectMethod(node) && t.isIdentifier(node.key)) { return node.key.name; }
+        if (t.isVariableDeclarator(path.parent) && t.isIdentifier(path.parent.id)) { return path.parent.id.name; }
+        if ((t.isObjectProperty(path.parent) || t.isObjectMethod(path.parent)) && t.isIdentifier(path.parent.key)) {
+            return path.parent.key.name;
+        }
+        if (t.isAssignmentExpression(path.parent) && t.isIdentifier(path.parent.left)) { return path.parent.left.name; }
+        return undefined;
+    };
+
+    const inferExpression = (node: any, scope: any): BindingInference => {
+        if (!node) { return {}; }
+        if (t.isTSAsExpression(node) || t.isTSTypeAssertion(node) || t.isParenthesizedExpression(node)) {
+            return inferExpression(node.expression, scope);
+        }
+        if (t.isAwaitExpression(node)) {
+            const inferred = inferExpression(node.argument, scope);
+            const typeId = inferred.typeId?.startsWith('Promise<') && inferred.typeId.endsWith('>')
+                ? inferred.typeId.slice(8, -1)
+                : inferred.typeId;
+            return { ...inferred, typeId };
+        }
+        if (t.isIdentifier(node)) {
+            const binding = scope?.getBinding(node.name);
+            return binding ? inferBinding(binding) : {};
+        }
+        if (t.isCallExpression(node)) {
+            if (t.isIdentifier(node.callee, { name: 'require' }) && t.isStringLiteral(node.arguments[0])) {
+                return getModule(node.arguments[0].value) ? { moduleId: node.arguments[0].value } : {};
+            }
+            if (!t.isMemberExpression(node.callee) || !t.isIdentifier(node.callee.property)) { return {}; }
+
+            const methodName = node.callee.property.name;
+            if (methodName === 'promise' && t.isMemberExpression(node.callee.object)
+                && t.isIdentifier(node.callee.object.property)) {
+                const parentMethodName = node.callee.object.property.name;
+                const receiver = inferExpression(node.callee.object.object, scope);
+                const methods = receiver.moduleId
+                    ? getModuleMethods(receiver.moduleId)
+                    : receiver.typeId ? getObjectMethods(receiver.typeId) : [];
+                const returned = methods.find(method => method.name === parentMethodName)?.returnType;
+                return returned ? { typeId: `Promise<${returned}>` } : {};
+            }
+
+            const receiver = inferExpression(node.callee.object, scope);
+            const methods = receiver.moduleId
+                ? getModuleMethods(receiver.moduleId)
+                : receiver.typeId ? getObjectMethods(receiver.typeId) : [];
+            const returned = methods.find(method => method.name === methodName)?.returnType;
+            return returned ? { typeId: returned } : {};
+        }
+        if (t.isMemberExpression(node) && t.isIdentifier(node.property) && !node.computed) {
+            const propertyName = node.property.name;
+            const receiver = inferExpression(node.object, scope);
+            if (receiver.typeId?.startsWith('context#')) {
+                const entryPoint = receiver.typeId.slice('context#'.length);
+                const typeId = getContextPropertyTypeId(entryPoint, propertyName);
+                return typeId ? { typeId } : {};
+            }
+            if (receiver.typeId) {
+                const property = getObjectProperties(receiver.typeId).find(item => item.name === propertyName);
+                return property?.typeId ? { typeId: property.typeId } : {};
+            }
+        }
+        return {};
+    };
+
+    const inferBinding = (binding: any): BindingInference => {
+        const cached = cache.get(binding);
+        if (cached) { return cached; }
+        if (resolving.has(binding)) { return {}; }
+        resolving.add(binding);
+        let inferred: BindingInference = {};
+        const bindingPath = binding.path;
+
+        if (binding.kind === 'param') {
+            const fnPath = bindingPath.findParent((path: any) => path.isFunction());
+            if (fnPath) {
+                const paramIndex = fnPath.node.params.findIndex((param: any) =>
+                    param === bindingPath.node || (t.isRestElement(param) && param.argument === bindingPath.node));
+                const callPath = fnPath.parentPath;
+                if (callPath?.isCallExpression()
+                    && t.isIdentifier(callPath.node.callee, { name: 'define' })
+                    && t.isArrayExpression(callPath.node.arguments[0])) {
+                    const dependency = callPath.node.arguments[0].elements[paramIndex];
+                    if (t.isStringLiteral(dependency) && getModule(dependency.value)) {
+                        inferred = { moduleId: dependency.value };
+                    }
+                }
+
+                if (!inferred.moduleId && paramIndex === 0) {
+                    const name = functionName(fnPath);
+                    const insideReturn = fnPath.findParent((path: any) => path.isReturnStatement());
+                    if (name && (SAFE_ENTRY_POINTS.has(name) || (insideReturn && KNOWN_ENTRY_POINTS.has(name)))) {
+                        const typeId = getContextTypeId(name);
+                        if (typeId) { inferred = { typeId }; }
+                    }
+                }
+
+                if (!inferred.typeId && paramIndex === 0 && callPath?.isCallExpression()
+                    && t.isMemberExpression(callPath.node.callee)
+                    && t.isIdentifier(callPath.node.callee.property, { name: 'then' })) {
+                    const promise = inferExpression(callPath.node.callee.object, callPath.scope);
+                    if (promise.typeId?.startsWith('Promise<') && promise.typeId.endsWith('>')) {
+                        inferred = { typeId: promise.typeId.slice(8, -1) };
+                    }
+                }
+            }
+        } else if (bindingPath?.isVariableDeclarator()) {
+            inferred = inferExpression(bindingPath.node.init, bindingPath.scope);
+        }
+
+        resolving.delete(binding);
+        cache.set(binding, inferred);
+        return inferred;
+    };
+
+    try {
+        traverse(ast, {
+            Identifier(path: any) {
+                if (!path.isBindingIdentifier()) { return; }
+                const binding = path.scope.getBinding(path.node.name);
+                if (!binding || seen.has(binding)) { return; }
+                seen.add(binding);
+
+                const block = binding.scope.block;
+                const start = typeof block.start === 'number' ? block.start : 0;
+                const end = typeof block.end === 'number' ? block.end : textLength;
+                let segmentStart = start;
+                let inferred = inferBinding(binding);
+                const violations = [...(binding.constantViolations ?? [])]
+                    .filter((violation: any) => typeof violation.node.start === 'number' && violation.node.start <= end)
+                    .sort((a: any, b: any) => a.node.start - b.node.start);
+
+                for (const violation of violations) {
+                    const violationEnd = typeof violation.node.end === 'number'
+                        ? violation.node.end
+                        : violation.node.start;
+                    results.push({
+                        name: path.node.name,
+                        start: segmentStart,
+                        end: violationEnd,
+                        ...inferred,
+                    });
+                    inferred = violation.isAssignmentExpression?.()
+                        && violation.node.operator === '='
+                        ? inferExpression(violation.node.right, violation.scope)
+                        : {};
+                    segmentStart = violationEnd;
+                }
+                results.push({ name: path.node.name, start: segmentStart, end, ...inferred });
+            },
+        });
+    } catch {
+        return [];
+    }
+    return results;
 }
 
 function findReturnBlocks(text: string): string[] {
     const blocks: string[] = [];
+
+    // Mask the contents of string literals and comments before scanning, so
+    // braces inside them (e.g. "}" in a log message) don't produce
+    // unbalanced/mismatched return blocks.
+    const masked = text
+        .replace(/\/\*[\s\S]*?\*\//g, match => ' '.repeat(match.length))
+        .replace(/\/\/[^\n]*/g, match => ' '.repeat(match.length))
+        .replace(/'(?:[^'\\\n]|\\.)*'/g, match => `' ${' '.repeat(Math.max(0, match.length - 2))} '`)
+        .replace(/"(?:[^"\\\n]|\\.)*"/g, match => `" ${' '.repeat(Math.max(0, match.length - 2))} "`);
+
     const opener = /return\s*\{/g;
     let m: RegExpExecArray | null;
-    while ((m = opener.exec(text)) !== null) {
+    while ((m = opener.exec(masked)) !== null) {
         let depth = 1;
         let i = m.index + m[0].length;
-        while (i < text.length && depth > 0) {
-            if (text[i] === '{') depth++;
-            else if (text[i] === '}') depth--;
+        while (i < masked.length && depth > 0) {
+            if (masked[i] === '{') { depth++; }
+            else if (masked[i] === '}') { depth--; }
             i++;
         }
-        if (depth === 0) blocks.push(text.substring(m.index, i));
+        if (depth === 0) { blocks.push(text.substring(m.index, i)); }
     }
     return blocks;
 }

@@ -1041,6 +1041,23 @@
                 { "name": "helpText", "type": "string", "description": "The inline help text for the tab or subtab." },
                 { "name": "label", "type": "string", "description": "The label for the tab or subtab." }
             ]
+        },
+        {
+            "name": "Portlet",
+            "description": "A dashboard portlet passed to a Portlet script's render entry point.",
+            "methods": [
+                { "name": "addColumn", "description": "Adds a column to a list-style portlet.", "params": [{ "name": "options", "type": "Object", "description": "Column options." }, { "name": "options.id", "type": "string", "description": "The column ID." }, { "name": "options.type", "type": "string", "description": "The column type." }, { "name": "options.label", "type": "string", "description": "The column label." }], "returns": "void" },
+                { "name": "addField", "description": "Adds a field to a form-style portlet.", "params": [{ "name": "options", "type": "Object", "description": "Field options." }, { "name": "options.id", "type": "string", "description": "The field ID." }, { "name": "options.type", "type": "serverWidget.FieldType", "description": "The field type." }, { "name": "options.label", "type": "string", "description": "The field label." }], "returns": "serverWidget.Field", "returnType": "N/ui/serverWidget#Field" },
+                { "name": "addLine", "description": "Adds a line to a list-style portlet.", "params": [{ "name": "options", "type": "Object", "description": "Line values." }, { "name": "options.text", "type": "string", "description": "The line text." }, { "name": "options.url", "type": "string", "description": "An optional line URL.", "optional": true }], "returns": "void" },
+                { "name": "addRow", "description": "Adds a row to a list-style portlet.", "params": [{ "name": "options", "type": "Object", "description": "Row values keyed by column ID." }], "returns": "void" },
+                { "name": "setSubmitButton", "description": "Adds a submit button to a form-style portlet.", "params": [{ "name": "options", "type": "Object", "description": "Button options." }, { "name": "options.url", "type": "string", "description": "The submission URL." }, { "name": "options.label", "type": "string", "description": "The button label.", "optional": true }], "returns": "void" }
+            ],
+            "properties": [
+                { "name": "clientScriptFileId", "type": "number", "description": "Internal ID of the client script file attached to the portlet." },
+                { "name": "clientScriptModulePath", "type": "string", "description": "Module path of the client script attached to the portlet." },
+                { "name": "html", "type": "string", "description": "HTML content for an inline HTML portlet." },
+                { "name": "title", "type": "string", "description": "The portlet title." }
+            ]
         }
     ]
 }

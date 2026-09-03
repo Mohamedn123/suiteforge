@@ -1153,6 +1153,39 @@
                     "description": "Returns the record type."
                 }
             ]
+        },
+        {
+            "name": "Field",
+            "description": "A body or sublist field on the current record.",
+            "methods": [],
+            "properties": [
+                { "name": "id", "type": "string", "description": "The internal ID of the field.", "readOnly": true },
+                { "name": "isDisabled", "type": "boolean", "description": "Whether the field is disabled." },
+                { "name": "isDisplay", "type": "boolean", "description": "Whether the field is displayed." },
+                { "name": "isMandatory", "type": "boolean", "description": "Whether the field is mandatory." },
+                { "name": "isReadOnly", "type": "boolean", "description": "Whether the field is read-only.", "readOnly": true },
+                { "name": "label", "type": "string", "description": "The field label.", "readOnly": true },
+                { "name": "type", "type": "string", "description": "The field type.", "readOnly": true }
+            ]
+        },
+        {
+            "name": "Sublist",
+            "description": "A sublist on the current record.",
+            "methods": [
+                {
+                    "name": "getColumn",
+                    "description": "Returns a field object for a sublist column.",
+                    "params": [
+                        { "name": "options.fieldId", "type": "string", "description": "The internal ID of the sublist field." }
+                    ],
+                    "returns": "currentRecord.Field",
+                    "returnType": "N/currentRecord#Field"
+                }
+            ],
+            "properties": [
+                { "name": "id", "type": "string", "description": "The internal ID of the sublist.", "readOnly": true },
+                { "name": "type", "type": "string", "description": "The sublist type.", "readOnly": true }
+            ]
         }
     ]
 }

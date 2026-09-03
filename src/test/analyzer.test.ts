@@ -1,5 +1,5 @@
 import * as assert from 'assert';
-import { analyzeDocument } from '../lsp/server/analyzer';
+import { analyzeDocument, narrowAnalysisToOffset } from '../lsp/server/analyzer';
 
 suite('Analyzer Test Suite', () => {
     test('Should parse AMD define and map modules', () => {
@@ -157,6 +157,18 @@ suite('Analyzer Test Suite', () => {
         assert.ok(result.typeMap.has('summaryContext'), 'summarize context should be typed');
     });
 
+    test('Should retain context typing inside object-method entry points', () => {
+        const text = `define([], function() {
+            return { beforeSubmit(context) { return context.newRecord; } };
+        });`;
+        const result = analyzeDocument(text);
+        const offset = text.indexOf('context.newRecord');
+        assert.strictEqual(
+            narrowAnalysisToOffset(result, offset).typeMap.get('context'),
+            'context#beforeSubmit',
+        );
+    });
+
     test('Should handle await unwrapping of Promise types', () => {
         const text = `
             define(['N/record'], function(record) {
@@ -201,5 +213,65 @@ suite('Analyzer Test Suite', () => {
         const result = analyzeDocument(text);
         assert.strictEqual(result.moduleMap.get('record'), 'N/record');
         assert.strictEqual(result.moduleMap.get('search'), 'N/search');
+    });
+
+    test('Should not leak inferred types across lexical scopes', () => {
+        const text = `
+            define(['N/record'], function(record) {
+                function first() {
+                    const value = record.create({ type: 'salesorder' });
+                    return value;
+                }
+                function second() {
+                    const value = 'plain text';
+                    return value;
+                }
+            });
+        `;
+        const result = analyzeDocument(text);
+        assert.strictEqual(result.typeMap.has('value'), false);
+        const firstOffset = text.indexOf('return value') + 'return '.length;
+        const secondOffset = text.lastIndexOf('return value') + 'return '.length;
+        assert.strictEqual(narrowAnalysisToOffset(result, firstOffset).typeMap.get('value'), 'N/record#Record');
+        assert.strictEqual(narrowAnalysisToOffset(result, secondOffset).typeMap.has('value'), false);
+    });
+
+    test('Should retain the same inferred type for same-name bindings in separate scopes', () => {
+        const text = `define(['N/record'], function(record) {
+            function first() { const rec = record.create({}); return rec; }
+            function second() { const rec = record.load({}); return rec; }
+        });`;
+        const result = analyzeDocument(text);
+        assert.strictEqual(result.typeMap.get('rec'), 'N/record#Record');
+        const firstOffset = text.indexOf('return rec') + 'return '.length;
+        const secondOffset = text.lastIndexOf('return rec') + 'return '.length;
+        assert.strictEqual(narrowAnalysisToOffset(result, firstOffset).typeMap.get('rec'), 'N/record#Record');
+        assert.strictEqual(narrowAnalysisToOffset(result, secondOffset).typeMap.get('rec'), 'N/record#Record');
+    });
+
+    test('Should select the innermost binding at the request position', () => {
+        const text = `define(['N/record'], function(record) {
+            function first() { return record.create({}); }
+            function second(record) { return record.customMethod(); }
+        });`;
+        const result = analyzeDocument(text);
+        const firstOffset = text.indexOf('record.create');
+        const secondOffset = text.indexOf('record.customMethod');
+        assert.strictEqual(narrowAnalysisToOffset(result, firstOffset).moduleMap.get('record'), 'N/record');
+        assert.strictEqual(narrowAnalysisToOffset(result, secondOffset).moduleMap.has('record'), false);
+    });
+
+    test('Should stop offering an inferred type after reassignment', () => {
+        const text = `define(['N/record'], function(record) {
+            let rec = record.create({});
+            rec.getValue({ fieldId: 'entity' });
+            rec = 'plain text';
+            return rec;
+        });`;
+        const result = analyzeDocument(text);
+        const before = text.indexOf('rec.getValue');
+        const after = text.lastIndexOf('return rec') + 'return '.length;
+        assert.strictEqual(narrowAnalysisToOffset(result, before).typeMap.get('rec'), 'N/record#Record');
+        assert.strictEqual(narrowAnalysisToOffset(result, after).typeMap.has('rec'), false);
     });
 });

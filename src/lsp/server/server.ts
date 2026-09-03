@@ -7,13 +7,24 @@ import {
     CompletionParams,
     CompletionList,
     HoverParams,
+    SignatureHelpParams,
+    SignatureHelp,
+    CodeActionParams,
+    CodeAction,
     Diagnostic,
     DiagnosticSeverity,
 } from 'vscode-languageserver/node';
 import { TextDocument } from 'vscode-languageserver-textdocument';
-import { analyzeDocument, AnalysisResult } from './analyzer';
+import { analyzeDocument, narrowAnalysisToOffset, AnalysisResult } from './analyzer';
 import { getCompletions, getHoverInfo } from './completions';
+import { getSignatureHelp } from './signature';
 import { getModule } from './moduleData';
+import {
+    getMissingModuleDiagnostics,
+    createAddModuleToDefineAction,
+    MISSING_MODULE_CODE,
+    type MissingModuleInfo,
+} from './moduleImports';
 
 const connection = createConnection(ProposedFeatures.all);
 const documents = new TextDocuments(TextDocument);
@@ -30,6 +41,12 @@ connection.onInitialize((): InitializeResult => {
                 resolveProvider: false,
             },
             hoverProvider: true,
+            signatureHelpProvider: {
+                triggerCharacters: ['(', ','],
+            },
+            codeActionProvider: {
+                codeActionKinds: ['quickfix'],
+            },
         },
     };
 });
@@ -70,6 +87,10 @@ function validateTextDocument(document: TextDocument): void {
             }
         }
 
+        // Missing-module quick-fix diagnostics (e.g. `search.create(...)` used
+        // without 'N/search' in define()).
+        diagnostics.push(...getMissingModuleDiagnostics(document, analysis));
+
         connection.sendDiagnostics({
             uri: document.uri,
             diagnostics,
@@ -86,6 +107,10 @@ function validateTextDocument(document: TextDocument): void {
 documents.onDidChangeContent(change => {
     // Debounce validation to prevent thrashing while user types
     const uri = change.document.uri;
+    // Never serve completions/hover data from the previous document version.
+    // Validation remains debounced, but interactive requests can recompute the
+    // current text immediately when the cache is empty.
+    analysisCache.delete(uri);
     if (validationDelays[uri]) {
         clearTimeout(validationDelays[uri]);
     }
@@ -115,7 +140,15 @@ connection.onCompletion((params: CompletionParams): CompletionList => {
         }
 
         const offset = doc.offsetAt(params.position);
-        const textBeforeCursor = doc.getText().substring(0, offset);
+        const text = doc.getText();
+        const textBeforeCursor = text.substring(0, offset);
+
+        // A trailing dot is temporarily invalid JavaScript. Patch only the
+        // analysis copy so Babel can still provide lexical scope information.
+        if (analysis.scopedBindings === undefined && text[offset - 1] === '.') {
+            analysis = analyzeDocument(`${text.substring(0, offset)}__suiteforge_member__${text.substring(offset)}`);
+        }
+        analysis = narrowAnalysisToOffset(analysis, offset);
 
         const items = getCompletions(textBeforeCursor, analysis) || [];
         return { isIncomplete: false, items };
@@ -148,10 +181,53 @@ connection.onHover((params: HoverParams) => {
 
         const textBeforeWord = text.substring(0, wordStart);
 
-        return getHoverInfo(word, textBeforeWord, analysis);
+        return getHoverInfo(word, textBeforeWord, narrowAnalysisToOffset(analysis, wordStart));
     } catch (e) {
         console.error('Hover error:', e);
         return null;
+    }
+});
+
+connection.onSignatureHelp((params: SignatureHelpParams): SignatureHelp | null => {
+    try {
+        const doc = documents.get(params.textDocument.uri);
+        if (!doc) { return null; }
+
+        let analysis = analysisCache.get(doc.uri);
+        if (!analysis) {
+            analysis = analyzeDocument(doc.getText());
+            analysisCache.set(doc.uri, analysis);
+        }
+
+        const offset = doc.offsetAt(params.position);
+        const textBeforeCursor = doc.getText().substring(0, offset);
+
+        return getSignatureHelp(textBeforeCursor, narrowAnalysisToOffset(analysis, offset));
+    } catch (e) {
+        console.error('Signature help error:', e);
+        return null;
+    }
+});
+
+connection.onCodeAction((params: CodeActionParams): CodeAction[] => {
+    try {
+        const doc = documents.get(params.textDocument.uri);
+        if (!doc) { return []; }
+
+        const actions: CodeAction[] = [];
+        for (const diag of params.context.diagnostics) {
+            if (diag.code === MISSING_MODULE_CODE) {
+                const info = diag.data as MissingModuleInfo | undefined;
+                if (info?.module) {
+                    const action = createAddModuleToDefineAction(doc, info, diag);
+                    if (action) { actions.push(action); }
+                }
+            }
+        }
+        return actions;
+    } catch (e) {
+        console.error('Code action error:', e);
+        return [];
     }
 });
 

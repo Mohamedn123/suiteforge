@@ -19,6 +19,7 @@ export interface SsProperty {
     type: string;
     description: string;
     readOnly?: boolean;
+    typeId?: string;
 }
 
 export interface SsEnum {

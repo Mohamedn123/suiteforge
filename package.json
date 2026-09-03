@@ -4,7 +4,7 @@
   "publisher": "MohamedNashaat00",
   "icon": "assets/logo.png",
   "description": "Professional scaffolding and productivity tools for NetSuite SDF.",
-  "version": "1.1.2",
+  "version": "2.0.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/Mohamedn123/suiteforge"
@@ -85,6 +85,30 @@
         "icon": "$(play)"
       },
       {
+        "command": "suiteforge.deployActiveFile",
+        "title": "Deploy Active File",
+        "category": "SuiteForge",
+        "icon": "$(cloud-upload)"
+      },
+      {
+        "command": "suiteforge.selectDeploymentAccount",
+        "title": "Select Deployment Account...",
+        "category": "SuiteForge",
+        "icon": "$(account)"
+      },
+      {
+        "command": "suiteforge.addNetSuiteAccount",
+        "title": "Add NetSuite Account...",
+        "category": "SuiteForge",
+        "icon": "$(add)"
+      },
+      {
+        "command": "suiteforge.manageSavedAccounts",
+        "title": "Manage Saved NetSuite Accounts...",
+        "category": "SuiteForge",
+        "icon": "$(key)"
+      },
+      {
         "command": "suiteforge.refreshSdfCommands",
         "title": "Refresh",
         "category": "SuiteForge",
@@ -97,7 +121,28 @@
         "label": "SuiteForge: New..."
       }
     ],
+    "keybindings": [
+      {
+        "command": "suiteforge.deployActiveFile",
+        "key": "alt+shift+u",
+        "when": "editorTextFocus"
+      }
+    ],
     "menus": {
+      "editor/context": [
+        {
+          "command": "suiteforge.deployActiveFile",
+          "when": "resourceScheme == file",
+          "group": "suiteforge@1"
+        }
+      ],
+      "editor/title": [
+        {
+          "command": "suiteforge.deployActiveFile",
+          "when": "resourceScheme == file",
+          "group": "navigation"
+        }
+      ],
       "explorer/context": [
         {
           "submenu": "suiteforge.newMenu",
@@ -172,7 +217,40 @@
           "type": "webview"
         }
       ]
-    }
+    },
+    "configuration": {
+      "title": "SuiteForge",
+      "properties": {
+        "suiteforge.deploy.accountPicker": {
+          "type": "string",
+          "enum": [
+            "always",
+            "whenMultiple",
+            "never"
+          ],
+          "enumDescriptions": [
+            "Ask which saved NetSuite account to use before every deployment.",
+            "Ask only when more than one saved NetSuite account is available.",
+            "Use the project's current default authentication ID without showing the picker."
+          ],
+          "default": "always",
+          "scope": "resource",
+          "description": "Controls when SuiteForge asks for a saved SuiteCloud authentication ID before deployment."
+        },
+        "suiteforge.deploy.confirmProduction": {
+          "type": "boolean",
+          "default": true,
+          "scope": "resource",
+          "description": "Require a modal confirmation before deploying to a production or unverified NetSuite account."
+        }
+      }
+    },
+    "snippets": [
+      {
+        "language": "javascript",
+        "path": "./snippets/suitescript.json"
+      }
+    ]
   },
   "scripts": {
     "vscode:prepublish": "npm run package",
@@ -204,6 +282,8 @@
   "dependencies": {
     "@babel/parser": "^7.29.2",
     "@babel/traverse": "^7.29.0",
+    "@babel/types": "^7.29.0",
+    "@vscode/codicons": "^0.0.46-24",
     "vscode-languageclient": "^9.0.1",
     "vscode-languageserver": "^9.0.1",
     "vscode-languageserver-textdocument": "^1.0.12"
@@ -230,5 +310,9 @@
     "suitelet",
     "restlet",
     "netsuite-development"
-  ]
+  ],
+  "allowScripts": {
+    "@vscode/test-cli@0.0.12": true,
+    "@vscode/test-electron@2.5.2": true
+  }
 }

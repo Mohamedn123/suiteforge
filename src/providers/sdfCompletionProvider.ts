@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { sdfFieldTypes } from '../data';
 import sdfEnums from '../data/sdf/sdfEnums.json';
-import { getEnclosingTagName } from './xmlUtils';
+import { getEnclosingTagName, isLikelySdfDocument } from './xmlUtils';
 
 // ---------------------------------------------------------------------------
 // Pre-built completion item lists
@@ -57,8 +57,8 @@ for (const tag of [
     'enablemailmerge', 'enablesourcing', 'hashtml',
     'showhierarchy', 'allowemptysource', 'checkspelling',
     'istext', 'isrecordtype', 'alllocalizationcontexts',
-    'allrecords', 'allroles', 'isimportant', 'displayheight',
-    'displaywidth', 'issortable', 'allowhyperlinks',
+    'allrecords', 'allroles', 'isimportant',
+    'issortable', 'allowhyperlinks',
     'storevalue', 'showinnewsearchcolumn', 'showinnewlistcolumn',
 ]) {
     TAG_COMPLETIONS.set(tag, BOOLEAN_ITEMS);
@@ -82,6 +82,7 @@ export class SdfCompletionProvider implements vscode.CompletionItemProvider {
         document: vscode.TextDocument,
         position: vscode.Position,
     ): vscode.CompletionItem[] | undefined {
+        if (!isLikelySdfDocument(document)) { return undefined; }
         const tag = getEnclosingTagName(document, position);
         if (!tag) { return undefined; }
         return TAG_COMPLETIONS.get(tag);

@@ -1,12 +1,23 @@
 import * as vscode from 'vscode';
 import type { SdfCommand } from '../data';
 import { SdfCliRunner, CliRunEvent } from './sdfCliRunner';
+import {
+    parseValidateOutput,
+    publishValidationDiagnostics,
+    clearValidationDiagnostics,
+} from './validationParser';
 
 export class SdfWebviewPanel {
     private static instance: SdfWebviewPanel | undefined;
     private panel: vscode.WebviewPanel;
     private runner: SdfCliRunner;
     private startTime = 0;
+    private disposed = false;
+    private validating = false;
+    private validateBuffer = '';
+    private activeWorkspaceRoot: vscode.Uri | undefined;
+    private starting = false;
+    private static readonly MAX_VALIDATE_OUTPUT = 5 * 1024 * 1024;
 
     private constructor(private readonly extensionUri: vscode.Uri) {
         this.runner = new SdfCliRunner();
@@ -18,19 +29,39 @@ export class SdfWebviewPanel {
             { enableScripts: true, retainContextWhenHidden: true },
         );
 
-        this.panel.webview.html = buildHtml();
+        this.panel.webview.html = buildHtml(this.panel.webview, extensionUri);
 
         this.panel.webview.onDidReceiveMessage((msg: { type: string }) => {
             if (msg.type === 'cancel') { this.runner.cancel(); }
         });
 
         this.panel.onDidDispose(() => {
+            this.disposed = true;
             this.runner.cancel();
+            this.runner.removeAllListeners('output');
             SdfWebviewPanel.instance = undefined;
         });
 
         this.runner.on('output', (event: CliRunEvent) => {
+            if (this.disposed) { return; }
+
+            if (event.type === 'stdout' || event.type === 'stderr') {
+                this.validateBuffer += event.data;
+                if (this.validateBuffer.length > SdfWebviewPanel.MAX_VALIDATE_OUTPUT) {
+                    this.validateBuffer = this.validateBuffer.slice(-SdfWebviewPanel.MAX_VALIDATE_OUTPUT);
+                }
+            }
+
             if (event.type === 'exit' || event.type === 'error') {
+                this.starting = false;
+                // Publish Problems-panel diagnostics when a validate run ends.
+                if (this.validating) {
+                    // A cancelled run only contains a partial report. Preserve
+                    // the last complete validation result instead of replacing
+                    // it with misleading partial diagnostics.
+                    if (!event.cancelled) { this.publishValidationResults(event); }
+                    this.validating = false;
+                }
                 const elapsed = Date.now() - this.startTime;
                 const code = event.type === 'error' ? 1 : (event.code ?? 1);
                 this.panel.webview.postMessage({ type: 'finish', code, elapsed, data: event.data });
@@ -49,8 +80,30 @@ export class SdfWebviewPanel {
         return SdfWebviewPanel.instance;
     }
 
-    runCommand(command: SdfCommand): void {
+    static get commandIsRunning(): boolean {
+        return Boolean(SdfWebviewPanel.instance?.starting || SdfWebviewPanel.instance?.runner.isRunning);
+    }
+
+    runCommand(command: SdfCommand, args?: string[], workspaceRoot?: vscode.Uri): void {
+        if (this.starting || this.runner.isRunning) {
+            vscode.window.showWarningMessage('SuiteForge: A command is already running. Cancel it before starting another.');
+            return;
+        }
+        // Post 'start' BEFORE spawning. run() may refuse to start (command
+        // already running, no workspace) and will then emit an 'error' event
+        // which the webview renders as a failed finish — so the panel can
+        // never get stuck in its "running" animation. The spawn itself is
+        // deferred to the next tick so the webview always processes 'start'
+        // (including its log reset) before any stdout banner lines arrive.
         this.startTime = Date.now();
+        this.starting = true;
+        this.activeWorkspaceRoot = workspaceRoot;
+
+        // project:validate output is captured and turned into Problems-panel
+        // diagnostics when the run finishes.
+        this.validating = command.id === 'project:validate';
+        this.validateBuffer = '';
+
         this.panel.webview.postMessage({
             type: 'start',
             label: command.label,
@@ -58,16 +111,57 @@ export class SdfWebviewPanel {
             flow: command.flow,
         });
         this.panel.title = `SDF: ${command.label}`;
-        this.runner.run(command.id);
+        setTimeout(() => {
+            if (this.disposed) { return; }
+            this.starting = false;
+            this.runner.run(command.id, args, workspaceRoot);
+        }, 0);
+    }
+
+    private publishValidationResults(event: CliRunEvent): void {
+        const projectRoot = this.activeWorkspaceRoot ?? vscode.workspace.workspaceFolders?.[0]?.uri;
+        if (!projectRoot) { return; }
+
+        // Prepend the banner too — some CLI versions put the error list in
+        // stderr, and the buffer already contains both streams in order.
+        const fullOutput = this.validateBuffer;
+        if (event.type === 'error' || fullOutput.trim().length === 0) {
+            // CLI failed to start / produced nothing — clear any stale results.
+            clearValidationDiagnostics();
+            return;
+        }
+
+        const issues = parseValidateOutput(fullOutput, projectRoot);
+        publishValidationDiagnostics(issues);
+
+        if (issues.length > 0) {
+            vscode.window.showInformationMessage(
+                `SuiteForge: Validation found ${issues.length} problem${issues.length > 1 ? 's' : ''}. See the Problems panel for details.`,
+            );
+        }
     }
 }
 
-function buildHtml(): string {
+function buildHtml(webview: vscode.Webview, extensionUri: vscode.Uri): string {
+    const nonce = getNonce();
+    // Serve the codicon font from the extension so the webview can render icons.
+    const codiconsUri = webview.asWebviewUri(
+        vscode.Uri.joinPath(extensionUri, 'assets', 'webview', 'codicon.css'),
+    );
+    const csp = [
+        `default-src 'none'`,
+        `style-src ${webview.cspSource} 'unsafe-inline'`,
+        `font-src ${webview.cspSource}`,
+        `script-src 'nonce-${nonce}'`,
+    ].join('; ');
+
     return /* html */ `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="${csp}">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link rel="stylesheet" href="${codiconsUri}">
 <style>
 :root{
     --bg:var(--vscode-editor-background);
@@ -229,7 +323,7 @@ body{
 
 <div class="toolbar">
     <span class="toolbar-title" id="toolbarTitle">SDF Output</span>
-    <button class="btn-danger" id="btnCancel" style="display:none" onclick="post('cancel')">Cancel</button>
+    <button class="btn-danger" id="btnCancel" style="display:none">Cancel</button>
 </div>
 
 <div id="idle" class="idle-state">
@@ -243,13 +337,13 @@ body{
 <div class="anim-area hidden" id="animArea"></div>
 
 <div class="log-section" id="logSection" style="display:none">
-    <div class="log-toggle" id="logToggle" onclick="toggleLog()">
+    <div class="log-toggle" id="logToggle">
         <span class="chevron">&#9654;</span> Command output
     </div>
     <div class="log-content" id="logContent"></div>
 </div>
 
-<script>
+<script nonce="${nonce}">
 const vscode = acquireVsCodeApi();
 const animArea = document.getElementById('animArea');
 const idle = document.getElementById('idle');
@@ -259,9 +353,10 @@ const logContent = document.getElementById('logContent');
 const titleEl = document.getElementById('toolbarTitle');
 const btnCancel = document.getElementById('btnCancel');
 
-let logOpen = false;
+btnCancel.addEventListener('click', () => vscode.postMessage({ type: 'cancel' }));
+logToggle.addEventListener('click', () => toggleLog());
 
-function post(type){ vscode.postMessage({type}); }
+let logOpen = false;
 
 function toggleLog(){
     logOpen = !logOpen;
@@ -370,8 +465,9 @@ window.addEventListener('message', (event) => {
 
             animArea.classList.remove('hidden');
             animArea.innerHTML = buildScene(currentFlow) +
-                '<div class="status-text animate">' + msg.label + '...</div>' +
+                '<div class="status-text animate"></div>' +
                 '<div class="progress-bar"><div class="shimmer"></div></div>';
+            animArea.querySelector('.status-text').textContent = msg.label + '...';
             break;
         }
 
@@ -419,4 +515,13 @@ window.addEventListener('message', (event) => {
 </script>
 </body>
 </html>`;
+}
+
+function getNonce(): string {
+    let text = '';
+    const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    for (let i = 0; i < 32; i++) {
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+    return text;
 }

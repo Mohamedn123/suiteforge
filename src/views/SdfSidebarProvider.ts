@@ -7,6 +7,12 @@ export class SdfSidebarProvider implements vscode.WebviewViewProvider {
 
     constructor(private readonly _extensionUri: vscode.Uri) {}
 
+    refresh(): void {
+        if (this._view) {
+            this._view.webview.html = this._buildHtml(this._view.webview, this._extensionUri);
+        }
+    }
+
     resolveWebviewView(
         webviewView: vscode.WebviewView,
         _context: vscode.WebviewViewResolveContext,
@@ -14,7 +20,7 @@ export class SdfSidebarProvider implements vscode.WebviewViewProvider {
     ): void {
         this._view = webviewView;
         webviewView.webview.options = { enableScripts: true };
-        webviewView.webview.html = this._buildHtml();
+        webviewView.webview.html = this._buildHtml(webviewView.webview, this._extensionUri);
 
         webviewView.webview.onDidReceiveMessage((msg: { type: string; commandId?: string }) => {
             if (msg.type === 'runCommand' && msg.commandId) {
@@ -27,13 +33,30 @@ export class SdfSidebarProvider implements vscode.WebviewViewProvider {
         });
     }
 
-    private _buildHtml(): string {
-        const dataJson = JSON.stringify(sdfCommandCategories);
+    private _buildHtml(webview: vscode.Webview, extensionUri: vscode.Uri): string {
+        // Keep serialized data from ever terminating the script tag if command
+        // descriptions later come from generated or external documentation.
+        const dataJson = JSON.stringify(sdfCommandCategories)
+            .replace(/</g, '\\u003c')
+            .replace(/\u2028/g, '\\u2028')
+            .replace(/\u2029/g, '\\u2029');
+        const nonce = getNonce();
+        const codiconsUri = webview.asWebviewUri(
+            vscode.Uri.joinPath(extensionUri, 'assets', 'webview', 'codicon.css'),
+        );
+        const csp = [
+            `default-src 'none'`,
+            `style-src ${webview.cspSource} 'unsafe-inline'`,
+            `font-src ${webview.cspSource}`,
+            `script-src 'nonce-${nonce}'`,
+        ].join('; ');
         return /* html */ `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="${csp}">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link rel="stylesheet" href="${codiconsUri}">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{
@@ -160,7 +183,7 @@ body{
 <div id="commandList"></div>
 <div id="emptyState" class="empty-state" style="display:none">No matching commands</div>
 
-<script>
+<script nonce="${nonce}">
 const vscode = acquireVsCodeApi();
 const categories = ${dataJson};
 
@@ -185,7 +208,10 @@ function render(filter) {
 
         const header = document.createElement('div');
         header.className = 'cat-header';
-        header.innerHTML = '<span class="chevron codicon codicon-chevron-down"></span>' + cat.category;
+        const chevron = document.createElement('span');
+        chevron.className = 'chevron codicon codicon-chevron-down';
+        header.appendChild(chevron);
+        header.appendChild(document.createTextNode(cat.category));
         header.onclick = () => {
             header.classList.toggle('collapsed');
             body.classList.toggle('collapsed');
@@ -197,11 +223,19 @@ function render(filter) {
         cmds.forEach(cmd => {
             const row = document.createElement('div');
             row.className = 'cmd-row';
-            row.innerHTML =
-                '<span class="cmd-icon codicon codicon-' + cmd.icon + '"></span>' +
-                '<span class="cmd-label">' + cmd.label + '</span>' +
-                '<span class="flow-badge">' + flowLabel(cmd.flow) + '</span>' +
-                '<span class="cmd-desc">' + cmd.description + '</span>';
+            const icon = document.createElement('span');
+            icon.className = 'cmd-icon codicon';
+            if (/^[a-z0-9-]+$/.test(cmd.icon)) icon.classList.add('codicon-' + cmd.icon);
+            const label = document.createElement('span');
+            label.className = 'cmd-label';
+            label.textContent = cmd.label;
+            const badge = document.createElement('span');
+            badge.className = 'flow-badge';
+            badge.textContent = flowLabel(cmd.flow);
+            const description = document.createElement('span');
+            description.className = 'cmd-desc';
+            description.textContent = cmd.description;
+            row.append(icon, label, badge, description);
             row.onclick = () => vscode.postMessage({ type: 'runCommand', commandId: cmd.id });
             body.appendChild(row);
         });
@@ -226,4 +260,13 @@ render('');
 </body>
 </html>`;
     }
+}
+
+function getNonce(): string {
+    let text = '';
+    const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    for (let i = 0; i < 32; i++) {
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+    return text;
 }

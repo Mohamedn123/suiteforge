@@ -1,6 +1,4 @@
 import * as vscode from 'vscode';
-import * as path from 'path';
-import * as fs from 'fs';
 import { SDF_OBJECTS, SDF_CATEGORY_META, type SdfCategory, type SdfObjectDef } from './sdfObjectRegistry';
 import { resolveTargetFolder, writeAndOpen, validateScriptId } from './utils';
 
@@ -45,23 +43,32 @@ async function pickAndGenerate(
         title: `SuiteForge — New ${def.label}`,
         prompt: `Enter the ID (the "${def.prefix}" prefix is added automatically)`,
         placeHolder: 'e.g.  my_custom_id',
-        validateInput: validateScriptId,
+        validateInput: value => value.startsWith(def.prefix)
+            ? `Enter only the ID portion after "${def.prefix}".`
+            : validateScriptId(value),
     });
     if (id === undefined) { return; }
 
     const scriptId = `${def.prefix}${id}`;
-    const template = loadTemplate(context, def.type);
+    const template = await loadTemplate(context, def.type);
     const content = template.replace(/\{\{SCRIPTID\}\}/g, scriptId);
-    const fileName = `${def.type === 'customrecordtype' ? 'customrecordtype' : def.rootTag}_${id}.xml`;
+    // Oracle SDF convention: object files are named after their full script ID
+    // (e.g. customrecordtype_my_record.xml, custentity_my_field.xml).
+    const fileName = `${scriptId}.xml`;
 
-    await writeAndOpen(targetFolder, fileName, content);
-    vscode.window.showInformationMessage(`SuiteForge: Created ${fileName}`);
+    const created = await writeAndOpen(targetFolder, fileName, content);
+    if (created) {
+        vscode.window.showInformationMessage(`SuiteForge: Created ${fileName}`);
+    }
 }
 
-function loadTemplate(context: vscode.ExtensionContext, type: string): string {
-    const templatePath = path.join(context.extensionPath, 'templates', 'sdf', `${type}.xml`);
+async function loadTemplate(context: vscode.ExtensionContext, type: string): Promise<string> {
+    // Use the workspace file system API (not Node's fs) so this also works in
+    // remote workspaces (SSH, Dev Containers, WSL, etc.).
+    const templateUri = vscode.Uri.joinPath(context.extensionUri, 'templates', 'sdf', `${type}.xml`);
     try {
-        return fs.readFileSync(templatePath, 'utf-8');
+        const bytes = await vscode.workspace.fs.readFile(templateUri);
+        return new TextDecoder('utf-8').decode(bytes);
     } catch {
         const def = SDF_OBJECTS.find(o => o.type === type);
         if (!def) { return ''; }
