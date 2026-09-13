@@ -4,7 +4,7 @@
   "publisher": "MohamedNashaat00",
   "icon": "assets/logo.png",
   "description": "Professional scaffolding and productivity tools for NetSuite SDF.",
-  "version": "2.1.0",
+  "version": "3.0.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/Mohamedn123/suiteforge"

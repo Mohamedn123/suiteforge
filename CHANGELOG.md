@@ -4,6 +4,20 @@ All notable changes to the "suiteforge" extension will be documented in this fil
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [3.0.0] - 2026-09-13
+
+### Added
+
+- Custom module IntelliSense: exported function and property completions, parameter hints, and hover documentation from local implementations and JSDoc.
+- Find All References across source files in the open workspace, including exported aliases, destructured imports, and callers reached through AMD path mappings.
+- Safe Rename with a native VS Code refactor preview. Renames definitions, exports, and callers together while preserving separately named aliases. Edits are versioned and annotated for review before application.
+- Cross-file Go to Definition (Ctrl+Click/F12) for local custom SuiteScript modules, including AMD `define()`/`require()`, CommonJS and ES imports, exported aliases, destructured helpers, nested objects, and re-exported functions.
+- Relative and File Cabinet module paths, static `@NAmdConfig` `paths` aliases, and navigation from dependency strings to module files.
+- Definition requests prefer current unsaved editor content and handle shadowed bindings, missing files, malformed sources, and circular imports without stale or unrelated targets.
+- Rename rejects invalid identifiers, collisions, ambiguous module mappings, known dynamic property access, syntax errors, and source changes detected during the operation. It validates the proposed edits by checking symbol bindings before returning them to the editor.
+- Workspace searches support cancellation and omit dependencies, build outputs and symlink directories. Searches are bounded to 3,000 source files and 100,000 candidate symbols; exceeding a limit reports an error instead of returning a partial rename.
+- Regression tests and a running language-server integration test cover all four V3 capabilities, disk lookup, unsaved edits, document closure, file deletion, reference search, and annotated rename edits.
+
 ## [2.1.0] - 2026-09-03
 
 ### 🚀 New Features

@@ -13,12 +13,17 @@ import {
     CodeAction,
     Diagnostic,
     DiagnosticSeverity,
+    ResponseError,
+    ErrorCodes,
 } from 'vscode-languageserver/node';
 import { TextDocument } from 'vscode-languageserver-textdocument';
 import { analyzeDocument, narrowAnalysisToOffset, AnalysisResult } from './analyzer';
 import { getCompletions, getHoverInfo } from './completions';
 import { getSignatureHelp } from './signature';
 import { getModule } from './moduleData';
+import { createDefinitionHost, getDefinition } from './definitions';
+import { getCustomCompletions, getCustomHover, getCustomSignature } from './customIntelliSense';
+import { findSymbolReferences, prepareSymbolRename, renameSymbol, workspaceDocuments } from './workspaceSymbols';
 import {
     getMissingModuleDiagnostics,
     createAddModuleToDefineAction,
@@ -28,11 +33,16 @@ import {
 
 const connection = createConnection(ProposedFeatures.all);
 const documents = new TextDocuments(TextDocument);
+const definitionHost = createDefinitionHost(() => documents.all());
+let workspaceRoots: string[] = [];
+let supportsWorkspaceFolders = false;
 
 const analysisCache = new Map<string, AnalysisResult>();
 const validationDelays: Record<string, NodeJS.Timeout> = {};
 
-connection.onInitialize((): InitializeResult => {
+connection.onInitialize((params): InitializeResult => {
+    workspaceRoots = params.workspaceFolders?.map(folder => folder.uri) ?? (params.rootUri ? [params.rootUri] : []);
+    supportsWorkspaceFolders = params.capabilities.workspace?.workspaceFolders === true;
     return {
         capabilities: {
             textDocumentSync: TextDocumentSyncKind.Incremental,
@@ -41,6 +51,10 @@ connection.onInitialize((): InitializeResult => {
                 resolveProvider: false,
             },
             hoverProvider: true,
+            definitionProvider: true,
+            referencesProvider: true,
+            renameProvider: { prepareProvider: true },
+            workspace: { workspaceFolders: { supported: true, changeNotifications: true } },
             signatureHelpProvider: {
                 triggerCharacters: ['(', ','],
             },
@@ -49,6 +63,15 @@ connection.onInitialize((): InitializeResult => {
             },
         },
     };
+});
+
+connection.onInitialized(() => {
+    if (supportsWorkspaceFolders) {
+        connection.workspace.onDidChangeWorkspaceFolders(event => {
+            const removed = new Set(event.removed.map(folder => folder.uri));
+            workspaceRoots = [...new Set([...workspaceRoots.filter(uri => !removed.has(uri)), ...event.added.map(folder => folder.uri)])];
+        });
+    }
 });
 
 function validateTextDocument(document: TextDocument): void {
@@ -128,7 +151,7 @@ documents.onDidClose(e => {
     }
 });
 
-connection.onCompletion((params: CompletionParams): CompletionList => {
+connection.onCompletion(async (params: CompletionParams): Promise<CompletionList> => {
     try {
         const doc = documents.get(params.textDocument.uri);
         if (!doc) { return { isIncomplete: false, items: [] }; }
@@ -151,14 +174,16 @@ connection.onCompletion((params: CompletionParams): CompletionList => {
         analysis = narrowAnalysisToOffset(analysis, offset);
 
         const items = getCompletions(textBeforeCursor, analysis) || [];
-        return { isIncomplete: false, items };
+        const custom = await getCustomCompletions(doc, params.position, definitionHost);
+        const names = new Set(custom.map(item => item.label));
+        return { isIncomplete: false, items: [...custom, ...items.filter(item => !names.has(item.label))] };
     } catch (e) {
         console.error('Completion error:', e);
         return { isIncomplete: false, items: [] };
     }
 });
 
-connection.onHover((params: HoverParams) => {
+connection.onHover(async (params: HoverParams) => {
     try {
         const doc = documents.get(params.textDocument.uri);
         if (!doc) { return null; }
@@ -181,14 +206,55 @@ connection.onHover((params: HoverParams) => {
 
         const textBeforeWord = text.substring(0, wordStart);
 
-        return getHoverInfo(word, textBeforeWord, narrowAnalysisToOffset(analysis, wordStart));
+        return await getCustomHover(doc, params.position, definitionHost)
+            ?? getHoverInfo(word, textBeforeWord, narrowAnalysisToOffset(analysis, wordStart));
     } catch (e) {
         console.error('Hover error:', e);
         return null;
     }
 });
 
-connection.onSignatureHelp((params: SignatureHelpParams): SignatureHelp | null => {
+connection.onDefinition(async params => {
+    try {
+        const document = documents.get(params.textDocument.uri);
+        if (!document) { return []; }
+        return await getDefinition(document, params.position, definitionHost);
+    } catch (error) {
+        console.error('Definition error:', error);
+        return [];
+    }
+});
+
+connection.onReferences(async (params, token) => {
+    try {
+        const doc = documents.get(params.textDocument.uri);
+        if (!doc) { return []; }
+        if (!workspaceRoots.length) { throw new Error('Open a workspace folder to find references across files.'); }
+        const snapshot = await workspaceDocuments(workspaceRoots, documents.all(), definitionHost, token);
+        return await findSymbolReferences(doc, params.position, snapshot, definitionHost, params.context.includeDeclaration, token);
+    } catch (error) {
+        throw new ResponseError(ErrorCodes.InvalidRequest, error instanceof Error ? error.message : String(error));
+    }
+});
+
+connection.onPrepareRename(async params => {
+    const doc = documents.get(params.textDocument.uri);
+    return doc ? prepareSymbolRename(doc, params.position, definitionHost) : null;
+});
+
+connection.onRenameRequest(async (params, token) => {
+    try {
+        const doc = documents.get(params.textDocument.uri);
+        if (!doc) { throw new Error('Open the source file before renaming.'); }
+        if (!workspaceRoots.length) { throw new Error('Open a workspace folder to rename across files.'); }
+        const snapshot = await workspaceDocuments(workspaceRoots, documents.all(), definitionHost, token);
+        return await renameSymbol(doc, params.position, params.newName, snapshot, definitionHost, token);
+    } catch (error) {
+        throw new ResponseError(ErrorCodes.InvalidRequest, error instanceof Error ? error.message : String(error));
+    }
+});
+
+connection.onSignatureHelp(async (params: SignatureHelpParams): Promise<SignatureHelp | null> => {
     try {
         const doc = documents.get(params.textDocument.uri);
         if (!doc) { return null; }
@@ -202,7 +268,8 @@ connection.onSignatureHelp((params: SignatureHelpParams): SignatureHelp | null =
         const offset = doc.offsetAt(params.position);
         const textBeforeCursor = doc.getText().substring(0, offset);
 
-        return getSignatureHelp(textBeforeCursor, narrowAnalysisToOffset(analysis, offset));
+        return await getCustomSignature(doc, params.position, definitionHost)
+            ?? getSignatureHelp(textBeforeCursor, narrowAnalysisToOffset(analysis, offset));
     } catch (e) {
         console.error('Signature help error:', e);
         return null;

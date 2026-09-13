@@ -12,6 +12,10 @@ SuiteForge is a powerful Visual Studio Code extension designed to enhance produc
   - Promise type resolution for `.then()`, `.catch()`, `.finally()` callbacks and `await` expressions.
   - Method parameter completions inside options objects (e.g., `record.load({ | })`).
   - Module path completions inside `define([])` and `require()`.
+  - **Go to Definition**: Ctrl+Click or F12 on custom module functions to open their implementation in another local file. Follows AMD `define()`/`require()` dependencies, exported aliases, destructured helpers, re-exports, and static `@NAmdConfig` `paths` mappings. Uses unsaved editor content when available.
+  - **Custom Module IntelliSense**: Type `helpers.` for exported functions and properties, with parameter hints and hover documentation from their implementations and JSDoc.
+  - **Find All References**: Find a custom function's declaration, exports, aliases and callers across your open workspace.
+  - **Safe Rename**: Preview coordinated edits to definitions, exports and callers. SuiteForge checks for collisions, preserves separately named aliases, and rejects changes that would alter symbol bindings.
   - Real-time diagnostics warning when a module is used in an unsupported script type.
 - **Command Palette Integration**: Quickly access SuiteForge commands via the VS Code Command Palette.
 - **Code Generators**:
@@ -39,6 +43,27 @@ SuiteForge is a powerful Visual Studio Code extension designed to enhance produc
 3. Open your NetSuite SDF project in VS Code.
 
 ## Usage
+
+### V3: work across custom modules
+
+All four custom module features ship together in **SuiteForge 3.0.0**:
+
+| Feature | How to use it |
+| --- | --- |
+| Custom module IntelliSense | Type `helpers.` or use Ctrl+Space; hover a function or type `(` for documentation and parameters. |
+| Go to Definition | Ctrl+Click a function or press F12. |
+| Find All References | Right-click a function and select **Find All References**, or press Shift+F12. |
+| Safe Rename | Press F2, enter the new name, and review the Refactor Preview before applying. Ctrl+Enter explicitly requests preview in VS Code. |
+
+On macOS use Cmd+Click for navigation and Cmd+Enter for rename preview.
+
+For `define(['./helpers'], helpers => { helpers.calculate(); })`, Ctrl+Click `calculate` (Cmd+Click on macOS) or press F12 to open its exported implementation in `helpers.js`. Clicking the dependency string opens the module file. Relative paths, explicit `.js`/`.ts` extensions, and File Cabinet paths such as `/SuiteScripts/lib/helpers` are resolved against your local project; CommonJS and ES module imports are also supported.
+
+Files must be available locally. NetSuite's built-in `N/*` implementations and modules that exist only in the remote File Cabinet cannot be opened. Dynamic module paths, runtime-generated exports, and AMD configuration features beyond static `paths` mappings are not resolved.
+
+References and rename search `.js`, `.mjs`, `.cjs` and `.ts` source files in the open workspace, using unsaved editor buffers where available. They exclude `node_modules`, `.git`, `.vscode`, `.vscode-test`, `dist`, `out`, `coverage`, declaration files and symlink directories. Open the source project rather than its generated output. Searches beyond 3,000 files or 100,000 candidate symbols report a limit error; they never apply a partial rename.
+
+Renaming a public export updates its statically resolved callers. Renaming a separately named local alias preserves the public API, expanding shorthand imports when needed. SuiteForge requests confirmation through VS Code's native edit annotations, checks the proposed bindings, and detects source/configuration changes during the operation. It refuses renames with syntax errors, name collisions, ambiguous module mappings, or known dynamic member access to the affected module. Dynamic imports and callers outside the open workspace require manual review.
 
 ### Activating the Extension
 
@@ -118,6 +143,13 @@ We welcome contributions! To contribute:
 - The Language Server's regex fallback (used during active typing) does not support all patterns that the primary AST parser handles.
 
 ## Release Notes
+
+### 3.0.0 — Custom Module Development
+
+- Custom function/property completions, JSDoc hover information and parameter hints.
+- Cross-file Go to Definition, Find All References, and Safe Rename with Refactor Preview.
+- Shared static module resolution for AMD dependencies, local CommonJS/ES imports, File Cabinet paths and `@NAmdConfig` path mappings.
+- Rename validation for collisions, aliases, dynamic access, syntax errors, concurrent edits and ambiguous mappings.
 
 ### 2.1.0 — SuiteCloud CLI Manager
 
